@@ -1,0 +1,27 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
+    <style name="ClubToolbar" parent="Widget.AppCompat.Toolbar">
+        <item name="contentInsetStart">0dp</item>
+    </style>
+
+    <declare-styleable name="RoundImageView">
+        <attr name="border_thickness" format="dimension" />
+        <attr name="border_inside_color" format="color" />
+        <attr name="border_outside_color" format="color" />
+        <attr name="borderRadius" format="dimension" />
+        <attr name="type">
+            <enum name="circle" value="0" />
+            <enum name="round" value="1" />
+        </attr>
+    </declare-styleable>
+
+
+</resources>

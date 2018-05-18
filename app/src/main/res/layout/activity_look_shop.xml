@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    tools:context="com.xingguang.localrun.maincode.home.view.activity.LookShopActivity">
+
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <com.androidkun.xtablayout.XTabLayout
+            android:id="@+id/xtab_shop"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_gravity="center"
+            android:background="@color/white"
+            app:xTabDisplayNum="5"
+            app:xTabIndicatorColor="@color/home_read"
+            app:xTabIndicatorHeight="2dp"
+            app:xTabIndicatorWidth="35dp"
+            app:xTabMode="scrollable"
+            app:xTabPaddingEnd="10dp"
+            app:xTabPaddingStart="10dp"
+            app:xTabSelectedTextColor="@color/home_read"
+            app:xTabSelectedTextSize="14sp"
+            app:xTabTextColor="@color/textBlack"
+            app:xTabTextSize="14sp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="@color/fengexian" />
+
+        <android.support.v4.view.ViewPager
+            android:id="@+id/mPager_shop"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white" />
+
+    </LinearLayout>
+
+
+
+</LinearLayout>
