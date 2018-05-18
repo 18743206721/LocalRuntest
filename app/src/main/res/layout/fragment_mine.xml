@@ -16,14 +16,13 @@
         <android.support.design.widget.AppBarLayout
             android:id="@+id/AppFragment_AppBarLayout"
             android:layout_width="match_parent"
-            android:layout_height="250dp"
+            android:layout_height="180dp"
             android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
             <android.support.design.widget.CollapsingToolbarLayout
                 android:id="@+id/AppFragment_CollapsingToolbarLayout"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:contentScrim="?attr/colorPrimary"
+                android:layout_height="match_parent"
                 app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
                 <RelativeLayout
@@ -31,7 +30,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:background="@color/home_read"
-                    app:layout_collapseMode="parallax">
+                    >
 
                     <com.xingguang.localrun.view.RoundImageView
                         android:id="@+id/my_user_img"
@@ -46,29 +45,28 @@
                         android:id="@+id/my_user_name"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_alignParentBottom="true"
-                        android:layout_centerHorizontal="true"
-                        android:layout_marginBottom="20dp"
-                        android:layout_marginTop="20dp"
+                        android:layout_marginTop="12dp"
+                        android:layout_below="@+id/my_user_img"
                         android:text="未登录"
                         android:textColor="@color/white"
-                        android:textSize="16sp" />
+                        android:textSize="16sp"
+                        android:layout_centerHorizontal="true" />
                 </RelativeLayout>
 
 
                 <android.support.v7.widget.Toolbar
                     android:id="@+id/AppFragment_Toolbar"
                     android:layout_width="match_parent"
-                    android:layout_height="76dp"
+                    android:layout_height="40dp"
                     android:background="@color/colorPrimary"
                     app:layout_collapseMode="pin">
 
                     <TextView
                         android:layout_width="match_parent"
-                        android:layout_height="?attr/actionBarSize"
+                        android:layout_height="40dp"
                         android:gravity="left"
-                        android:paddingTop="20dp"
-                        android:text="应用"
+                        android:paddingTop="10dp"
+                        android:text="设置"
                         android:textColor="@android:color/white"
                         android:textSize="16sp" />
                 </android.support.v7.widget.Toolbar>

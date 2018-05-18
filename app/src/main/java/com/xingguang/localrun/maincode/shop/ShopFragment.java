@@ -12,7 +12,6 @@ public class ShopFragment extends BaseFragment {
 
     @Override
     protected void initView() {
-
     }
 
     @Override
