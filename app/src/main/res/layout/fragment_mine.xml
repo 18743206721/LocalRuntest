@@ -79,7 +79,7 @@
 
         <android.support.v4.widget.NestedScrollView
             android:layout_width="match_parent"
-            android:layout_height="500dp"
+            android:layout_height="wrap_content"
             android:background="@android:color/white"
             android:focusable="true"
             android:focusableInTouchMode="true"
@@ -90,6 +90,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical">
+
+                <include layout="@layout/layout_mine_bottom" />
 
 
             </LinearLayout>

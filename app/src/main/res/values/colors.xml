@@ -32,6 +32,8 @@
     <color name="titlebar_txt_color">#1f1f1f</color>
     <!-- 背景颜色 -->
     <color name="bg_color">#f5f5f5</color>
+    <!--背景色-->
+    <color name="board">#efeff4</color>
 
 
 </resources>
