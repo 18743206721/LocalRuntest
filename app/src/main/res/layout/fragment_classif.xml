@@ -26,7 +26,7 @@
             android:divider="@null"/>
 
         <ListView
-            android:id="@+id/pinnedListView"
+            android:id="@+id/right_listView"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_marginLeft="10dp"

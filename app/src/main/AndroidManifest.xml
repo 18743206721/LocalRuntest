@@ -22,7 +22,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".maincode.home.view.activity.LookShopActivity"></activity>
+        <activity android:name=".maincode.home.view.activity.LookShopActivity" />
+        <activity android:name=".maincode.home.view.activity.HomeSearchActivity" />
+        <activity android:name=".login.view.activity.LoginActivity" />
+        <activity android:name=".login.view.activity.RegisterActivity" />
+        <activity android:name=".login.view.activity.ForgetPwdActivity"></activity>
     </application>
 
 </manifest>

@@ -13,6 +13,7 @@
         android:orientation="horizontal">
 
         <LinearLayout
+            android:id="@+id/ll_my_collection"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -22,7 +23,7 @@
             android:paddingTop="5dp">
 
             <TextView
-                android:id="@+id/alliance_tv_activitycount"
+                android:id="@+id/tv_my_colcount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="58"
@@ -40,6 +41,7 @@
 
 
         <LinearLayout
+            android:id="@+id/ll_my_attention"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -49,7 +51,7 @@
             android:paddingTop="5dp">
 
             <TextView
-                android:id="@+id/alliance_tv_memberCount"
+                android:id="@+id/tv_my_colshopcount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/textBlack"
@@ -66,6 +68,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/ll_my_zuji"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -75,7 +78,7 @@
             android:paddingTop="5dp">
 
             <TextView
-                android:id="@+id/alliance_tv_attentionCount"
+                android:id="@+id/tv_zujicount"
                 android:text="35"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -101,6 +104,7 @@
         android:orientation="vertical">
         <!--我的订单，全部订单-->
         <LinearLayout
+            android:id="@+id/ll_my_allorder"
             android:layout_width="match_parent"
             android:layout_height="45dp"
             android:gravity="center_vertical">
@@ -128,6 +132,7 @@
 
         <!--待付款-->
         <LinearLayout
+            android:id="@+id/ll_daipay"
             android:layout_width="match_parent"
             android:layout_height="45dp"
             android:gravity="center_vertical">
@@ -154,6 +159,7 @@
             android:background="@color/board" />
         <!--待发货-->
         <LinearLayout
+            android:id="@+id/ll_mydai_fahuo"
             android:layout_width="match_parent"
             android:layout_height="45dp"
             android:gravity="center_vertical">
@@ -182,6 +188,7 @@
 
         <!--已完成-->
         <LinearLayout
+            android:id="@+id/ll_complete"
             android:layout_width="match_parent"
             android:layout_height="45dp"
             android:gravity="center_vertical">
@@ -208,6 +215,7 @@
             android:background="@color/board" />
         <!--我的收货地址-->
         <LinearLayout
+            android:id="@+id/ll_getads"
             android:layout_width="match_parent"
             android:layout_height="45dp"
             android:gravity="center_vertical">
@@ -235,7 +243,7 @@
 
         <!--关于同城快跑-->
         <LinearLayout
-            android:id="@+id/ll_aboutmy"
+            android:id="@+id/ll_about"
             android:layout_width="match_parent"
             android:layout_height="45dp"
             android:gravity="center_vertical">
@@ -261,6 +269,7 @@
             android:layout_height="0.5dp"
             android:background="@color/board" />
         <Button
+            android:id="@+id/btn_shenqing"
             android:visibility="visible"
             android:layout_width="match_parent"
             android:layout_height="45dp"
@@ -270,8 +279,8 @@
             android:textSize="15sp" />
 
         <Button
-            android:visibility="visible"
             android:id="@+id/bt_back"
+            android:visibility="visible"
             android:layout_width="match_parent"
             android:layout_height="45dp"
             android:background="@null"
@@ -280,9 +289,5 @@
             android:textSize="15sp" />
 
     </LinearLayout>
-
-
-
-
 
 </LinearLayout>

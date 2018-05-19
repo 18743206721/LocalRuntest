@@ -20,10 +20,10 @@ public class LeftListAdapter extends BaseAdapter {
     boolean[] flagArray;
     private Context context;
 
-    public LeftListAdapter(Context context, String[] leftStr, boolean[] flagArray) {
+    public LeftListAdapter(Context context, String[] leftStr,boolean[] flagArray) {
         this.leftStr = leftStr;
-        this.context = context;
         this.flagArray = flagArray;
+        this.context = context;
     }
 
     @Override
@@ -54,6 +54,10 @@ public class LeftListAdapter extends BaseAdapter {
         }
         holder.updataView(arg0);
         return arg1;
+    }
+
+    public int indexOf(String title) {
+        return leftStr.length;
     }
 
     private class Holder {

@@ -1,17 +1,21 @@
 package com.xingguang.localrun.maincode.home;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 import com.xingguang.localrun.R;
 import com.xingguang.localrun.base.BaseFragment;
 import com.xingguang.localrun.maincode.home.model.GlideImageLoader;
+import com.xingguang.localrun.maincode.home.view.activity.HomeSearchActivity;
 import com.xingguang.localrun.maincode.home.view.activity.LookShopActivity;
-import com.xingguang.localrun.maincode.home.view.adapter.HomeDaiAdapter;
+import com.xingguang.localrun.maincode.home.view.adapter.HomeDaiGouAdapter;
 import com.xingguang.localrun.maincode.home.view.adapter.HomeDaiBanAdapter;
 import com.youth.banner.Banner;
 
@@ -19,7 +23,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import butterknife.OnClick;
+import butterknife.Unbinder;
 
 public class HomeFragment extends BaseFragment {
 
@@ -45,8 +51,11 @@ public class HomeFragment extends BaseFragment {
     RecyclerView mainHomeLv;
     @BindView(R.id.main_homelv_daiban)
     RecyclerView mainHomelvDaiban;
+    @BindView(R.id.ll_sousuo_serch)
+    LinearLayout llsousuo;
+    Unbinder unbinder;
 
-    private HomeDaiAdapter daigouadapter;
+    private HomeDaiGouAdapter daigouadapter;
     private HomeDaiBanAdapter daibanadapter;
 
 
@@ -77,18 +86,18 @@ public class HomeFragment extends BaseFragment {
 
     private void initListener() {
 
-        daigouadapter.setmOnItemLookshopListener(new HomeDaiAdapter.OnItemLookshopListener() {
+        daigouadapter.setmOnItemLookshopListener(new HomeDaiGouAdapter.OnItemLookshopListener() {
             @Override
             public void OnItemLookshop(View view, int position) {
                 //跳转到店铺页面
-                intent = new Intent(getActivity(),LookShopActivity.class);
+                intent = new Intent(getActivity(), LookShopActivity.class);
                 startActivity(intent);
             }
         });
     }
 
     private void initAdapter() {
-        daigouadapter = new HomeDaiAdapter(getActivity());
+        daigouadapter = new HomeDaiGouAdapter(getActivity());
         GridLayoutManager mgr = new GridLayoutManager(getActivity(), 2);
         mainHomeLv.setLayoutManager(mgr);
         mainHomeLv.setAdapter(daigouadapter);
@@ -136,9 +145,14 @@ public class HomeFragment extends BaseFragment {
         banner.stopAutoPlay();
     }
 
-    @OnClick({R.id.ll_main_fenlei, R.id.ll_main_selecte, R.id.ll_home_dijia, R.id.ll_home_food, R.id.ll_outfit, R.id.ll_supermarket, R.id.ll_home_fruit, R.id.ll_home_hardware})
+    @OnClick({R.id.ll_main_fenlei, R.id.ll_main_selecte, R.id.ll_home_dijia, R.id.ll_home_food,
+            R.id.ll_outfit, R.id.ll_supermarket, R.id.ll_home_fruit, R.id.ll_home_hardware,
+            R.id.ll_sousuo_serch})
     public void onViewClicked(View view) {
         switch (view.getId()) {
+            case R.id.ll_sousuo_serch://搜索
+                startActivity(new Intent(getActivity(),HomeSearchActivity.class));
+                break;
             case R.id.ll_main_fenlei://分类
                 break;
             case R.id.ll_main_selecte://精选
@@ -157,4 +171,21 @@ public class HomeFragment extends BaseFragment {
                 break;
         }
     }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        // TODO: inflate a fragment view
+        View rootView = super.onCreateView(inflater, container, savedInstanceState);
+        unbinder = ButterKnife.bind(this, rootView);
+        return rootView;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        unbinder.unbind();
+    }
+
+
+
 }

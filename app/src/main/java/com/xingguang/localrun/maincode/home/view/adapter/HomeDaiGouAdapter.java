@@ -11,7 +11,7 @@ import com.xingguang.localrun.view.CommonViewHolder;
 
 import java.util.List;
 
-public class HomeDaiAdapter extends RecyclerView.Adapter <CommonViewHolder> {
+public class HomeDaiGouAdapter extends RecyclerView.Adapter <CommonViewHolder> {
 
     private Context mContext;
     private List<String> list;
@@ -29,7 +29,7 @@ public class HomeDaiAdapter extends RecyclerView.Adapter <CommonViewHolder> {
         this.mOnItemClickLitener = mOnItemClickListener;
     }
 
-    public HomeDaiAdapter(Context mContext) {
+    public HomeDaiGouAdapter(Context mContext) {
         this.mContext = mContext;
     }
 
