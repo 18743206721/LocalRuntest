@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
+    android:background="@color/bg_color"
     android:orientation="vertical"
     tools:context="com.xingguang.localrun.login.view.activity.RegisterActivity">
 
@@ -18,18 +18,26 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="15dp"
-        android:background="@color/white"
         android:orientation="vertical">
 
         <!--手机号-->
         <LinearLayout
+            android:layout_marginTop="@dimen/dp10"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="30dp"
-            android:layout_marginRight="30dp"
-            android:layout_marginTop="15dp"
+            android:layout_marginLeft="13dp"
+            android:layout_marginRight="13dp"
+            android:background="@color/white"
             android:gravity="center_vertical"
             android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:text="手机号"
+                android:textColor="@color/textBlack"
+                android:textSize="14sp" />
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -39,9 +47,9 @@
                     android:id="@+id/register_phone"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/outside_margin"
+                    android:layout_marginLeft="@dimen/dp10"
+                    android:background="@null"
                     android:gravity="left"
-                    android:hint="手机号"
                     android:inputType="phone"
                     android:lines="1"
                     android:maxLines="11"
@@ -49,20 +57,28 @@
                     android:textColor="@color/title_color"
                     android:textColorHint="@color/hint_color"
                     android:textCursorDrawable="@drawable/color_cursor"
-                    android:textSize="14sp"
-                    android:theme="@style/MyEditText" />
+                    android:textSize="14sp" />
             </RelativeLayout>
         </LinearLayout>
 
         <!--输入密码-->
         <LinearLayout
+            android:layout_marginTop="@dimen/dp10"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="30dp"
-            android:layout_marginRight="30dp"
-            android:layout_marginTop="15dp"
+            android:layout_marginLeft="13dp"
+            android:layout_marginRight="13dp"
+            android:background="@color/white"
             android:gravity="center_vertical"
             android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:text="输入密码"
+                android:textColor="@color/textBlack"
+                android:textSize="14sp" />
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -72,9 +88,9 @@
                     android:id="@+id/register_pwd"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/outside_margin"
+                    android:layout_marginLeft="@dimen/dp10"
+                    android:background="@null"
                     android:gravity="left"
-                    android:hint="输入密码"
                     android:inputType="textPassword"
                     android:lines="1"
                     android:maxLines="11"
@@ -82,20 +98,28 @@
                     android:textColor="@color/title_color"
                     android:textColorHint="@color/hint_color"
                     android:textCursorDrawable="@drawable/color_cursor"
-                    android:textSize="14sp"
-                    android:theme="@style/MyEditText" />
+                    android:textSize="14sp" />
             </RelativeLayout>
         </LinearLayout>
 
         <!--再次输入密码-->
         <LinearLayout
+            android:layout_marginTop="@dimen/dp10"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="30dp"
-            android:layout_marginRight="30dp"
-            android:layout_marginTop="15dp"
+            android:layout_marginLeft="13dp"
+            android:layout_marginRight="13dp"
+            android:background="@color/white"
             android:gravity="center_vertical"
             android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:text="再次输入密码"
+                android:textColor="@color/textBlack"
+                android:textSize="14sp" />
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -105,9 +129,9 @@
                     android:id="@+id/register_twopwd"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/outside_margin"
+                    android:layout_marginLeft="@dimen/dp10"
+                    android:background="@null"
                     android:gravity="left"
-                    android:hint="再次输入密码"
                     android:inputType="textPassword"
                     android:lines="1"
                     android:maxLines="11"
@@ -115,33 +139,40 @@
                     android:textColor="@color/title_color"
                     android:textColorHint="@color/hint_color"
                     android:textCursorDrawable="@drawable/color_cursor"
-                    android:textSize="14sp"
-                    android:theme="@style/MyEditText" />
+                    android:textSize="14sp" />
             </RelativeLayout>
         </LinearLayout>
 
         <!--验证码-->
         <LinearLayout
+            android:layout_marginTop="@dimen/dp10"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="30dp"
-            android:layout_marginRight="30dp"
-            android:layout_marginTop="15dp"
+            android:layout_marginLeft="13dp"
+            android:layout_marginRight="13dp"
+            android:background="@color/white"
             android:gravity="center_vertical"
             android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:text="验证码"
+                android:textColor="@color/textBlack"
+                android:textSize="14sp" />
 
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
-
                 <com.xingguang.localrun.view.ClearEditText
                     android:id="@+id/register_mss"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/outside_margin"
                     android:layout_toLeftOf="@+id/rl_get_messs"
-                    android:hint="验证码"
-                    android:inputType="phone"
+                    android:background="@null"
+                    android:inputType="number"
                     android:lines="1"
                     android:maxLines="6"
                     android:padding="@dimen/outside_margin"

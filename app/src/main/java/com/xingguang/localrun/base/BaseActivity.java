@@ -40,6 +40,7 @@ public abstract class BaseActivity extends AppCompatActivity {
      * 用于在setContentView之前做处理
      */
     protected void beforeLayout() {
+
     }
 
     /**

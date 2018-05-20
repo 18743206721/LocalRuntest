@@ -14,8 +14,6 @@ import com.xingguang.localrun.view.ClearEditText;
 
 import butterknife.BindView;
 import butterknife.OnClick;
-
-
 /**
  * 创建日期：2018/5/19
  * 描述:登录界面
@@ -23,7 +21,7 @@ import butterknife.OnClick;
  */
 public class LoginActivity extends ToolBarActivity {
 
-    @BindView(R.id.login_phone)
+    @BindView(R.id.et_forget_phone)
     ClearEditText loginPhone;
     @BindView(R.id.login_pwd)
     ClearEditText loginPwd;

@@ -3,12 +3,21 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/bg_color"
     android:orientation="vertical">
 
+    <!--设置沉浸式状态栏，填充布局-->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/dp10"
+        android:background="@color/home_bule"
+        android:paddingTop="@dimen/padding_top">
+    </LinearLayout>
+
+    <LinearLayout
+        android:padding="@dimen/dp10"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:background="#fff"
         android:gravity="center_vertical"
         android:orientation="horizontal">
@@ -48,9 +57,10 @@
 
             <TextView
                 android:id="@+id/tv_play_serch"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp"
+                android:layout_weight="4"
                 android:background="@null"
                 android:gravity="center|left"
                 android:hint="请输入搜索关键字"
@@ -58,13 +68,18 @@
                 android:textColorHint="@color/textLightGray"
                 android:textCursorDrawable="@drawable/color_cursor"
                 android:textSize="14sp" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="|  搜索"
+                android:textColor="@color/textBlack"
+                android:textColorHint="@color/textLightGray"
+                android:textSize="14sp" />
         </LinearLayout>
     </LinearLayout>
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/line_color" />
 
     <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
@@ -77,6 +92,7 @@
 
             <com.youth.banner.Banner
                 android:id="@+id/banner"
+                android:background="#fff"
                 android:layout_width="match_parent"
                 android:layout_height="200dp" />
 
@@ -283,6 +299,7 @@
 
             <!--一建优速-->
             <LinearLayout
+                android:layout_marginTop="@dimen/dp10"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
@@ -388,7 +405,7 @@
                     android:layout_centerVertical="true"
                     android:layout_marginRight="15dp"
                     android:gravity="center_vertical"
-                    android:orientation="vertical">
+                    android:orientation="horizontal">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -418,10 +435,8 @@
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/main_home_lv"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="#fff" />
+                    android:layout_height="wrap_content" />
             </LinearLayout>
-
 
             <!--加载更多-->
             <LinearLayout
@@ -509,11 +524,8 @@
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/main_homelv_daiban"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="#fff" />
+                    android:layout_height="wrap_content" />
             </LinearLayout>
-
-
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>
 

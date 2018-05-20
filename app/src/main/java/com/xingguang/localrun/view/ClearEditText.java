@@ -12,6 +12,8 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnFocusChangeListener;
+import android.widget.EditText;
+
 import com.xingguang.localrun.R;
 
 
@@ -19,7 +21,7 @@ import com.xingguang.localrun.R;
  * @说明： 自定义带删除按钮的EditText
  *
  */
-public class ClearEditText extends android.support.v7.widget.AppCompatEditText implements OnFocusChangeListener,
+public class ClearEditText extends EditText implements OnFocusChangeListener,
         TextWatcher {
     // EditText右侧的删除按钮
     private Drawable mClearDrawable;

@@ -71,6 +71,8 @@ public class MainActivity extends BaseActivity {
 
     private FragmentManager fm;
 
+    public static MainActivity instance;
+
     @Override
     protected int getLayoutId() {
         return R.layout.activity_main;
@@ -78,7 +80,8 @@ public class MainActivity extends BaseActivity {
 
     @Override
     protected void initView() {
-
+        AppUtil.translucentStatusBar(MainActivity.this);//设置沉浸式
+        instance = this;
         fm = getSupportFragmentManager();
         setToNewsFragment();
         setThemeColor(tabOneImg,R.drawable.home_icon);
