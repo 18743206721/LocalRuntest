@@ -58,7 +58,8 @@
             android:windowSoftInputMode="stateHidden" />
         <activity android:name=".maincode.mine.view.activity.MineSettingActivity" />
         <activity android:name=".maincode.mine.view.activity.ModificationActivity" />
-        <activity android:name=".maincode.mine.view.activity.MyCollectionActivity"></activity>
+        <activity android:name=".maincode.mine.view.activity.MyCollectionActivity" />
+        <activity android:name=".maincode.mine.view.activity.MyGuanzhuActivity"></activity>
     </application>
 
 </manifest>

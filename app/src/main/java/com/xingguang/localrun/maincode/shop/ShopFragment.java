@@ -2,7 +2,9 @@ package com.xingguang.localrun.maincode.shop;
 
 import com.xingguang.localrun.R;
 import com.xingguang.localrun.base.BaseFragment;
-
+/**
+ * 购物车
+ * */
 public class ShopFragment extends BaseFragment {
 
     @Override

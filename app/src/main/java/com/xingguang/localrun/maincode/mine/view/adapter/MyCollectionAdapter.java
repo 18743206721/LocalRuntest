@@ -42,6 +42,7 @@ public class MyCollectionAdapter extends RecyclerView.Adapter <CommonViewHolder>
     public int getItemCount() {
         return list.size();
     }
+
     public void removeItem(int position) {
         list.remove(position);
         notifyItemRemoved(position);

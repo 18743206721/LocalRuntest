@@ -9,6 +9,9 @@
     <color name="home_read">#ff0000</color>
     <!-- 文字颜色  红色 -->
     <color name="text_color_red">#fa3333</color>
+    <!-- 文字颜色  浅红色 -->
+    <color name="text_RedDauk">#ff3838</color>
+
 
     <!-- 钱的颜色 -->
     <color name="textMoney">#ff6130</color>

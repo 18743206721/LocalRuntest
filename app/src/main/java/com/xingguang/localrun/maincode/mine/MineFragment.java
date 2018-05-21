@@ -19,6 +19,7 @@ import com.xingguang.localrun.login.view.activity.LoginActivity;
 import com.xingguang.localrun.maincode.mine.view.activity.MineApplyEnterActivity;
 import com.xingguang.localrun.maincode.mine.view.activity.MineSettingActivity;
 import com.xingguang.localrun.maincode.mine.view.activity.MyCollectionActivity;
+import com.xingguang.localrun.maincode.mine.view.activity.MyGuanzhuActivity;
 import com.xingguang.localrun.utils.AppUtil;
 import com.xingguang.localrun.view.RoundImageView;
 
@@ -115,6 +116,7 @@ public class MineFragment extends BaseFragment {
                 startActivity(new Intent(getActivity(), MyCollectionActivity.class));
                 break;
             case R.id.ll_my_attention://我的关注
+                startActivity(new Intent(getActivity(), MyGuanzhuActivity.class));
                 break;
             case R.id.ll_my_zuji://我的足迹
                 break;
