@@ -5,7 +5,10 @@
     <!-- 程序结束 -->
     <uses-permission android:name="android.permission.KILL_BACKGROUND_PROCESSES" />
     <uses-permission android:name="android.permission.INTERNET" />
+    <!-- 图片选择 -->
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.CAMERA" />
 
     <application
         android:name=".app.MyApplication"
@@ -15,18 +18,47 @@
         android:roundIcon="@mipmap/icon_logo"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".main.view.MainActivity">
+
+        <!-- 图片选择器 -->
+        <activity
+            android:name="me.iwf.photopicker.PhotoPickerActivity"
+            android:theme="@style/Theme.AppCompat.NoActionBar" />
+        <activity
+            android:name="me.iwf.photopicker.PhotoPagerActivity"
+            android:theme="@style/Theme.AppCompat.NoActionBar" />
+        <!-- 图片选择器结束 -->
+
+        <activity
+            android:name=".main.view.MainActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".maincode.home.view.activity.LookShopActivity" />
-        <activity android:name=".maincode.home.view.activity.HomeSearchActivity" />
-        <activity android:name=".login.view.activity.LoginActivity" />
-        <activity android:name=".login.view.activity.RegisterActivity" />
-        <activity android:name=".login.view.activity.ForgetPwdActivity"></activity>
+        <activity
+            android:name=".maincode.home.view.activity.LookShopActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".maincode.home.view.activity.HomeSearchActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".login.view.activity.LoginActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".login.view.activity.RegisterActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".login.view.activity.ForgetPwdActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".maincode.mine.view.activity.MineApplyEnterActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden" />
+        <activity android:name=".maincode.mine.view.activity.MineSettingActivity" />
+        <activity android:name=".maincode.mine.view.activity.ModificationActivity" />
+        <activity android:name=".maincode.mine.view.activity.MyCollectionActivity"></activity>
     </application>
 
 </manifest>

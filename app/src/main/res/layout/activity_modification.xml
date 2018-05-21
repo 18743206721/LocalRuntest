@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/board"
+    tools:context="com.xingguang.localrun.maincode.mine.view.ModificationActivity">
+
+
+    <include layout="@layout/toolbar_layout" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="@color/fengexian" />
+
+    <RelativeLayout
+        android:layout_margin="@dimen/dp20"
+        android:background="#fff"
+        android:layout_width="match_parent"
+        android:layout_height="40dp">
+        <com.xingguang.localrun.view.ClearEditText
+            android:id="@+id/et_modif_bianliang"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@null"
+            android:maxLines="1"
+            android:textColorHint="@color/textLightGray"
+            android:textColor="@color/textBlack"
+            android:textSize="14sp"
+            />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/tv_zhuxiao"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_margin="@dimen/dp20"
+            android:layout_marginTop="25dp"
+            android:background="@drawable/corners30_solidgreen"
+            android:gravity="center"
+            android:text="注销账户"
+            android:textColor="#fff"
+            android:textSize="16sp" />
+    </LinearLayout>
+
+
+</LinearLayout>

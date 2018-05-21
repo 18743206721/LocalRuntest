@@ -54,15 +54,7 @@ public class ClassifFragment extends ToolBarFragment {
 
             @Override
             public void onItemClick(AdapterView<?> arg0, View view, int position, long arg3) {
-//                isScroll = false;
-//                leftListview.setItemChecked(position, true);
-//                int section = rightListAdapter.indexOf(leftListAdapter.getItem(position).toString());
-//                if (section == -1) return;
-//                rightListView.setSelection(section);
-
-
                 isScroll = false;
-
                 for (int i = 0; i < leftStr.length; i++) {
                     if (i == position) {
                         flagArray[i] = true;
@@ -72,13 +64,7 @@ public class ClassifFragment extends ToolBarFragment {
                 }
                 leftListAdapter.notifyDataSetChanged();
                 int rightSection = 0;
-//                for (int i = 0; i < position; i++) {
-//                    rightSection += sectionedAdapter.getCountForSection(i) + 1;
-//                }
                 rightListView.setSelection(rightSection);
-
-
-
             }
 
         });

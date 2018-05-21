@@ -16,6 +16,7 @@
     <!-- 文字的颜色 -->
     <color name="textBlack">#161c16</color>
     <color name="textDarkGray">#737773</color>
+    <color name="textGray">#999999</color>
     <color name="textLightGray">#aaaaaa</color>
 
     <!-- 颜色  白色 -->

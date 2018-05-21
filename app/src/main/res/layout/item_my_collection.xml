@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="100dp"
+    android:background="#fff"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/item_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:id="@+id/content_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+
+            <!--内容区域放置布局-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="13dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/item_iv_collect_img"
+                    android:layout_width="85dp"
+                    android:layout_height="85dp"
+                    android:background="@color/home_read"
+                    android:scaleType="centerCrop" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="10dp"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/item_tv_collec_title"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_gravity="top"
+                        android:layout_weight="1"
+                        android:gravity="center_vertical"
+                        android:text="桂花鸭南京盐水鸭"
+                        android:textColor="@color/textBlack"
+                        android:textSize="15sp" />
+
+                    <TextView
+                        android:id="@+id/tv_collec_people"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:gravity="center_vertical"
+                        android:text="3052人收藏"
+                        android:textColor="@color/textDarkGray"
+                        android:textSize="13sp" />
+
+                    <TextView
+                        android:id="@+id/tv_collec_price"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:gravity="center_vertical"
+                        android:text="¥55"
+                        android:textColor="@color/home_read"
+                        android:textSize="13sp" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:background="@color/fengexian" />
+
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/iv_deleted"
+            android:layout_width="50dp"
+            android:layout_height="match_parent"
+            android:background="@mipmap/collection_deleted"
+            android:gravity="center" />
+
+        <ImageView
+            android:id="@+id/iv_jindian"
+            android:layout_width="50dp"
+            android:layout_height="match_parent"
+            android:background="@mipmap/collec_jindian"
+            android:gravity="center" />
+
+    </LinearLayout>
+
+</LinearLayout>
