@@ -44,6 +44,38 @@ public class ClassifFragment extends ToolBarFragment {
         leftListview.setAdapter(leftListAdapter);
 
         initListener();
+        load();
+    }
+
+    private void load() {
+//        novate = new Novate.Builder(getActivity())
+//                .connectTimeout(8)
+//                .baseUrl(HttpManager.BASE_URL)
+//                //.addApiManager(ApiManager.class)
+//                .addLog(true)
+//                .build();
+//        Service myApi = novate.create(Service.class);
+//
+//        novate.call(myApi.getdata(parameters),
+//                new BaseSubscriber<MyBean> {
+//
+//        });
+
+//        Map<String, Object> parameters = new HashMap<>();
+//        parameters.put("username", "zhansa");
+//        parameters.put("password", "12313");
+//        Service myAPI = novate.create(Service.class);
+//
+//        novate.call(myAPI.getSougu(parameters), new MyBaseSubscriber<MyBean>(getActivity()) {
+//            @Override
+//            public void onNext(MyBean souguBean) {
+//                Toast.makeText(getActivity(), souguBean.toString(), Toast.LENGTH_SHORT).show();
+//            }
+//            @Override
+//            public void onError(Throwable e) {
+//                Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
+//            }
+//        });
 
     }
 
