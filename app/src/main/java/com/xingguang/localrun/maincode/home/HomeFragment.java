@@ -13,10 +13,11 @@ import android.widget.LinearLayout;
 import com.xingguang.localrun.R;
 import com.xingguang.localrun.base.BaseFragment;
 import com.xingguang.localrun.maincode.home.model.GlideImageLoader;
+import com.xingguang.localrun.maincode.home.view.activity.ClassifShopActivity;
 import com.xingguang.localrun.maincode.home.view.activity.HomeSearchActivity;
 import com.xingguang.localrun.maincode.home.view.activity.LookShopActivity;
-import com.xingguang.localrun.maincode.home.view.adapter.HomeDaiGouAdapter;
 import com.xingguang.localrun.maincode.home.view.adapter.HomeDaiBanAdapter;
+import com.xingguang.localrun.maincode.home.view.adapter.HomeDaiGouAdapter;
 import com.youth.banner.Banner;
 
 import java.util.ArrayList;
@@ -154,22 +155,35 @@ public class HomeFragment extends BaseFragment {
                 startActivity(new Intent(getActivity(),HomeSearchActivity.class));
                 break;
             case R.id.ll_main_fenlei://分类
+
                 break;
             case R.id.ll_main_selecte://精选
+                startfenlei("精选");
                 break;
             case R.id.ll_home_dijia://低价
+                startfenlei("低价");
                 break;
             case R.id.ll_home_food://美食
+                startfenlei("美食");
                 break;
             case R.id.ll_outfit://美装
+                startfenlei("美装");
                 break;
             case R.id.ll_supermarket://超市
+                startfenlei("超市");
                 break;
             case R.id.ll_home_fruit://果蔬
+                startfenlei("果蔬");
                 break;
             case R.id.ll_home_hardware://五金
+                startfenlei("五金");
                 break;
         }
+    }
+
+    private void startfenlei(String text) {
+        startActivity(new Intent(getActivity(),ClassifShopActivity.class)
+                .putExtra("name",text));
     }
 
     @Override
@@ -185,6 +199,7 @@ public class HomeFragment extends BaseFragment {
         super.onDestroyView();
         unbinder.unbind();
     }
+
 
 
 
