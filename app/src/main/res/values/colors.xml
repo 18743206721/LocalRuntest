@@ -48,6 +48,8 @@
     <!-- 提示文字颜色  中灰文字 -->
     <color name="hint_middle_color">#6c6c6c</color>
 
+    <!-- 提示文字颜色  中灰文字 -->
+    <color name="btn_addshopcar">#666666</color>
 
 
 </resources>

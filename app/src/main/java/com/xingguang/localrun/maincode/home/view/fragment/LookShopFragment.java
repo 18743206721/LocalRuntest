@@ -1,26 +1,24 @@
 package com.xingguang.localrun.maincode.home.view.fragment;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import com.xingguang.localrun.R;
 import com.xingguang.localrun.base.BaseFragment;
+import com.xingguang.localrun.maincode.home.view.activity.ProductdetailsActivity;
 import com.xingguang.localrun.maincode.home.view.adapter.LookShopAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.Unbinder;
 
 /**
  * 创建日期：2018/5/18
@@ -37,7 +35,6 @@ public class LookShopFragment extends BaseFragment {
     RelativeLayout myDecoFgApply;
     @BindView(R.id.empty)
     ImageView empty;
-    Unbinder unbinder;
     private LookShopAdapter adapter;
     private List<String> looklist = new ArrayList<>();
 
@@ -48,7 +45,6 @@ public class LookShopFragment extends BaseFragment {
         fragment.setArguments(bundle);
         return fragment;
     }
-
 
     @Override
     protected int getLayoutId() {
@@ -63,29 +59,34 @@ public class LookShopFragment extends BaseFragment {
         }
 
         initAdapter();
-
         initListener();
-
-    }
-
-    private void initListener() {
-
     }
 
     private void initAdapter() {
+        adapter = new LookShopAdapter(getActivity(),looklist,type);
         if (type == 1){
-            adapter = new LookShopAdapter(getActivity(),looklist,type);
             LinearLayoutManager mgr = new LinearLayoutManager(getActivity());
             rvLooksp.setLayoutManager(mgr);
             rvLooksp.setAdapter(adapter);
         }else {
-            adapter = new LookShopAdapter(getActivity(),looklist,type);
             GridLayoutManager mgr = new GridLayoutManager(getActivity(), 2);
             rvLooksp.setLayoutManager(mgr);
             rvLooksp.setAdapter(adapter);
         }
+    }
+
+    private void initListener() {
+        adapter.setOnItemClickListener(new LookShopAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                Intent intent = new Intent(getActivity(), ProductdetailsActivity.class);
+//                intent.putExtra("id", listDatas.get(position).getCommodityId());
+                startActivity(intent);
+            }
+        });
 
     }
+
 
     @Override
     protected void lazyLoad() {
@@ -93,17 +94,4 @@ public class LookShopFragment extends BaseFragment {
     }
 
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        // TODO: inflate a fragment view
-        View rootView = super.onCreateView(inflater, container, savedInstanceState);
-        unbinder = ButterKnife.bind(this, rootView);
-        return rootView;
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        unbinder.unbind();
-    }
 }

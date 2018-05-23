@@ -3,6 +3,7 @@ package com.xingguang.localrun.maincode.home.view.adapter;
 import android.content.Context;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 import android.view.ViewGroup;
 
 import com.xingguang.localrun.R;
@@ -19,7 +20,7 @@ import java.util.List;
  * 描述:
  * 作者:LiuYu
  */
-public class LookShopAdapter extends RecyclerView.Adapter<CommonViewHolder> {
+public class LookShopAdapter extends RecyclerView.Adapter<CommonViewHolder>{
 
     private Context mContext;
     private List<String> list;
@@ -40,6 +41,12 @@ public class LookShopAdapter extends RecyclerView.Adapter<CommonViewHolder> {
         this.type = type;
     }
 
+    private OnItemClickListener mOnItemClickListener = null;
+
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        this.mOnItemClickListener = listener;
+    }
+
     @Override
     public CommonViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         CommonViewHolder commonViewHolder = null;
@@ -54,7 +61,7 @@ public class LookShopAdapter extends RecyclerView.Adapter<CommonViewHolder> {
     }
 
     @Override
-    public void onBindViewHolder(CommonViewHolder holder, int position) {
+    public void onBindViewHolder(final CommonViewHolder holder, final int position) {
 
 
 
@@ -74,9 +81,15 @@ public class LookShopAdapter extends RecyclerView.Adapter<CommonViewHolder> {
             initpage();
 
         }else if (type == 2){
-
-
-
+            if (mOnItemClickListener != null) {
+                holder.getItemView().setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        //注意这里使用getTag方法获取position
+                        mOnItemClickListener.onItemClick(holder.getItemView(), position);
+                    }
+                });
+            }
         }else{
 
 
@@ -109,5 +122,10 @@ public class LookShopAdapter extends RecyclerView.Adapter<CommonViewHolder> {
     }
 
 
+
+    //define interface
+    public interface OnItemClickListener {
+        void onItemClick(View view, int position);
+    }
 
 }
