@@ -2,6 +2,7 @@ package com.xingguang.localrun.maincode.home;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -12,6 +13,7 @@ import android.widget.LinearLayout;
 
 import com.xingguang.localrun.R;
 import com.xingguang.localrun.base.BaseFragment;
+import com.xingguang.localrun.main.view.MainActivity;
 import com.xingguang.localrun.maincode.home.model.GlideImageLoader;
 import com.xingguang.localrun.maincode.home.view.activity.ClassifShopActivity;
 import com.xingguang.localrun.maincode.home.view.activity.HomeSearchActivity;
@@ -66,6 +68,7 @@ public class HomeFragment extends BaseFragment {
             "http://d.3987.com/sqmy_131219/001.jpg",
             "http://img2.3lian.com/2014/f2/37/d/39.jpg"};
     private Intent intent;
+    private FragmentManager fm;
 
 
     @Override
@@ -75,6 +78,8 @@ public class HomeFragment extends BaseFragment {
 
     @Override
     protected void initView() {
+
+        fm = getFragmentManager();
 
         initpage();
 
@@ -155,7 +160,8 @@ public class HomeFragment extends BaseFragment {
                 startActivity(new Intent(getActivity(),HomeSearchActivity.class));
                 break;
             case R.id.ll_main_fenlei://分类
-
+                MainActivity.instance.setBg(2);
+                MainActivity.instance.setToProjectFragment();
                 break;
             case R.id.ll_main_selecte://精选
                 startfenlei("精选");

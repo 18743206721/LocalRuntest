@@ -64,5 +64,4 @@ dependencies {
     implementation 'com.tamic.novate:novate:1.5.2.3'
 
 
-
 }

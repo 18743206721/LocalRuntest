@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:Star="http://schemas.android.com/apk/res-auto"
+    android:gravity="center"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <com.xingguang.localrun.view.Star
+        android:id="@+id/iv_tice_star"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        Star:starBackground="@drawable/star_empty"
+        Star:starDistance="3dp"
+        Star:starDrawBackground="@drawable/star_full"
+        Star:starHeight="15dp"
+        Star:starWidth="15dp"
+        Star:starsNum="5" />
+
+
+</LinearLayout>

@@ -86,6 +86,8 @@ public class MainActivity extends BaseActivity {
         setToNewsFragment();
         setThemeColor(tabOneImg,R.drawable.home_icon);
         tabOneTxt.setTextColor(getResources().getColor(R.color.text_color_red));
+
+
     }
 
     @OnClick({R.id.tab_one, R.id.tab_two, R.id.tab_three, R.id.tab_four})
@@ -113,7 +115,7 @@ public class MainActivity extends BaseActivity {
 
     }
 
-    private void setBg(int id) {
+    public void setBg(int id) {
         switch (id) {
             case 1: // 首页
                 setAllToGrey();
@@ -168,7 +170,7 @@ public class MainActivity extends BaseActivity {
     /**
      * 设置当前的Fragment 为首页
      */
-    private void setToNewsFragment() {
+    public void setToNewsFragment() {
         FragmentTransaction transaction = fm.beginTransaction();
         transaction.addToBackStack(null);
         hideAll(transaction);
@@ -185,7 +187,7 @@ public class MainActivity extends BaseActivity {
     /**
      * 设置当前的Fragment 为分类
      */
-    private void setToProjectFragment() {
+    public void setToProjectFragment() {
         FragmentTransaction transaction = fm.beginTransaction();
         transaction.addToBackStack(null);
         hideAll(transaction);

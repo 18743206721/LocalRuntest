@@ -9,12 +9,10 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.CAMERA" />
-    <!--网络请求框架-->
+    <!-- 网络请求框架 -->
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-
-
 
     <application
         android:name=".app.MyApplication"
@@ -66,7 +64,8 @@
         <activity android:name=".maincode.mine.view.activity.ModificationActivity" />
         <activity android:name=".maincode.mine.view.activity.MyCollectionActivity" />
         <activity android:name=".maincode.mine.view.activity.MyGuanzhuActivity" />
-        <activity android:name=".maincode.home.view.activity.ClassifShopActivity"></activity>
+        <activity android:name=".maincode.home.view.activity.ClassifShopActivity" />
+        <activity android:name=".maincode.home.view.activity.ProductdetailsActivity"></activity>
     </application>
 
 </manifest>
