@@ -65,7 +65,11 @@
         <activity android:name=".maincode.mine.view.activity.MyCollectionActivity" />
         <activity android:name=".maincode.mine.view.activity.MyGuanzhuActivity" />
         <activity android:name=".maincode.home.view.activity.ClassifShopActivity" />
-        <activity android:name=".maincode.home.view.activity.ProductdetailsActivity"></activity>
+        <activity android:name=".maincode.home.view.activity.ProductdetailsActivity" />
+        <activity android:name=".maincode.mine.view.activity.FootPrintActivity" />
+        <activity android:name=".maincode.mine.view.activity.MyOrderAllActivity" />
+        <activity android:name=".maincode.mine.view.activity.PingLunActivity" />
+        <activity android:name=".maincode.mine.view.activity.AddressManagementActivity"></activity>
     </application>
 
 </manifest>

@@ -1,6 +1,7 @@
 package com.xingguang.localrun.maincode.home;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.GridLayoutManager;
@@ -10,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.xingguang.localrun.R;
 import com.xingguang.localrun.base.BaseFragment;
@@ -92,14 +94,24 @@ public class HomeFragment extends BaseFragment {
 
     private void initListener() {
 
-        daigouadapter.setmOnItemLookshopListener(new HomeDaiGouAdapter.OnItemLookshopListener() {
+        daigouadapter.setmOnItemClickListener(new HomeDaiGouAdapter.OnItemClickListener() {
             @Override
-            public void OnItemLookshop(View view, int position) {
+            public void OnItemClick(View view, int position) {
                 //跳转到店铺页面
                 intent = new Intent(getActivity(), LookShopActivity.class);
                 startActivity(intent);
             }
         });
+
+        daibanadapter.setmOnItemClickListener(new HomeDaiBanAdapter.OnItemClickListener() {
+            @Override
+            public void OnItemClick(TextView view, int position) {
+                Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + 1008655));
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+            }
+        });
+
     }
 
     private void initAdapter() {

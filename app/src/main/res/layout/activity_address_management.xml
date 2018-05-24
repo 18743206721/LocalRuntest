@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/board"
+    tools:context="com.xingguang.localrun.maincode.mine.view.activity.AddressManagementActivity">
+
+    <include layout="@layout/toolbar_layout" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/line_color" />
+
+    <LinearLayout
+        android:id="@+id/main_fl"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="visible">
+
+        <!--<com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout-->
+        <!--android:id="@+id/twinklingRefresh"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent">-->
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/address_management_recycle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/bottom"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginTop="25dp"
+            android:layout_marginLeft="@dimen/dp20"
+            android:layout_marginRight="@dimen/dp20"
+            android:background="@drawable/corners30_solidgreen"
+            android:gravity="center"
+            android:text="添加新地址"
+            android:textColor="#fff"
+            android:textSize="16sp" />
+
+        <!--</com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout>-->
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/empty"
+        android:layout_width="150dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="center_horizontal"
+        android:src="@mipmap/ico_nodata"
+        android:visibility="gone" />
+
+
+</LinearLayout>

@@ -50,6 +50,9 @@
 
     <!-- 提示文字颜色  中灰文字 -->
     <color name="btn_addshopcar">#666666</color>
+    <!-- 订单背景  中灰文字 -->
+    <color name="btn_orderall">#E2E2E2</color>
+
 
 
 </resources>

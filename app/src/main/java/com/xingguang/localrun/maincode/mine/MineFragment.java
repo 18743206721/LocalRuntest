@@ -16,10 +16,13 @@ import android.widget.TextView;
 import com.xingguang.localrun.R;
 import com.xingguang.localrun.base.BaseFragment;
 import com.xingguang.localrun.login.view.activity.LoginActivity;
+import com.xingguang.localrun.maincode.mine.view.activity.AddressManagementActivity;
+import com.xingguang.localrun.maincode.mine.view.activity.FootPrintActivity;
 import com.xingguang.localrun.maincode.mine.view.activity.MineApplyEnterActivity;
 import com.xingguang.localrun.maincode.mine.view.activity.MineSettingActivity;
 import com.xingguang.localrun.maincode.mine.view.activity.MyCollectionActivity;
 import com.xingguang.localrun.maincode.mine.view.activity.MyGuanzhuActivity;
+import com.xingguang.localrun.maincode.mine.view.activity.MyOrderAllActivity;
 import com.xingguang.localrun.utils.AppUtil;
 import com.xingguang.localrun.view.RoundImageView;
 
@@ -119,16 +122,26 @@ public class MineFragment extends BaseFragment {
                 startActivity(new Intent(getActivity(), MyGuanzhuActivity.class));
                 break;
             case R.id.ll_my_zuji://我的足迹
+                startActivity(new Intent(getActivity(), FootPrintActivity.class));
                 break;
             case R.id.ll_my_allorder://我的全部订单
+                startActivity(new Intent(getActivity(), MyOrderAllActivity.class)
+                        .putExtra("state","0"));
                 break;
             case R.id.ll_daipay://待支付
+                startActivity(new Intent(getActivity(), MyOrderAllActivity.class)
+                        .putExtra("state","1"));
                 break;
             case R.id.ll_mydai_fahuo://待付款
+                startActivity(new Intent(getActivity(), MyOrderAllActivity.class)
+                        .putExtra("state","2"));
                 break;
             case R.id.ll_complete://已完成
+                startActivity(new Intent(getActivity(), MyOrderAllActivity.class)
+                        .putExtra("state","3"));
                 break;
             case R.id.ll_getads://收货地址
+                startActivity(new Intent(getActivity(), AddressManagementActivity.class));
                 break;
             case R.id.ll_about://关于
                 break;
