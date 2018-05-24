@@ -63,5 +63,8 @@ dependencies {
     //对于retrofit+rxjava封装的网络请求
     implementation 'com.tamic.novate:novate:1.5.2.3'
 
+    // 城市选择
+    implementation 'liji.library.dev:citypickerview:0.9.0'
+
 
 }

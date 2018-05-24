@@ -1,5 +1,7 @@
 package com.xingguang.localrun.maincode.home.view.activity;
 
+import android.os.Handler;
+import android.os.Message;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.webkit.WebView;
@@ -10,8 +12,12 @@ import android.widget.TextView;
 
 import com.xingguang.localrun.R;
 import com.xingguang.localrun.base.ToolBarActivity;
+import com.xingguang.localrun.maincode.home.model.ProductDetailsBean;
+import com.xingguang.localrun.popwindow.NowBuyPopUpWindow;
 import com.xingguang.localrun.utils.MyListView;
 import com.xingguang.localrun.view.TiceScrollview;
+
+import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -58,9 +64,19 @@ public class ProductdetailsActivity extends ToolBarActivity implements TiceScrol
     LinearLayout bottom;
     @BindView(R.id.ll_parent)
     RelativeLayout llParent;
+    @BindView(R.id.ll_guige)
+    LinearLayout ll_guige;
 
     private int mHeight;
+    public static ProductdetailsActivity instance;
 
+    private ArrayList<ProductDetailsBean> lists = new ArrayList<ProductDetailsBean>();
+
+    //购买件数
+    private int nums = 1;
+
+    //规格ID   类型  提醒
+    private String id, specificationId, type;
 
     @Override
     protected int getLayoutId() {
@@ -69,6 +85,7 @@ public class ProductdetailsActivity extends ToolBarActivity implements TiceScrol
 
     @Override
     protected void initView() {
+        instance = this;
         getToolbarTitle().setText("商品详情");
         setSubImg(R.mipmap.pro_more);
 
@@ -122,7 +139,7 @@ public class ProductdetailsActivity extends ToolBarActivity implements TiceScrol
 
     }
 
-    @OnClick({R.id.ll_shop, R.id.collect, R.id.add_shopcar, R.id.commit})
+    @OnClick({R.id.ll_shop, R.id.collect, R.id.add_shopcar, R.id.commit,R.id.ll_guige})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.ll_shop://店铺
@@ -133,9 +150,45 @@ public class ProductdetailsActivity extends ToolBarActivity implements TiceScrol
                 break;
             case R.id.commit://立即购买
                 break;
+            case R.id.ll_guige://选择规格
+                new NowBuyPopUpWindow(ProductdetailsActivity.this, llParent, lists, nums);
+                break;
         }
     }
 
+    public Handler handler = new Handler() {
+
+        @Override
+        public void handleMessage(Message msg) {
+            // TODO Auto-generated method stub
+            super.handleMessage(msg);
+            switch (msg.what) {
+                case 1:
+                    nums = Integer.parseInt(msg.obj.toString().split("\\ ")[0]);
+                    specificationId = msg.obj.toString().split("\\ ")[1];
+                    tvProGuige.setText(msg.obj.toString().split("\\ ")[2]);
+//                    newPrice.setText(msg.obj.toString().split("\\ ")[3]);
+//                    oldPrice.setText("¥" + msg.obj.toString().split("\\ ")[4]);
+//                    oldPrice.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG | Paint.ANTI_ALIAS_FLAG); // 设置中划线并加清晰
+                    break;
+                case 2:
+                    //列表数据
+                    falshsaleCommoditySize(id);
+                    break;
+                default:
+                    break;
+            }
+        }
+
+    };
+
+    /**
+     * 商品规格
+     */
+    private void falshsaleCommoditySize(String id) {
+//        lists.clear();
+//        lists.addAll(model.getList());
+    }
 
 
 }

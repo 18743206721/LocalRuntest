@@ -1,5 +1,6 @@
 package com.xingguang.localrun.maincode.mine.view.activity;
 
+import android.content.Intent;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -67,7 +68,10 @@ public class AddressManagementActivity extends ToolBarActivity {
 
     @OnClick(R.id.bottom)
     public void onViewClicked() {
-
+        Intent intent = new Intent(AddressManagementActivity.this, AddressDetailActivity.class);
+//                intent.putExtra("title", "update");
+//                intent.putExtra("id", myContractList.get(position).getId());
+        startActivityForResult(intent, 1);
     }
 
     /**
@@ -78,6 +82,7 @@ public class AddressManagementActivity extends ToolBarActivity {
         mAdapter = new AddressManagementAdapter(myContractList, this);
         addressManagementRecycle.setLayoutManager(new LinearLayoutManager(this));
         addressManagementRecycle.setAdapter(mAdapter);
+        addressManagementRecycle.setNestedScrollingEnabled(false);
         //设置默认
         mAdapter.setDefaultClick(new AddressManagementAdapter.DefaultListener() {
             @Override
@@ -92,10 +97,10 @@ public class AddressManagementActivity extends ToolBarActivity {
         mAdapter.setUpdateClick(new AddressManagementAdapter.UpdateListener() {
             @Override
             public void UpdateClick(int position) {
-//                Intent intent = new Intent(AddressManagementActivity.this, AddressDetailActivity.class);
+                Intent intent = new Intent(AddressManagementActivity.this, AddressDetailActivity.class);
 //                intent.putExtra("title", "update");
 //                intent.putExtra("id", myContractList.get(position).getId());
-//                startActivityForResult(intent, 1);
+                startActivityForResult(intent, 1);
             }
         });
         //删除

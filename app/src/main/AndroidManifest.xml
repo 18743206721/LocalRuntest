@@ -69,7 +69,10 @@
         <activity android:name=".maincode.mine.view.activity.FootPrintActivity" />
         <activity android:name=".maincode.mine.view.activity.MyOrderAllActivity" />
         <activity android:name=".maincode.mine.view.activity.PingLunActivity" />
-        <activity android:name=".maincode.mine.view.activity.AddressManagementActivity"></activity>
+        <activity android:name=".maincode.mine.view.activity.AddressManagementActivity" />
+        <activity android:name=".maincode.mine.view.activity.AddressDetailActivity" />
+        <activity android:name=".maincode.mine.view.activity.AboutActivity" />
+        <activity android:name=".maincode.mine.view.activity.WebViewActivity"></activity>
     </application>
 
 </manifest>

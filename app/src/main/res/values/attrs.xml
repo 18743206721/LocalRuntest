@@ -20,5 +20,15 @@
 
     </declare-styleable>
 
+    <!--标签 流式布局属性-->
+    <declare-styleable name="TagCloudLayout">
+        <attr name="lineSpacing" format="dimension" />
+        <attr name="tagSpacing" format="dimension" />
+        <!-- 是否是固定布局 -->
+        <attr name="isFixed" format="boolean" />
+        <attr name="columnSize" format="integer" />
+        <attr name="maxLines" format="integer" />
+    </declare-styleable>
+
 
 </resources>

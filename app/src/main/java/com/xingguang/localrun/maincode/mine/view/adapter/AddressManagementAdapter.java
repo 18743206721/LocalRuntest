@@ -86,15 +86,15 @@ public class AddressManagementAdapter extends RecyclerView.Adapter<RecyclerView.
             ListviewHolder mHolder = (ListviewHolder) holder;
             mHolder.itemView.setTag(position);
 
-            mHolder.name.setText(myContractList.get(position).getName());
-            mHolder.phone.setText(myContractList.get(position).getPhone());
-            mHolder.address.setText(myContractList.get(position).getProv() + myContractList.get(position).getCity() +
-                    myContractList.get(position).getDist() + myContractList.get(position).getAddress());
+//            mHolder.name.setText(myContractList.get(position).getName());
+//            mHolder.phone.setText(myContractList.get(position).getPhone());
+//            mHolder.address.setText(myContractList.get(position).getProv() + myContractList.get(position).getCity() +
+//                    myContractList.get(position).getDist() + myContractList.get(position).getAddress());
 
 //            if ("0".equals(myContractList.get(position).getDefAddress())) {
-//                mHolder.default_address_img.setImageResource(R.mipmap.nochoice_btn_gray);
+//                mHolder.default_address_img.setImageResource(R.mipmap.ic_uncheck);
 //            } else {
-//                mHolder.default_address_img.setImageResource(R.mipmap.choice_btn_green);
+//                mHolder.default_address_img.setImageResource(R.mipmap.ic_checked);
 //            }
 
             mHolder.defaultAddress.setTag(position);
@@ -104,10 +104,10 @@ public class AddressManagementAdapter extends RecyclerView.Adapter<RecyclerView.
                 public void onClick(View v) {
                     int position = Integer.parseInt(v.getTag().toString());
                     if (mListener != null) {
-                        mListener.SubClick(position,myContractList.get(position).getName()+"      "+myContractList.get(position).getPhone()
-                                ,myContractList.get(position).getProv() + myContractList.get(position).getCity() +
-                                        myContractList.get(position).getDist() + myContractList.get(position).getAddress(),
-                                myContractList.get(position).getId());
+//                        mListener.SubClick(position,myContractList.get(position).getName()+"      "+myContractList.get(position).getPhone()
+//                                ,myContractList.get(position).getProv() + myContractList.get(position).getCity() +
+//                                        myContractList.get(position).getDist() + myContractList.get(position).getAddress(),
+//                                myContractList.get(position).getId());
                     }
                 }
             });
@@ -136,9 +136,9 @@ public class AddressManagementAdapter extends RecyclerView.Adapter<RecyclerView.
             mHolder.ll_parent.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    onItem.onItem(position,myContractList.get(position).getName()+"      "+myContractList.get(position).getPhone()
-                    ,myContractList.get(position).getProv() + myContractList.get(position).getCity() +
-                                    myContractList.get(position).getDist() + myContractList.get(position).getAddress());
+//                    onItem.onItem(position,myContractList.get(position).getName()+"      "+myContractList.get(position).getPhone()
+//                    ,myContractList.get(position).getProv() + myContractList.get(position).getCity() +
+//                                    myContractList.get(position).getDist() + myContractList.get(position).getAddress());
                 }
             });
         }
@@ -151,7 +151,7 @@ public class AddressManagementAdapter extends RecyclerView.Adapter<RecyclerView.
 
     @Override
     public int getItemCount() {
-        return myContractList.size();
+        return 5;
     }
 
     @Override
@@ -167,20 +167,20 @@ public class AddressManagementAdapter extends RecyclerView.Adapter<RecyclerView.
      * HomeList布局
      */
     class ListviewHolder extends RecyclerView.ViewHolder {
-        TextView name, phone, address;
+        TextView name, phone, address,update,detele;
         LinearLayout defaultAddress,ll_parent;
-        ImageView update, detele, default_address_img;
+        ImageView default_address_img;
 
         public ListviewHolder(View itemView) {
             super(itemView);
-//            name = (TextView) itemView.findViewById(R.id.name);
-//            phone = (TextView) itemView.findViewById(R.id.phone);
-//            address = (TextView) itemView.findViewById(R.id.address);
-//            defaultAddress = (LinearLayout) itemView.findViewById(R.id.default_address);
-//            ll_parent = (LinearLayout) itemView.findViewById(R.id.ll_parent);
-//            update = (ImageView) itemView.findViewById(R.id.update);
-//            detele = (ImageView) itemView.findViewById(R.id.detele);
-//            default_address_img = (ImageView) itemView.findViewById(R.id.default_address_img);
+            name = (TextView) itemView.findViewById(R.id.name);
+            phone = (TextView) itemView.findViewById(R.id.phone);
+            address = (TextView) itemView.findViewById(R.id.address);
+            defaultAddress = (LinearLayout) itemView.findViewById(R.id.default_address);
+            ll_parent = (LinearLayout) itemView.findViewById(R.id.ll_parent);
+            update = (TextView) itemView.findViewById(R.id.itemtv_ads_edit);
+            detele = (TextView) itemView.findViewById(R.id.itemtv_ads_delet);
+            default_address_img = (ImageView) itemView.findViewById(R.id.default_address_img);
 
         }
     }

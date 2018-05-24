@@ -16,6 +16,7 @@ import android.widget.TextView;
 import com.xingguang.localrun.R;
 import com.xingguang.localrun.base.BaseFragment;
 import com.xingguang.localrun.login.view.activity.LoginActivity;
+import com.xingguang.localrun.maincode.mine.view.activity.AboutActivity;
 import com.xingguang.localrun.maincode.mine.view.activity.AddressManagementActivity;
 import com.xingguang.localrun.maincode.mine.view.activity.FootPrintActivity;
 import com.xingguang.localrun.maincode.mine.view.activity.MineApplyEnterActivity;
@@ -144,6 +145,7 @@ public class MineFragment extends BaseFragment {
                 startActivity(new Intent(getActivity(), AddressManagementActivity.class));
                 break;
             case R.id.ll_about://关于
+                startActivity(new Intent(getActivity(), AboutActivity.class));
                 break;
             case R.id.btn_shenqing://申请入驻
                 startActivity(new Intent(getActivity(), MineApplyEnterActivity.class));
