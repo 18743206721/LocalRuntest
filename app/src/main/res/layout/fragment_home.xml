@@ -307,7 +307,14 @@
                 <LinearLayout
                     android:layout_width="100dp"
                     android:layout_height="180dp"
-                    android:background="@color/home_read"></LinearLayout>
+                    android:background="@color/home_read">
+                    <ImageView
+                        android:id="@+id/iv_img1"
+                        android:scaleType="centerCrop"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
+
+                </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -319,7 +326,13 @@
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
                         android:layout_weight="1"
-                        android:background="@color/home_read"></LinearLayout>
+                        android:background="@color/home_read">
+                        <ImageView
+                            android:id="@+id/iv_img2"
+                            android:scaleType="centerCrop"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent" />
+                    </LinearLayout>
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -332,14 +345,28 @@
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:layout_weight="1"
-                            android:background="@color/home_read"></LinearLayout>
+                            android:background="@color/home_read">
+                            <ImageView
+                                android:id="@+id/iv_img3"
+                                android:scaleType="centerCrop"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent" />
+
+                        </LinearLayout>
 
                         <LinearLayout
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:layout_marginLeft="10dp"
                             android:layout_weight="1"
-                            android:background="@color/home_read"></LinearLayout>
+                            android:background="@color/home_read">
+                            <ImageView
+                                android:id="@+id/iv_img4"
+                                android:scaleType="centerCrop"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent" />
+
+                        </LinearLayout>
 
                     </LinearLayout>
 
@@ -399,6 +426,7 @@
                     android:textSize="18sp" />
 
                 <LinearLayout
+                    android:id="@+id/ll_daigou_more"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
@@ -489,6 +517,7 @@
                     android:textSize="18sp" />
 
                 <LinearLayout
+                    android:id="@+id/ll_daiban_more"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"

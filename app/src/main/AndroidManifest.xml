@@ -72,7 +72,9 @@
         <activity android:name=".maincode.mine.view.activity.AddressManagementActivity" />
         <activity android:name=".maincode.mine.view.activity.AddressDetailActivity" />
         <activity android:name=".maincode.mine.view.activity.AboutActivity" />
-        <activity android:name=".maincode.mine.view.activity.WebViewActivity"></activity>
+        <activity android:name=".maincode.mine.view.activity.WebViewActivity" />
+        <activity android:name=".maincode.home.view.activity.DaiBanMoreActivity" />
+        <activity android:name=".maincode.home.view.activity.DaiBanDetailsActivity"></activity>
     </application>
 
 </manifest>

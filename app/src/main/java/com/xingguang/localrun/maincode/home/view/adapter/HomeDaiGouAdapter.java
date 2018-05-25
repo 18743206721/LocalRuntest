@@ -18,11 +18,11 @@ public class HomeDaiGouAdapter extends RecyclerView.Adapter <CommonViewHolder> {
 
     private OnItemClickListener mOnItemClickLitener;
 
-    private OnItemLookshopListener mOnItemLookshopLitener;
-
-    public void setmOnItemLookshopListener(OnItemLookshopListener mOnItemLookshopListener) {
-        this.mOnItemLookshopLitener = mOnItemLookshopListener;
-    }
+//    private OnItemLookshopListener mOnItemLookshopLitener;
+//
+//    public void setmOnItemLookshopListener(OnItemLookshopListener mOnItemLookshopListener) {
+//        this.mOnItemLookshopLitener = mOnItemLookshopListener;
+//    }
 
 
     public void setmOnItemClickListener(OnItemClickListener mOnItemClickListener) {
@@ -57,12 +57,12 @@ public class HomeDaiGouAdapter extends RecyclerView.Adapter <CommonViewHolder> {
 
         holder.setText(R.id.item_tv_name, "好吃的蛋糕");
 
-        item_tv_look.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mOnItemLookshopLitener.OnItemLookshop(item_tv_look, position);
-            }
-        });
+//        item_tv_look.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                mOnItemLookshopLitener.OnItemLookshop(item_tv_look, position);
+//            }
+//        });
 
 
     }
@@ -76,9 +76,9 @@ public class HomeDaiGouAdapter extends RecyclerView.Adapter <CommonViewHolder> {
         void OnItemClick(View view, int position);
     }
 
-    public interface OnItemLookshopListener {
-        void OnItemLookshop(View view, int position);
-    }
+//    public interface OnItemLookshopListener {
+//        void OnItemLookshop(View view, int position);
+//    }
 
 
 }

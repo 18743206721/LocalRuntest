@@ -17,6 +17,12 @@ import java.util.List;
 
 import butterknife.BindView;
 
+
+/**
+ * 创建日期：2018/5/25
+ * 描述:我关注的
+ * 作者:LiuYu
+ */
 public class MyGuanzhuActivity extends ToolBarActivity {
 
     @BindView(R.id.rv_attention)

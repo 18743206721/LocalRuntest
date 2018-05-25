@@ -86,8 +86,6 @@ public class MainActivity extends BaseActivity {
         setToNewsFragment();
         setThemeColor(tabOneImg,R.drawable.home_icon);
         tabOneTxt.setTextColor(getResources().getColor(R.color.text_color_red));
-
-
     }
 
     @OnClick({R.id.tab_one, R.id.tab_two, R.id.tab_three, R.id.tab_four})

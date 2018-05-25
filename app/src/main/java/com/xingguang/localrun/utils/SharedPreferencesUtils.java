@@ -44,6 +44,10 @@ public class SharedPreferencesUtils {
     //默认地址地址
     public static final String ADDRESSLOC = "addressloc";
 
+    //home的搜索
+    public static final String TOGETHERPLAY = "history";
+
+
     /**
      * @param context
      * @param key

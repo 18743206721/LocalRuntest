@@ -10,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -18,6 +19,8 @@ import com.xingguang.localrun.base.BaseFragment;
 import com.xingguang.localrun.main.view.MainActivity;
 import com.xingguang.localrun.maincode.home.model.GlideImageLoader;
 import com.xingguang.localrun.maincode.home.view.activity.ClassifShopActivity;
+import com.xingguang.localrun.maincode.home.view.activity.DaiBanDetailsActivity;
+import com.xingguang.localrun.maincode.home.view.activity.DaiBanMoreActivity;
 import com.xingguang.localrun.maincode.home.view.activity.HomeSearchActivity;
 import com.xingguang.localrun.maincode.home.view.activity.LookShopActivity;
 import com.xingguang.localrun.maincode.home.view.adapter.HomeDaiBanAdapter;
@@ -58,6 +61,19 @@ public class HomeFragment extends BaseFragment {
     RecyclerView mainHomelvDaiban;
     @BindView(R.id.ll_sousuo_serch)
     LinearLayout llsousuo;
+    @BindView(R.id.ll_daigou_more)
+    LinearLayout ll_daigou_more;
+    @BindView(R.id.ll_daiban_more)
+    LinearLayout ll_daiban_more;
+    @BindView(R.id.iv_img1)
+    ImageView iv_img1;
+    @BindView(R.id.iv_img2)
+    ImageView iv_img2;
+    @BindView(R.id.iv_img3)
+    ImageView iv_img3;
+    @BindView(R.id.iv_img4)
+    ImageView iv_img4;
+
     Unbinder unbinder;
 
     private HomeDaiGouAdapter daigouadapter;
@@ -165,7 +181,8 @@ public class HomeFragment extends BaseFragment {
 
     @OnClick({R.id.ll_main_fenlei, R.id.ll_main_selecte, R.id.ll_home_dijia, R.id.ll_home_food,
             R.id.ll_outfit, R.id.ll_supermarket, R.id.ll_home_fruit, R.id.ll_home_hardware,
-            R.id.ll_sousuo_serch})
+            R.id.ll_sousuo_serch,R.id.ll_daigou_more,R.id.ll_daiban_more,
+            R.id.iv_img1,R.id.iv_img2,R.id.iv_img3,R.id.iv_img4})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.ll_sousuo_serch://搜索
@@ -195,6 +212,25 @@ public class HomeFragment extends BaseFragment {
                 break;
             case R.id.ll_home_hardware://五金
                 startfenlei("五金");
+                break;
+            case R.id.ll_daigou_more: //代购更多跳转分类
+                MainActivity.instance.setBg(2);
+                MainActivity.instance.setToProjectFragment();
+                break;
+            case R.id.ll_daiban_more://代办更多跳转到代办
+                startActivity(new Intent(getActivity(),DaiBanMoreActivity.class));
+                break;
+            case R.id.iv_img1://优速办1
+                startActivity(new Intent(getActivity(),DaiBanDetailsActivity.class));
+                break;
+            case R.id.iv_img2://优速办2
+                startActivity(new Intent(getActivity(),DaiBanDetailsActivity.class));
+                break;
+            case R.id.iv_img3://优速办3
+                startActivity(new Intent(getActivity(),DaiBanDetailsActivity.class));
+                break;
+            case R.id.iv_img4://优速办4
+                startActivity(new Intent(getActivity(),DaiBanDetailsActivity.class));
                 break;
         }
     }

@@ -9,15 +9,17 @@
 
 
     <LinearLayout
+        android:id="@+id/ll_search"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
         android:orientation="horizontal">
 
         <ImageView
+            android:id="@+id/iv_finish"
             android:layout_marginLeft="5dp"
-            android:layout_width="23dp"
-            android:layout_height="23dp"
+            android:layout_width="19dp"
+            android:layout_height="19dp"
             android:src="@mipmap/back_finish" />
 
         <LinearLayout
@@ -48,7 +50,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:textSize="16sp"
+                android:textSize="14sp"
                 android:background="@drawable/bg_search_blue"
                 android:layout_marginLeft="@dimen/dp10"
                 android:layout_marginRight="10dp"
@@ -86,30 +88,62 @@
 
     </LinearLayout>
 
-
     <!--历史搜索-->
-    <RelativeLayout
-        android:gravity="center_vertical"
-        android:layout_marginTop="10dp"
-        android:layout_width="match_parent"
-        android:layout_height="40dp">
+    <LinearLayout
+        android:id="@+id/ll_history_search"
+        android:visibility="visible"
+        android:orientation="vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
 
-        <TextView
-            android:layout_marginLeft="@dimen/dp10"
-            android:textColor="@color/textDarkGray"
-            android:textSize="16sp"
-            android:text="历史搜索"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent" />
+        <RelativeLayout
+            android:gravity="center_vertical"
+            android:layout_marginTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="40dp">
 
-        <ImageView
-            android:layout_alignParentRight="true"
-            android:layout_marginRight="@dimen/dp10"
-            android:src="@mipmap/clear_search"
-            android:layout_width="20dp"
-            android:layout_height="20dp" />
+            <TextView
+                android:layout_marginLeft="@dimen/dp10"
+                android:textColor="@color/textDarkGray"
+                android:textSize="15sp"
+                android:text="历史搜索"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent" />
 
-    </RelativeLayout>
+            <ImageView
+                android:id="@+id/iv_hostiry_dele"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="@dimen/dp10"
+                android:src="@mipmap/clear_search"
+                android:layout_width="20dp"
+                android:layout_height="20dp" />
+
+        </RelativeLayout>
+
+        <!--标签-->
+        <LinearLayout
+            android:id="@+id/ll_biaoqian"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:orientation="vertical">
+
+            <com.xingguang.localrun.view.TagCloudLayout
+                android:id="@+id/rv_tag"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center_horizontal"
+                android:padding="10dp"
+                app:columnSize="2"
+                app:isFixed="true"
+                app:lineSpacing="5dp"
+                app:tagSpacing="10dp" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+
 
 
 

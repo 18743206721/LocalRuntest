@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/board"
+    android:orientation="vertical"
+    tools:context="com.xingguang.localrun.maincode.home.view.activity.DaiBanDetailsActivity">
+
+
+    <include layout="@layout/toolbar_layout" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="@color/fengexian" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:background="@color/white"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/dp10"
+            android:background="@drawable/btn_ads_bg"
+            android:gravity="center">
+
+            <ImageView
+                android:id="@+id/iv_daibande"
+                android:layout_width="wrap_content"
+                android:layout_height="220dp"
+                android:src="@mipmap/home_fruit" />
+        </LinearLayout>
+
+
+        <TextView
+            android:id="@+id/item_tv_ads"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="13dp"
+            android:text="新租客的积分看见爱上大路口附近是的离开房间"
+            android:textColor="@color/textBlack"
+            android:textSize="14sp" />
+    </LinearLayout>
+
+    <!--注册-->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:gravity="center_horizontal">
+
+        <TextView
+            android:id="@+id/tv_lianxi"
+            android:layout_width="340dp"
+            android:layout_height="40dp"
+            android:background="@drawable/corners30_solidgreen"
+            android:gravity="center"
+            android:text="立即联系"
+            android:textColor="#fff" />
+    </LinearLayout>
+
+
+</LinearLayout>
