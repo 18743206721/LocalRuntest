@@ -1,5 +1,8 @@
 package com.xingguang.localrun.maincode.home.view.activity;
 
+import android.content.Intent;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
@@ -9,7 +12,10 @@ import android.widget.TextView;
 import com.androidkun.xtablayout.XTabLayout;
 import com.xingguang.localrun.R;
 import com.xingguang.localrun.base.BaseActivity;
+import com.xingguang.localrun.maincode.home.view.adapter.DaiBanMoreAdapter;
 import com.xingguang.localrun.maincode.home.view.adapter.HistoryListAdapter;
+import com.xingguang.localrun.maincode.home.view.adapter.SearchResultAdapter;
+import com.xingguang.localrun.maincode.home.view.adapter.ShopDianAdapter;
 import com.xingguang.localrun.utils.AppUtil;
 import com.xingguang.localrun.utils.SharedPreferencesUtils;
 import com.xingguang.localrun.utils.ToastUtils;
@@ -48,12 +54,23 @@ public class HomeSearchActivity extends BaseActivity {
     LinearLayout llHistorySearch;
     @BindView(R.id.ll_search)
     LinearLayout ll_search;
+    @BindView(R.id.ll_biaoqian)
+    LinearLayout ll_biaoqian;
+    @BindView(R.id.ll_rv)
+    LinearLayout ll_rv;
+    @BindView(R.id.rv_list)
+    RecyclerView rv_list;
     Timer timer = new Timer();
-
     HistoryListAdapter listAdapter;
     //搜索历史的集合
     private List<String> historList = new ArrayList<>();
     String search = "";
+    public static HomeSearchActivity instance;
+    int currentpos = 0;
+
+    private List<String> proList = new ArrayList<>();
+    private List<String> shopList = new ArrayList<>();
+    private List<String> daibanList = new ArrayList<>();
 
     @Override
     protected int getLayoutId() {
@@ -62,11 +79,20 @@ public class HomeSearchActivity extends BaseActivity {
 
     @Override
     protected void initView() {
-
+        instance = this;
+        ll_biaoqian.setVisibility(View.VISIBLE);
         listAdapter = new HistoryListAdapter(HomeSearchActivity.this, historList);
         rv_tag.setAdapter(listAdapter);
         huixian();
         initTab();
+    }
+
+    public void initListener(int position) {
+        currentpos = position;
+        search = historList.get(position);
+        etSearch.setText(search);
+//                loadfindbykey(search, 0);
+        initxianshi();
     }
 
     private void huixian() {
@@ -92,11 +118,60 @@ public class HomeSearchActivity extends BaseActivity {
             @Override
             public void onTabSelected(XTabLayout.Tab tab) {
                 String text = (String) tab.getText();
+                ToastUtils.showToast(HomeSearchActivity.this, "dianji" + text);
+                if (text.equals("商品")){
+                    SearchResultAdapter shopadapter = new SearchResultAdapter(HomeSearchActivity.this,proList,"1");
+                    LinearLayoutManager lmg = new LinearLayoutManager(HomeSearchActivity.this);
+                    rv_list.setLayoutManager(lmg);
+                    rv_list.setAdapter(shopadapter);
+                    shopadapter.setaList(proList);
+                    shopadapter.setmOnItemaddcarClickLitener(new SearchResultAdapter.OnItemaddcarClickListener() {
+                        @Override
+                        public void OnItemaddcarClick(TextView view, int position) {
+                            ToastUtils.showToast(HomeSearchActivity.this,"已加入到购物车!");
+                        }
+                    });
+                    shopadapter.setmOnItemClickListener(new SearchResultAdapter.OnItemClickListener() {
+                        @Override
+                        public void OnItemClick(View view, int position) {
+                            startActivity(new Intent(HomeSearchActivity.this,ProductdetailsActivity.class));
+                        }
+                    });
+
+                }else if (text.equals("店铺")){
+                    ShopDianAdapter adapter = new ShopDianAdapter(HomeSearchActivity.this,shopList,1);
+                    LinearLayoutManager mgr = new LinearLayoutManager(HomeSearchActivity.this);
+                    rv_list.setLayoutManager(mgr);
+                    rv_list.setAdapter(adapter);
+                    adapter.setmOnItemClickListener(new ShopDianAdapter.OnItemClickListener() {
+                        @Override
+                        public void OnItemClick(TextView view, int position) {
+                            Intent intent = new Intent(HomeSearchActivity.this, LookShopActivity.class);
+//                intent.putExtra("id", listDatas.get(position).getCommodityId());
+                            startActivity(intent);
+                        }
+                    });
+                }else {
+                    DaiBanMoreAdapter adapter = new DaiBanMoreAdapter(HomeSearchActivity.this,daibanList);
+                    LinearLayoutManager lmg = new LinearLayoutManager(HomeSearchActivity.this);
+                    rv_list.setLayoutManager(lmg);
+                    rv_list.setAdapter(adapter);
+                    adapter.setOnItemClickLitener(new DaiBanMoreAdapter.OnItemClickLitener() {
+                        @Override
+                        public void onItemClick(TextView view, int position) {
+                            startActivity(new Intent(HomeSearchActivity.this,DaiBanDetailsActivity.class));
+                        }
+                    });
+
+                }
+
+
             }
 
             @Override
             public void onTabUnselected(XTabLayout.Tab tab) {
             }
+
             @Override
             public void onTabReselected(XTabLayout.Tab tab) {
             }
@@ -111,7 +186,10 @@ public class HomeSearchActivity extends BaseActivity {
                 finish();
                 break;
             case R.id.iv_hostiry_dele://删除历史记录
-                listAdapter.removeList(historList);
+                historList.clear();
+                saveHistory(historList);
+                initxianshi();
+                ll_biaoqian.setVisibility(View.GONE);
                 break;
             case R.id.tv_search: //搜索
                 historyload();
@@ -122,13 +200,22 @@ public class HomeSearchActivity extends BaseActivity {
     private void historyload() {
         if (!etSearch.getText().toString().equals("")) { //输入不为空
             initxianshi();
-
+            ll_biaoqian.setVisibility(View.VISIBLE);
             search = etSearch.getText().toString();
-            historList.add(search);
-            listAdapter.setList(historList);
-
-            saveHistory(historList);
-
+            if (historList.size() != 0) {
+                if (etSearch.getText().toString().equals(historList.get(currentpos))) {
+                    //直接显示列表，不添加到集合
+                } else {
+                    //添加到集合
+                    historList.add(search);
+                    listAdapter.setList(historList);
+                    saveHistory(historList);
+                }
+            } else {
+                historList.add(search);
+                listAdapter.setList(historList);
+                saveHistory(historList);
+            }
         } else {//输入为空
             ToastUtils.showToast(HomeSearchActivity.this, "请输入搜索内容!");
         }

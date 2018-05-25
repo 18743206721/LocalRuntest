@@ -14,7 +14,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
-
+/**
+ * 首页按钮分类
+ * */
 public class ClassifShopActivity extends ToolBarActivity {
 
     @BindView(R.id.xtab_classifshop)
@@ -48,7 +50,7 @@ public class ClassifShopActivity extends ToolBarActivity {
     private void initViewPage() {
         mFragments = new ArrayList<>();
         for (int i = 0; i < mTitles.length; i++) {
-            listFragment = new LookClassifShopFragment(i+1+"");
+            listFragment = LookClassifShopFragment.newInstance(i+1);
             mFragments.add(listFragment);
         }
         BaseFragmentAdapter adapter = new BaseFragmentAdapter(getSupportFragmentManager(), mFragments, mTitles);
