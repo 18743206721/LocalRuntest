@@ -25,7 +25,7 @@ public class ClassifShopActivity extends ToolBarActivity {
     ViewPager mPagerClassifshop;
 
     List<Fragment> mFragments;
-    String[] mTitles = new String[]{"综和","销量","价格"};
+    String[] mTitles = new String[]{"综和","销量","信用"};
     LookClassifShopFragment listFragment;
 
     @Override
