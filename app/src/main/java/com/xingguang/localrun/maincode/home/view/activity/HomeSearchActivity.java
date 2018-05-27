@@ -60,6 +60,11 @@ public class HomeSearchActivity extends BaseActivity {
     LinearLayout ll_rv;
     @BindView(R.id.rv_list)
     RecyclerView rv_list;
+    @BindView(R.id.ll_sea_biaoqian)
+    LinearLayout ll_sea_biaoqian;
+    @BindView(R.id.xtab_classifshop)
+    XTabLayout xtab_classifshop;
+
     Timer timer = new Timer();
     HistoryListAdapter listAdapter;
     //搜索历史的集合
@@ -81,6 +86,7 @@ public class HomeSearchActivity extends BaseActivity {
     protected void initView() {
         instance = this;
         ll_biaoqian.setVisibility(View.VISIBLE);
+        ll_sea_biaoqian.setVisibility(View.GONE); //设置商品标签隐藏
         listAdapter = new HistoryListAdapter(HomeSearchActivity.this, historList);
         rv_tag.setAdapter(listAdapter);
         huixian();
@@ -114,12 +120,18 @@ public class HomeSearchActivity extends BaseActivity {
         tabAll.addTab(tabAll.newTab().setText("店铺"));
         tabAll.addTab(tabAll.newTab().setText("代办"));
 
+        //设置商品下综合销量价格标签
+        xtab_classifshop.addTab(xtab_classifshop.newTab().setText("综合"));
+        xtab_classifshop.addTab(xtab_classifshop.newTab().setText("销量"));
+        xtab_classifshop.addTab(xtab_classifshop.newTab().setText("价格"));
+
         tabAll.setOnTabSelectedListener(new XTabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(XTabLayout.Tab tab) {
                 String text = (String) tab.getText();
                 ToastUtils.showToast(HomeSearchActivity.this, "dianji" + text);
                 if (text.equals("商品")){
+                    ll_sea_biaoqian.setVisibility(View.VISIBLE);
                     SearchResultAdapter shopadapter = new SearchResultAdapter(HomeSearchActivity.this,proList,"1");
                     LinearLayoutManager lmg = new LinearLayoutManager(HomeSearchActivity.this);
                     rv_list.setLayoutManager(lmg);
@@ -139,6 +151,7 @@ public class HomeSearchActivity extends BaseActivity {
                     });
 
                 }else if (text.equals("店铺")){
+                    ll_sea_biaoqian.setVisibility(View.GONE);
                     ShopDianAdapter adapter = new ShopDianAdapter(HomeSearchActivity.this,shopList,1);
                     LinearLayoutManager mgr = new LinearLayoutManager(HomeSearchActivity.this);
                     rv_list.setLayoutManager(mgr);
@@ -152,6 +165,7 @@ public class HomeSearchActivity extends BaseActivity {
                         }
                     });
                 }else {
+                    ll_sea_biaoqian.setVisibility(View.GONE);
                     DaiBanMoreAdapter adapter = new DaiBanMoreAdapter(HomeSearchActivity.this,daibanList);
                     LinearLayoutManager lmg = new LinearLayoutManager(HomeSearchActivity.this);
                     rv_list.setLayoutManager(lmg);
@@ -174,6 +188,26 @@ public class HomeSearchActivity extends BaseActivity {
 
             @Override
             public void onTabReselected(XTabLayout.Tab tab) {
+            }
+        });
+
+        //设置商品下综合销量价格标签的点击
+        xtab_classifshop.setOnTabSelectedListener(new XTabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(XTabLayout.Tab tab) {
+                String text = (String) tab.getText();
+
+
+            }
+
+            @Override
+            public void onTabUnselected(XTabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(XTabLayout.Tab tab) {
+
             }
         });
 

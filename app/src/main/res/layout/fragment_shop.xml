@@ -54,7 +54,7 @@
                     android:gravity="center"
                     android:minHeight="64dp"
                     android:text="全选"
-                    android:textSize="18sp"
+                    android:textSize="15sp"
                     android:textAppearance="?android:attr/textAppearanceLarge" />
 
                 <LinearLayout
@@ -65,24 +65,24 @@
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:layout_marginRight="20dp"
                         android:layout_weight="1"
                         android:orientation="vertical">
 
                         <LinearLayout
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:gravity="right"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
                             android:orientation="horizontal">
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="5dp"
-                                android:text="合计金额:"
+                                android:text="合计金额: "
                                 android:textColor="@color/textBlack"
-                                android:textSize="14sp"
+                                android:textSize="13sp"
                                 android:textStyle="bold" />
 
                             <TextView
@@ -91,7 +91,7 @@
                                 android:layout_height="wrap_content"
                                 android:text="¥0.00"
                                 android:textColor="@color/textMoney"
-                                android:textSize="15sp"
+                                android:textSize="14sp"
                                 android:textStyle="bold" />
                         </LinearLayout>
                     </LinearLayout>
@@ -100,11 +100,11 @@
                         android:id="@+id/tv_go_to_pay"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_weight="3"
+                        android:layout_weight="2"
                         android:background="@color/text_RedDauk"
                         android:gravity="center"
                         android:text="结算"
-                        android:textSize="15sp"
+                        android:textSize="14sp"
                         android:textColor="@color/white" />
                 </LinearLayout>
             </LinearLayout>

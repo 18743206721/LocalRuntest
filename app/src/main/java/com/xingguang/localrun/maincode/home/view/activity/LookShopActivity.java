@@ -41,6 +41,7 @@ public class LookShopActivity extends BaseActivity {
     @BindView(R.id.toolbar_subimg)
     ImageView toolbarSubimg;
 
+    public static LookShopActivity instance;
     //是否关注
     private boolean isshow;
 
@@ -52,6 +53,7 @@ public class LookShopActivity extends BaseActivity {
 
     @Override
     protected void initView() {
+        instance = this;
         toolbarSubtitle.setText("商店");
         initViewPage();
         initListener();

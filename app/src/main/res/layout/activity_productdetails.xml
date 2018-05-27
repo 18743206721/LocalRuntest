@@ -5,37 +5,80 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:id="@+id/ll_parent"
+    android:background="@color/board"
     tools:context="com.xingguang.localrun.maincode.home.view.activity.ProductdetailsActivity">
 
 
-    <com.xingguang.localrun.view.TiceScrollview
+    <!--<TextView-->
+        <!--android:id="@+id/line"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="1dp"-->
+        <!--android:layout_below="@+id/toolbar_tool"-->
+        <!--android:background="@color/line_color" />-->
+
+    <android.support.v4.widget.NestedScrollView
         android:id="@+id/sc_head_view"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:focusable="true"
-        android:focusableInTouchMode="true"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/line_two"
         android:scrollbars="none">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <ImageView
-                android:id="@+id/iv_tice_head"
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="260dp"
-                android:scaleType="centerCrop"
-                android:src="@mipmap/productdetails" />
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/iv_tice_head"
+                    android:layout_width="match_parent"
+                    android:layout_height="260dp"
+                    android:scaleType="centerCrop"
+                    android:src="@mipmap/productdetails" />
+
+                <!--标题栏-->
+                <RelativeLayout
+                    android:background="#00000000"
+                    android:orientation="horizontal"
+                    android:id="@+id/toolbar_tool"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:id="@+id/back"
+                        android:layout_width="@dimen/icon_size_big"
+                        android:layout_height="@dimen/icon_size_big"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="@dimen/outside_margin"
+                        android:paddingRight="20dp"
+                        android:src="@mipmap/back_black" />
+
+                    <ImageView
+                        android:id="@+id/iv_fenxiang"
+                        android:layout_marginRight="13dp"
+                        android:layout_centerInParent="true"
+                        android:layout_alignParentRight="true"
+                        android:src="@mipmap/pro_more"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+
+                </RelativeLayout>
+
+            </RelativeLayout>
+
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="13dp"
+                android:background="@color/white"
                 android:orientation="vertical">
 
                 <!--价格和分享-->
                 <RelativeLayout
+                    android:padding="13dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
@@ -53,7 +96,7 @@
                     <LinearLayout
                         android:id="@+id/ll_profenxinag"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:layout_alignParentRight="true"
                         android:gravity="center"
                         android:orientation="horizontal">
@@ -65,17 +108,19 @@
                             android:text="分享"
                             android:textColor="@color/textGray"
                             android:textSize="14sp" />
-
                         <ImageView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:src="@mipmap/icon_logo" />
+                            android:src="@mipmap/pshare" />
                     </LinearLayout>
 
                 </RelativeLayout>
 
                 <!--名字和规格-->
                 <LinearLayout
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginRight="13dp"
+                    android:layout_marginLeft="13dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
@@ -87,7 +132,7 @@
                         android:lineSpacingExtra="4dp"
                         android:text="桂花鸭南京鸭桂花鸭南京鸭桂花鸭南京鸭桂花鸭南京鸭桂花鸭南京鸭桂花鸭南京鸭"
                         android:textColor="@color/textBlack"
-                        android:textSize="15sp" />
+                        android:textSize="14sp" />
 
                     <LinearLayout
                         android:id="@+id/ll_guige"
@@ -114,18 +159,22 @@
 
                     </LinearLayout>
 
-
                 </LinearLayout>
 
+                <View
+                    android:background="@color/board"
+                    android:layout_width="match_parent"
+                    android:layout_height="10dp"/>
                 <!--webview详情-->
                 <LinearLayout
+                    android:background="@color/white"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
                     android:orientation="vertical">
 
                     <WebView
-                        android:background="@color/white"
                         android:orientation="vertical"
                         android:id="@+id/webView1"
                         android:layout_width="match_parent"
@@ -134,16 +183,41 @@
                 </LinearLayout>
 
 
+                <View
+                    android:background="@color/board"
+                    android:layout_width="match_parent"
+                    android:layout_height="13dp" />
+
                 <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginTop="10dp"
-                    android:descendantFocusability="blocksDescendants">
+                    android:layout_height="match_parent">
 
-                    <com.xingguang.localrun.utils.MyListView
-                        android:id="@+id/rv_comment"
+                    <LinearLayout
+                        android:id="@+id/ll_liebiao"
+                        android:visibility="visible"
+                        android:orientation="vertical"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:layout_margin="13dp"
+                            android:textSize="14sp"
+                            android:textColor="@color/textBlack"
+                            android:text="评价"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+
+                        <View
+                            android:background="@color/fengexian"
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp" />
+
+                        <android.support.v7.widget.RecyclerView
+                            android:id="@+id/rv_comment"
+                            android:visibility="visible"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" />
+                    </LinearLayout>
 
                     <LinearLayout
                         android:id="@+id/ll_wpl"
@@ -152,7 +226,7 @@
                         android:orientation="vertical"
                         android:paddingBottom="50dp"
                         android:paddingTop="30dp"
-                        android:visibility="visible">
+                        android:visibility="gone">
 
                         <ImageView
                             android:layout_width="wrap_content"
@@ -168,23 +242,31 @@
                             android:text="暂无评论"
                             android:textSize="14sp" />
                     </LinearLayout>
+
                 </RelativeLayout>
+
             </LinearLayout>
+
         </LinearLayout>
-    </com.xingguang.localrun.view.TiceScrollview>
 
+    </android.support.v4.widget.NestedScrollView>
 
-    <include layout="@layout/toolbar_layout" />
-
+    <TextView
+        android:id="@+id/line_two"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_above="@+id/bottom"
+        android:background="@color/board" />
 
     <!--底部功能按钮-->
+    <RelativeLayout
+        android:id="@+id/bottom"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_alignParentBottom="true">
         <LinearLayout
-            android:id="@+id/bottom"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
             android:layout_width="match_parent"
-            android:layout_height="42dp"
+            android:layout_height="match_parent"
             android:orientation="horizontal"
             android:weightSum="4">
 
@@ -235,6 +317,7 @@
                     android:src="@mipmap/pro_collection" />
 
                 <TextView
+                    android:id="@+id/tv_pro"
                     android:layout_marginLeft="5dp"
                     android:gravity="center"
                     android:layout_width="wrap_content"
@@ -273,6 +356,6 @@
 
             </LinearLayout>
         </LinearLayout>
-
+    </RelativeLayout>
 
 </RelativeLayout>

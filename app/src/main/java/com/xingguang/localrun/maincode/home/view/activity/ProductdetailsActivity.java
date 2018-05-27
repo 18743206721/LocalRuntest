@@ -1,9 +1,16 @@
 package com.xingguang.localrun.maincode.home.view.activity;
 
+import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.widget.NestedScrollView;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewTreeObserver;
+import android.view.WindowManager;
 import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -11,13 +18,18 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.xingguang.localrun.R;
-import com.xingguang.localrun.base.ToolBarActivity;
+import com.xingguang.localrun.base.BaseActivity;
+import com.xingguang.localrun.main.view.MainActivity;
 import com.xingguang.localrun.maincode.home.model.ProductDetailsBean;
+import com.xingguang.localrun.maincode.home.view.adapter.PinglunAdapter;
+import com.xingguang.localrun.popwindow.CrowdPopUpWindow;
 import com.xingguang.localrun.popwindow.NowBuyPopUpWindow;
-import com.xingguang.localrun.utils.MyListView;
+import com.xingguang.localrun.utils.AppUtil;
+import com.xingguang.localrun.utils.ToastUtils;
 import com.xingguang.localrun.view.TiceScrollview;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -28,7 +40,7 @@ import butterknife.OnClick;
  * 描述:商品详情
  * 作者:LiuYu
  */
-public class ProductdetailsActivity extends ToolBarActivity implements TiceScrollview.onScrollChangedListener {
+public class ProductdetailsActivity extends BaseActivity implements TiceScrollview.onScrollChangedListener {
 
     @BindView(R.id.iv_tice_head)
     ImageView ivTiceHead;
@@ -43,13 +55,11 @@ public class ProductdetailsActivity extends ToolBarActivity implements TiceScrol
     @BindView(R.id.webView1)
     WebView webView1;
     @BindView(R.id.rv_comment)
-    MyListView rvComment;
+    RecyclerView rvComment;
     @BindView(R.id.ll_wpl)
     LinearLayout llWpl;
     @BindView(R.id.sc_head_view)
-    TiceScrollview scHeadView;
-    @BindView(R.id.title)
-    RelativeLayout title;
+    NestedScrollView scHeadView;
     @BindView(R.id.ll_shop)
     LinearLayout llShop;
     @BindView(R.id.collect_img)
@@ -61,22 +71,38 @@ public class ProductdetailsActivity extends ToolBarActivity implements TiceScrol
     @BindView(R.id.commit)
     TextView commit;
     @BindView(R.id.bottom)
-    LinearLayout bottom;
+    RelativeLayout bottom;
     @BindView(R.id.ll_parent)
     RelativeLayout llParent;
     @BindView(R.id.ll_guige)
     LinearLayout ll_guige;
+    @BindView(R.id.tv_pro)
+    TextView tv_pro;
+    @BindView(R.id.back)
+    ImageView back;
+    @BindView(R.id.iv_fenxiang)
+    ImageView ivFenxiang;
+    @BindView(R.id.ll_liebiao)
+    LinearLayout llLiebiao;
+    @BindView(R.id.line_two)
+    TextView lineTwo;
 
+    private boolean isshow;
     private int mHeight;
     public static ProductdetailsActivity instance;
 
     private ArrayList<ProductDetailsBean> lists = new ArrayList<ProductDetailsBean>();
 
+    private List<String> mdatas = new ArrayList<>();
     //购买件数
     private int nums = 1;
 
     //规格ID   类型  提醒
     private String id, specificationId, type;
+    private Intent intent;
+
+    private CrowdPopUpWindow mPopUpWindow;
+
 
     @Override
     protected int getLayoutId() {
@@ -86,11 +112,63 @@ public class ProductdetailsActivity extends ToolBarActivity implements TiceScrol
     @Override
     protected void initView() {
         instance = this;
-        getToolbarTitle().setText("商品详情");
-        setSubImg(R.mipmap.pro_more);
-
+        initAdapter();
         initListener();
 
+    }
+
+    class OnClickLintener implements View.OnClickListener {
+        @Override
+        public void onClick(View v) {
+            switch (v.getId()) {
+                case R.id.ll_btn1: //首页
+                    if (mPopUpWindow != null) {
+                        mPopUpWindow.dismiss();
+                        LookShopActivity.instance.finish();
+                        ProductdetailsActivity.this.finish();
+                        MainActivity.instance.finish();
+                        startActivity(new Intent(ProductdetailsActivity.this,MainActivity.class));
+                    }
+                    break;
+                case R.id.ll_btn2://个人中心
+                    if (mPopUpWindow != null) {
+
+                        mPopUpWindow.dismiss();
+                        LookShopActivity.instance.finish();
+                        ProductdetailsActivity.this.finish();
+                        MainActivity.instance.finish();
+
+//                        Message msg1 = MainActivity.instance.handler
+//                                .obtainMessage();
+//                        msg1.what = 1;
+//                        String a = "2";
+//                        msg1.obj = a;
+//                        MainActivity.instance.handler.sendMessage(msg1);
+                        Intent intent = new Intent();
+                        intent.setClass(ProductdetailsActivity.this,MainActivity.class);
+//                        intent.putExtra("type","2");
+                        startActivity(intent);
+
+
+                    }
+                    break;
+                case R.id.ll_btn3://分享
+                    if (mPopUpWindow != null) {
+                        mPopUpWindow.dismiss();
+                    }
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+
+    private void initAdapter() {
+        PinglunAdapter adapter = new PinglunAdapter(ProductdetailsActivity.this, mdatas);
+        LinearLayoutManager manager = new LinearLayoutManager(ProductdetailsActivity.this);
+        rvComment.setLayoutManager(manager);
+        rvComment.setAdapter(adapter);
+        rvComment.setNestedScrollingEnabled(false);
     }
 
     private void initListener() {
@@ -103,23 +181,8 @@ public class ProductdetailsActivity extends ToolBarActivity implements TiceScrol
                 onScrollChanged(scHeadView.getScrollY());
             }
         });
-        getToolbarBack().setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
-        //更多
-        getSubImg().setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-            }
-        });
-
 
     }
-
 
     @Override
     public void onScrollChanged(int y) {
@@ -139,12 +202,16 @@ public class ProductdetailsActivity extends ToolBarActivity implements TiceScrol
 
     }
 
-    @OnClick({R.id.ll_shop, R.id.collect, R.id.add_shopcar, R.id.commit,R.id.ll_guige})
+    @OnClick({R.id.ll_shop, R.id.collect, R.id.add_shopcar, R.id.commit, R.id.ll_guige,R.id.back, R.id.iv_fenxiang})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.ll_shop://店铺
+                intent = new Intent(ProductdetailsActivity.this, LookShopActivity.class);
+                startActivity(intent);
+                LookShopActivity.instance.finish();
                 break;
             case R.id.collect://收藏
+                collection();
                 break;
             case R.id.add_shopcar: //添加购物车
                 break;
@@ -153,7 +220,53 @@ public class ProductdetailsActivity extends ToolBarActivity implements TiceScrol
             case R.id.ll_guige://选择规格
                 new NowBuyPopUpWindow(ProductdetailsActivity.this, llParent, lists, nums);
                 break;
+            case R.id.back:
+                finish();
+                break;
+            case R.id.iv_fenxiang:
+                if (mPopUpWindow == null) {
+                    //自定义的单击事件
+                    OnClickLintener paramOnClickListener = new OnClickLintener();
+                    mPopUpWindow = new CrowdPopUpWindow(ProductdetailsActivity.this, paramOnClickListener);
+                    //监听窗口的焦点事件，点击窗口外面则取消显示
+                    mPopUpWindow.getContentView().setOnFocusChangeListener(new View.OnFocusChangeListener() {
+
+                        @Override
+                        public void onFocusChange(View v, boolean hasFocus) {
+                            if (!hasFocus) {
+                                mPopUpWindow.dismiss();
+                            }
+                        }
+                    });
+                }
+                WindowManager wm = ProductdetailsActivity.this.getWindowManager();
+                int width = wm.getDefaultDisplay().getWidth() / 6;
+                int btnWidth = ivFenxiang.getWidth() / 2;
+                //设置默认获取焦点
+                mPopUpWindow.setFocusable(true);
+                //以某个控件的x和y的偏移量位置开始显示窗口
+                mPopUpWindow.showAsDropDown(ivFenxiang, btnWidth - width, 20);
+                //如果窗口存在，则更新
+                mPopUpWindow.update();
+
+                break;
         }
+    }
+
+    private void collection() {
+        isshow = !isshow;
+        if (isshow) {
+            setThemeColor(collectImg, R.mipmap.pro_collection);
+            tv_pro.setText("已收藏");
+            tv_pro.setTextColor(ContextCompat.getColor(ProductdetailsActivity.this, R.color.home_read));
+            ToastUtils.showToast(ProductdetailsActivity.this, "已收藏!");
+        } else {
+            tv_pro.setText("收藏");
+            tv_pro.setTextColor(ContextCompat.getColor(ProductdetailsActivity.this, R.color.textDarkGray));
+            setThemeColor2(collectImg, R.mipmap.pro_collection);
+            ToastUtils.showToast(ProductdetailsActivity.this, "已取消收藏!");
+        }
+
     }
 
     public Handler handler = new Handler() {
@@ -190,5 +303,20 @@ public class ProductdetailsActivity extends ToolBarActivity implements TiceScrol
 //        lists.addAll(model.getList());
     }
 
+    private void setThemeColor(ImageView mImage, int icon) {
+        //利用ContextCompat工具类获取drawable图片资源
+        Drawable drawable = ContextCompat.getDrawable(this, icon);
+        //简单的使用tint改变drawable颜色
+        Drawable drawable1 = AppUtil.tintDrawable(drawable, ContextCompat.getColor(this, R.color.home_read));
+        mImage.setImageDrawable(drawable1);
+    }
+
+    private void setThemeColor2(ImageView mImage, int icon) {
+        //利用ContextCompat工具类获取drawable图片资源
+        Drawable drawable = ContextCompat.getDrawable(this, icon);
+        //简单的使用tint改变drawable颜色
+        Drawable drawable1 = AppUtil.tintDrawable(drawable, ContextCompat.getColor(this, R.color.textGray));
+        mImage.setImageDrawable(drawable1);
+    }
 
 }

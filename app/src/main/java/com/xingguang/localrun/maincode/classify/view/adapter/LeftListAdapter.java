@@ -2,6 +2,7 @@ package com.xingguang.localrun.maincode.classify.view.adapter;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -67,8 +68,10 @@ public class LeftListAdapter extends BaseAdapter {
             left_list_item.setText(leftStr[position]);
             if (flagArray[position]) {
                 left_list_item.setBackgroundColor(Color.rgb(255, 255, 255));
+                left_list_item.setTextColor(ContextCompat.getColor(context,R.color.text_color_red));
             } else {
                 left_list_item.setBackgroundColor(Color.TRANSPARENT);
+                left_list_item.setTextColor(ContextCompat.getColor(context,R.color.white));
             }
         }
 

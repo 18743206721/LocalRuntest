@@ -33,4 +33,11 @@
         <item name="colorControlActivated">@color/home_read</item>
     </style>
 
+    <style name="AnimTools" parent="@android:style/Animation">
+        <item name="android:windowEnterAnimation">@anim/push_in</item>
+        <item name="android:windowExitAnimation">@anim/push_out</item>
+    </style>
+
+
+
 </resources>

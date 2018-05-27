@@ -17,9 +17,9 @@
 
         <ImageView
             android:id="@+id/iv_finish"
-            android:layout_marginLeft="5dp"
-            android:layout_width="19dp"
-            android:layout_height="19dp"
+            android:layout_marginLeft="13dp"
+            android:layout_width="18dp"
+            android:layout_height="match_parent"
             android:src="@mipmap/back_finish" />
 
         <LinearLayout
@@ -143,6 +143,37 @@
 
     </LinearLayout>
 
+    <!--商品下的标签-->
+    <LinearLayout
+        android:id="@+id/ll_sea_biaoqian"
+        android:visibility="visible"
+        android:layout_marginTop="15dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <com.androidkun.xtablayout.XTabLayout
+            android:id="@+id/xtab_classifshop"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_gravity="center"
+            android:background="@color/white"
+            app:xTabDisplayNum="3"
+            app:xTabIndicatorColor="@color/home_read"
+            app:xTabIndicatorHeight="1dp"
+            app:xTabMode="scrollable"
+            app:xTabPaddingEnd="10dp"
+            app:xTabPaddingStart="10dp"
+            app:xTabSelectedTextColor="@color/home_read"
+            app:xTabSelectedTextSize="12sp"
+            app:xTabTextColor="@color/textBlack"
+            app:xTabTextSize="12sp" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="@color/fengexian" />
+    </LinearLayout>
+
     <!--搜索的数据-->
     <LinearLayout
         android:id="@+id/ll_rv"
@@ -156,8 +187,6 @@
             android:layout_height="wrap_content"/>
 
     </LinearLayout>
-
-
 
 
 </LinearLayout>

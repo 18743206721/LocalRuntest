@@ -1,6 +1,8 @@
 package com.xingguang.localrun.main.view;
 
 import android.graphics.drawable.Drawable;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
@@ -72,6 +74,7 @@ public class MainActivity extends BaseActivity {
     private FragmentManager fm;
 
     public static MainActivity instance;
+    private String type;
 
     @Override
     protected int getLayoutId() {
@@ -86,7 +89,48 @@ public class MainActivity extends BaseActivity {
         setToNewsFragment();
         setThemeColor(tabOneImg,R.drawable.home_icon);
         tabOneTxt.setTextColor(getResources().getColor(R.color.text_color_red));
+
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+//        if (type!=null) {
+//            if (type.equals("2")){
+//                setBg(4);
+//                setToInvestmentFragment();
+//            }
+
+
+    }
+
+    public Handler handler = new Handler() {
+
+        @Override
+        public void handleMessage(Message msg) {
+            // TODO Auto-generated method stub
+            super.handleMessage(msg);
+            switch (msg.what) {
+                case 1:
+
+
+//                    nums = Integer.parseInt(msg.obj.toString().split("\\ ")[0]);
+//                    specificationId = msg.obj.toString().split("\\ ")[1];
+//                    tvProGuige.setText(msg.obj.toString().split("\\ ")[2]);
+//                    newPrice.setText(msg.obj.toString().split("\\ ")[3]);
+//                    oldPrice.setText("¥" + msg.obj.toString().split("\\ ")[4]);
+//                    oldPrice.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG | Paint.ANTI_ALIAS_FLAG); // 设置中划线并加清晰
+                    break;
+                case 2:
+                    //列表数据
+//                    falshsaleCommoditySize(id);
+                    break;
+                default:
+                    break;
+            }
+        }
+
+    };
 
     @OnClick({R.id.tab_one, R.id.tab_two, R.id.tab_three, R.id.tab_four})
     public void onclick(View view) {
@@ -218,7 +262,7 @@ public class MainActivity extends BaseActivity {
     /**
      * 设置当前的Fragment 为我的
      */
-    private void setToInvestmentFragment() {
+    public void setToInvestmentFragment() {
         FragmentTransaction transaction = fm.beginTransaction();
         transaction.addToBackStack(null);
         hideAll(transaction);
