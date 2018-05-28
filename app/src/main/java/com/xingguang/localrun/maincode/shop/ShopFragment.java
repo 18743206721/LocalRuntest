@@ -1,5 +1,7 @@
 package com.xingguang.localrun.maincode.shop;
 
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -11,7 +13,9 @@ import android.widget.TextView;
 import com.xingguang.localrun.R;
 import com.xingguang.localrun.base.ToolBarFragment;
 import com.xingguang.localrun.maincode.shop.model.GoodInfo;
+import com.xingguang.localrun.maincode.shop.model.ShopBean;
 import com.xingguang.localrun.maincode.shop.view.adapter.ShopCarAdapter;
+import com.xingguang.localrun.popwindow.NowBuyPopUpWindow;
 import com.xingguang.localrun.popwindow.TextPopUpWindow;
 import com.xingguang.localrun.utils.ToastUtils;
 
@@ -51,6 +55,12 @@ public class ShopFragment extends ToolBarFragment implements ShopCarAdapter.Chec
     private TextPopUpWindow popde;
     private View.OnClickListener node;
     private View.OnClickListener yesde;
+    private ArrayList<ShopBean> lists = new ArrayList<ShopBean>();
+    //购买件数
+    private int nums = 1;
+    //规格ID   类型  提醒
+    private String id, specificationId, type;
+    TextView tvGuige;//规格
 
     @Override
     protected int getLayoutId() {
@@ -102,8 +112,9 @@ public class ShopFragment extends ToolBarFragment implements ShopCarAdapter.Chec
         //修改
         shopCarAdapter.setmOnItemEditListener(new ShopCarAdapter.OnItemEditListener() {
             @Override
-            public void OnItemEdit(TextView edit, int position) {
-                ToastUtils.showToast(getActivity(), "修改" + position);
+            public void OnItemEdit(TextView edit,TextView tv_shop_guige, int position) {
+                tvGuige = tv_shop_guige;
+                new NowBuyPopUpWindow(getActivity(), fragment_ll_shop, lists, nums,2);
             }
         });
 
@@ -135,8 +146,40 @@ public class ShopFragment extends ToolBarFragment implements ShopCarAdapter.Chec
 //                ToastUtils.showToast(getActivity(),"选中"+position);
 //            }
 //        });
+    }
 
+    public Handler handler = new Handler() {
 
+        @Override
+        public void handleMessage(Message msg) {
+            // TODO Auto-generated method stub
+            super.handleMessage(msg);
+            switch (msg.what) {
+                case 1:
+                    nums = Integer.parseInt(msg.obj.toString().split("\\ ")[0]);
+                    specificationId = msg.obj.toString().split("\\ ")[1];
+                    tvGuige.setText(msg.obj.toString().split("\\ ")[2]);
+//                    newPrice.setText(msg.obj.toString().split("\\ ")[3]);
+//                    oldPrice.setText("¥" + msg.obj.toString().split("\\ ")[4]);
+//                    oldPrice.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG | Paint.ANTI_ALIAS_FLAG); // 设置中划线并加清晰
+                    break;
+                case 2:
+                    //列表数据
+                    falshsaleCommoditySize(id);
+                    break;
+                default:
+                    break;
+            }
+        }
+
+    };
+
+    /**
+     * 商品规格
+     */
+    private void falshsaleCommoditySize(String id) {
+//        lists.clear();
+//        lists.addAll(model.getList());
     }
 
     /**

@@ -1,6 +1,7 @@
 package com.xingguang.localrun.maincode.home.view.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -8,6 +9,8 @@ import android.view.ViewGroup;
 
 import com.xingguang.localrun.R;
 import com.xingguang.localrun.maincode.home.model.GlideImageLoader;
+import com.xingguang.localrun.maincode.home.view.activity.LookShopActivity;
+import com.xingguang.localrun.maincode.home.view.activity.ProductdetailsActivity;
 import com.xingguang.localrun.view.CommonViewHolder;
 import com.xingguang.localrun.view.Star;
 import com.youth.banner.Banner;
@@ -80,6 +83,18 @@ public class LookShopAdapter extends RecyclerView.Adapter<CommonViewHolder>{
 
             initpage();
 
+            adapter.setOnItemClickListener(new LookShopItemAdapter.OnItemClickListener() {
+                @Override
+                public void onItemClick(View view, int position) {
+                    Intent intent = new Intent();
+                    intent.setClass(mContext, ProductdetailsActivity.class);
+                    intent.putExtra("proid", "2");
+                    mContext.startActivity(intent);
+                    LookShopActivity activity = (LookShopActivity) mContext;
+                    activity.finish();
+                }
+            });
+
         }else if (type == 2){
             if (mOnItemClickListener != null) {
                 holder.getItemView().setOnClickListener(new View.OnClickListener() {
@@ -91,6 +106,16 @@ public class LookShopAdapter extends RecyclerView.Adapter<CommonViewHolder>{
                 });
             }
         }else{
+
+            if (mOnItemClickListener != null) {
+                holder.getItemView().setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        //注意这里使用getTag方法获取position
+                        mOnItemClickListener.onItemClick(holder.getItemView(), position);
+                    }
+                });
+            }
 
 
         }

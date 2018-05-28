@@ -146,7 +146,11 @@ public class HomeSearchActivity extends BaseActivity {
                     shopadapter.setmOnItemClickListener(new SearchResultAdapter.OnItemClickListener() {
                         @Override
                         public void OnItemClick(View view, int position) {
-                            startActivity(new Intent(HomeSearchActivity.this,ProductdetailsActivity.class));
+                            Intent intent = new Intent();
+                            intent.setClass(HomeSearchActivity.this, ProductdetailsActivity.class);
+                            intent.putExtra("proid", "3");
+                            startActivity(intent);
+                            finish();
                         }
                     });
 
@@ -159,9 +163,11 @@ public class HomeSearchActivity extends BaseActivity {
                     adapter.setmOnItemClickListener(new ShopDianAdapter.OnItemClickListener() {
                         @Override
                         public void OnItemClick(TextView view, int position) {
-                            Intent intent = new Intent(HomeSearchActivity.this, LookShopActivity.class);
-//                intent.putExtra("id", listDatas.get(position).getCommodityId());
+                            Intent intent = new Intent();
+                            intent.setClass(HomeSearchActivity.this, LookShopActivity.class);
+//                            intent.putExtra("proid", "3");
                             startActivity(intent);
+                            finish();
                         }
                     });
                 }else {

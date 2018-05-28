@@ -79,9 +79,11 @@ public class LookShopFragment extends BaseFragment {
         adapter.setOnItemClickListener(new LookShopAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                Intent intent = new Intent(getActivity(), ProductdetailsActivity.class);
-//                intent.putExtra("id", listDatas.get(position).getCommodityId());
+                Intent intent = new Intent();
+                intent.setClass(getActivity(), ProductdetailsActivity.class);
+                intent.putExtra("proid", "2");
                 startActivity(intent);
+                getActivity().finish();
             }
         });
 

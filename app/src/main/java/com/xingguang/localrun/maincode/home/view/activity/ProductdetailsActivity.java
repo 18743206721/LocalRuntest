@@ -103,6 +103,7 @@ public class ProductdetailsActivity extends BaseActivity implements TiceScrollvi
 
     private CrowdPopUpWindow mPopUpWindow;
 
+    private String proid; //商品id
 
     @Override
     protected int getLayoutId() {
@@ -111,6 +112,7 @@ public class ProductdetailsActivity extends BaseActivity implements TiceScrollvi
 
     @Override
     protected void initView() {
+        proid = getIntent().getStringExtra("proid");
         instance = this;
         initAdapter();
         initListener();
@@ -206,7 +208,8 @@ public class ProductdetailsActivity extends BaseActivity implements TiceScrollvi
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.ll_shop://店铺
-                intent = new Intent(ProductdetailsActivity.this, LookShopActivity.class);
+                intent = new Intent();
+                intent.setClass(ProductdetailsActivity.this, LookShopActivity.class);
                 startActivity(intent);
                 LookShopActivity.instance.finish();
                 break;
@@ -218,7 +221,7 @@ public class ProductdetailsActivity extends BaseActivity implements TiceScrollvi
             case R.id.commit://立即购买
                 break;
             case R.id.ll_guige://选择规格
-                new NowBuyPopUpWindow(ProductdetailsActivity.this, llParent, lists, nums);
+                new NowBuyPopUpWindow(ProductdetailsActivity.this, llParent, lists, nums,1);
                 break;
             case R.id.back:
                 finish();

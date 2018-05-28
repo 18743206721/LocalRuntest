@@ -14,7 +14,7 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.xingguang.localrun.R;
-import com.xingguang.localrun.maincode.home.model.ProductDetailsBean;
+import com.xingguang.localrun.main.view.MainActivity;
 import com.xingguang.localrun.maincode.home.view.activity.ProductdetailsActivity;
 import com.xingguang.localrun.maincode.home.view.adapter.ProductTagAdapter;
 import com.xingguang.localrun.view.TagCloudLayout;
@@ -24,7 +24,7 @@ import java.util.ArrayList;
 /**
  * @param
  */
-public class NowBuyPopUpWindow extends PopupWindow implements View.OnClickListener {
+public class NowBuyPopUpWindow<T> extends PopupWindow implements View.OnClickListener {
 
     //图片  减号   加号
     private ImageView title_img, subtract_btn, plus_btn;
@@ -41,14 +41,16 @@ public class NowBuyPopUpWindow extends PopupWindow implements View.OnClickListen
     private Context context;
 
     private ProductTagAdapter mAdapter;
-    private ArrayList<ProductDetailsBean> lists = new ArrayList<ProductDetailsBean>();
+    private ArrayList<T> lists = new ArrayList<T>();
 
     private int nums = 1;
+    private int type = 0;
 
-    public NowBuyPopUpWindow(Context contexts, View parent, ArrayList<ProductDetailsBean> listss, int nums) {
+    public NowBuyPopUpWindow(Context contexts, View parent, ArrayList<T> listss, int nums,int type) {
         this.context = contexts;
         this.lists = listss;
         this.nums = nums;
+        this.type = type;
 
         View view = View.inflate(context, R.layout.popup_now_buy, null);
 
@@ -124,21 +126,48 @@ public class NowBuyPopUpWindow extends PopupWindow implements View.OnClickListen
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.commit: //确认购买
-                Message msg1 = ProductdetailsActivity.instance.handler
-                        .obtainMessage();
-                msg1.what = 1;
-                String specificationId = "";
-                String specification = "";
+
+                if (type == 1){ //产品
+                    ProductdetailsActivity activity = (ProductdetailsActivity) context;
+
+                    Message msg1 = activity.handler
+                            .obtainMessage();
+                    msg1.what = 1;
+                    String specificationId = "";
+                    String specification = "";
 //                for (int i = 0, j = lists.size(); i < j; i++) {
 //                    if ("1".equals(lists.get(i).getIsClick())) {
 //                        specificationId = lists.get(i).getId();
 //                        specification = lists.get(i).getName();
 //                    }
 //                }
-                msg1.obj = nums + " " + specificationId + " " + specification
-                        + " " + newPrice + " " + oldPrice;
-                ProductdetailsActivity.instance.handler.sendMessage(msg1);
-                dismiss();
+                    msg1.obj = nums + " " + specificationId + " " + specification
+                            + " " + newPrice + " " + oldPrice;
+                    ProductdetailsActivity.instance.handler.sendMessage(msg1);
+                    dismiss();
+
+                }else if (type == 2){ //购物车
+                    MainActivity activity = (MainActivity) context;
+
+                    Message msg1 = activity.handler
+                            .obtainMessage();
+                    msg1.what = 1;
+                    String specificationId = "";
+                    String specification = "";
+//                for (int i = 0, j = lists.size(); i < j; i++) {
+//                    if ("1".equals(lists.get(i).getIsClick())) {
+//                        specificationId = lists.get(i).getId();
+//                        specification = lists.get(i).getName();
+//                    }
+//                }
+                    msg1.obj = nums + " " + specificationId + " " + specification
+                            + " " + newPrice + " " + oldPrice;
+                    MainActivity.instance.handler.sendMessage(msg1);
+                    dismiss();
+
+                }
+
+
                 break;
             case R.id.cancel: //取消
                 dismiss();

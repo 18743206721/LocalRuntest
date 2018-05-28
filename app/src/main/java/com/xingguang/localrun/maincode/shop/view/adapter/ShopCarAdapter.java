@@ -65,6 +65,7 @@ public class ShopCarAdapter extends RecyclerView.Adapter <CommonViewHolder> {
         final TextView tv_edit = holder.getItemView().findViewById(R.id.tv_shop_xiugai);
         final TextView tv_shop_deleted = holder.getItemView().findViewById(R.id.tv_shop_deleted);
         final CheckBox check_box = holder.getItemView().findViewById(R.id.check_box);
+        final TextView tv_shop_guige = holder.getItemView().findViewById(R.id.tv_shop_guige);
 
         final GoodInfo shoppingCartBean = list.get(position);
 
@@ -88,7 +89,7 @@ public class ShopCarAdapter extends RecyclerView.Adapter <CommonViewHolder> {
         tv_edit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mOnItemEditLitener.OnItemEdit(tv_edit,position);
+                mOnItemEditLitener.OnItemEdit(tv_edit,tv_shop_guige,position);
             }
         });
         //删除
@@ -167,7 +168,7 @@ public class ShopCarAdapter extends RecyclerView.Adapter <CommonViewHolder> {
     }
 
     public interface OnItemEditListener {
-        void OnItemEdit(TextView edit, int position);
+        void OnItemEdit(TextView edit, TextView tv_shop_guige,int position);
     }
 
     public interface OnItemDeletedListener {
