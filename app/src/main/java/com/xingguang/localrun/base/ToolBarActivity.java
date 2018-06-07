@@ -6,13 +6,14 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import com.xingguang.core.base.BaseActivity;
 import com.xingguang.localrun.R;
 import butterknife.BindView;
 
 /**
  * Activity with ToolBar 基类
  *
- * @author BiHaidong
+ * @author LiuYu
  * @date 2017-4-25
  */
 public abstract class ToolBarActivity extends BaseActivity {

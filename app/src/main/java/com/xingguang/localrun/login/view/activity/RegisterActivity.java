@@ -5,11 +5,11 @@ import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.xingguang.core.utils.ToastUtils;
 import com.xingguang.localrun.R;
 import com.xingguang.localrun.base.ToolBarActivity;
 import com.xingguang.localrun.utils.AppUtil;
 import com.xingguang.localrun.utils.CountDownTimerUtil;
-import com.xingguang.localrun.utils.ToastUtils;
 import com.xingguang.localrun.view.ClearEditText;
 
 import butterknife.BindView;

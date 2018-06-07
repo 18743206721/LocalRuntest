@@ -12,9 +12,8 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
+import com.xingguang.core.base.BaseFragment;
 import com.xingguang.localrun.R;
-import com.xingguang.localrun.base.BaseFragment;
 import com.xingguang.localrun.login.view.activity.LoginActivity;
 import com.xingguang.localrun.maincode.mine.view.activity.AboutActivity;
 import com.xingguang.localrun.maincode.mine.view.activity.AddressManagementActivity;
@@ -26,7 +25,6 @@ import com.xingguang.localrun.maincode.mine.view.activity.MyGuanzhuActivity;
 import com.xingguang.localrun.maincode.mine.view.activity.MyOrderAllActivity;
 import com.xingguang.localrun.utils.AppUtil;
 import com.xingguang.localrun.view.RoundImageView;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;

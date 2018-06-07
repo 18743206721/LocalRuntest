@@ -57,6 +57,7 @@ public class MineApplyEnterActivity extends ToolBarActivity {
         });
 
 
+
     }
 
     @OnClick({R.id.rl_shangchuan_img, R.id.tv_apply})

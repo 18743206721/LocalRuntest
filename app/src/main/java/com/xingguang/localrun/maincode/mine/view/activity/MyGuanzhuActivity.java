@@ -5,16 +5,13 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
+import com.xingguang.core.utils.ToastUtils;
 import com.xingguang.localrun.R;
 import com.xingguang.localrun.base.ToolBarActivity;
 import com.xingguang.localrun.maincode.mine.view.adapter.MyAttentionAdapter;
 import com.xingguang.localrun.popwindow.TextPopUpWindow;
-import com.xingguang.localrun.utils.ToastUtils;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import butterknife.BindView;
 
 

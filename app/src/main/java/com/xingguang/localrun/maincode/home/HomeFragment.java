@@ -14,8 +14,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.xingguang.core.base.HttpFragment;
 import com.xingguang.localrun.R;
-import com.xingguang.localrun.base.BaseFragment;
 import com.xingguang.localrun.main.view.MainActivity;
 import com.xingguang.localrun.maincode.home.model.GlideImageLoader;
 import com.xingguang.localrun.maincode.home.view.activity.ClassifShopActivity;
@@ -35,7 +35,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 
-public class HomeFragment extends BaseFragment {
+public class HomeFragment extends HttpFragment {
 
     @BindView(R.id.banner)
     Banner banner;
@@ -105,7 +105,32 @@ public class HomeFragment extends BaseFragment {
 
         initListener();
 
+//        ProcurementIndex();
     }
+
+
+//    private void ProcurementIndex() {
+//        HttpManager.getInstance().ProcurementIndex().compose(bindRecycler())
+//                .subscribe(new BaseSubscriber<>(new HttpOnNextListener<ProcurementIndexBean>() {
+//                    @Override
+//                    public void onNext(ProcurementIndexBean bean) {
+//                        loadingFinished();
+//                        Log.e("homefragment", "onNext: "+bean.getImgList().get(0) );
+//                        ToastUtils.showLongToast(getActivity(),"走了接口"+bean.getCategoryList().get(0).getCategoryName());
+//                    }
+//                }, this));
+
+
+//        loadingFinished();
+//        for (int i = 0; i < bean.getCategoryList().size(); i++) {
+//            titles.add(bean.getCategoryList().get(i).getCategoryName());
+//        }
+//        for (int i = 0; i < bean.getImgList().size(); i++) {
+//        }
+
+
+//    }
+
 
 
     private void initListener() {

@@ -7,11 +7,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.androidkun.xtablayout.XTabLayout;
+import com.xingguang.core.base.BaseActivity;
+import com.xingguang.core.utils.ToastUtils;
 import com.xingguang.localrun.R;
-import com.xingguang.localrun.base.BaseActivity;
 import com.xingguang.localrun.base.BaseFragmentAdapter;
 import com.xingguang.localrun.maincode.home.view.fragment.LookShopFragment;
-import com.xingguang.localrun.utils.ToastUtils;
 
 import java.util.ArrayList;
 import java.util.List;

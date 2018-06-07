@@ -1,7 +1,7 @@
 /**
  * @param
  */
-package com.xingguang.localrun.utils;
+package com.xingguang.core.utils;
 
 import android.app.Activity;
 import android.app.ActivityManager;
@@ -12,7 +12,7 @@ import java.util.Stack;
 /**
  * 应用程序Activity管理类：用于Activity管理和应用程序退出
  *
- * @author BiHaidong
+ * @author LiuYu
  * @version 1.0
  * @created 2015-9-21
  */

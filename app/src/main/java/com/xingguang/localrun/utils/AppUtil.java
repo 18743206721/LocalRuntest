@@ -45,7 +45,7 @@ import static android.content.Context.MODE_PRIVATE;
 /**
  * 方法工具类
  *
- * @author BiHaidong
+ * @author LiuYu
  * @date 2017-4-25
  */
 

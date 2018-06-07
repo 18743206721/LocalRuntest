@@ -2,17 +2,14 @@ package com.xingguang.localrun.maincode.mine.view.activity;
 
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
-
+import com.xingguang.core.utils.ToastUtils;
 import com.xingguang.localrun.R;
 import com.xingguang.localrun.base.ToolBarActivity;
 import com.xingguang.localrun.maincode.mine.view.adapter.MyCollectionAdapter;
 import com.xingguang.localrun.maincode.mine.view.adapter.OnItemClickListener;
-import com.xingguang.localrun.utils.ToastUtils;
 import com.xingguang.localrun.view.DeleteRecyclerView;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import butterknife.BindView;
 
 

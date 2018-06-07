@@ -10,15 +10,15 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.androidkun.xtablayout.XTabLayout;
+import com.xingguang.core.base.BaseActivity;
+import com.xingguang.core.utils.SharedPreferencesUtils;
+import com.xingguang.core.utils.ToastUtils;
 import com.xingguang.localrun.R;
-import com.xingguang.localrun.base.BaseActivity;
 import com.xingguang.localrun.maincode.home.view.adapter.DaiBanMoreAdapter;
 import com.xingguang.localrun.maincode.home.view.adapter.HistoryListAdapter;
 import com.xingguang.localrun.maincode.home.view.adapter.SearchResultAdapter;
 import com.xingguang.localrun.maincode.home.view.adapter.ShopDianAdapter;
 import com.xingguang.localrun.utils.AppUtil;
-import com.xingguang.localrun.utils.SharedPreferencesUtils;
-import com.xingguang.localrun.utils.ToastUtils;
 import com.xingguang.localrun.view.ClearEditText;
 import com.xingguang.localrun.view.TagCloudLayout;
 

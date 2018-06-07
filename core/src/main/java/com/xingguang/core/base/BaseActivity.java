@@ -1,28 +1,30 @@
-package com.xingguang.localrun.base;
+package com.xingguang.core.base;
 
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.support.v7.app.AppCompatActivity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
+import com.umeng.analytics.MobclickAgent;
+import com.xingguang.core.utils.AppManager;
+import com.xingguang.core.utils.LogUtils;
 
 import butterknife.ButterKnife;
-
 
 /**
  * Activity 基类
  *
- * @author BiHaidong
+ * @author LiuYu
  * @date 2016-12-5
  */
-public abstract class BaseActivity extends AppCompatActivity {
+public abstract class BaseActivity extends RxAppCompatActivity {
 
     private static final String TAG = BaseActivity.class.getSimpleName();
 
@@ -32,7 +34,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         beforeLayout();
         setContentView(getLayoutId());
         ButterKnife.bind(this);
-//        AppManager.addActivity(this);
+        AppManager.addActivity(this);
         initView();
     }
 
@@ -40,7 +42,6 @@ public abstract class BaseActivity extends AppCompatActivity {
      * 用于在setContentView之前做处理
      */
     protected void beforeLayout() {
-
     }
 
     /**
@@ -79,8 +80,8 @@ public abstract class BaseActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-//        AppManager.finishActivity(this);
-//        LogUtils.v(TAG, "onDestroy...");
+        AppManager.finishActivity(this);
+        LogUtils.v(TAG, "onDestroy...");
     }
 
     @Override
@@ -88,16 +89,16 @@ public abstract class BaseActivity extends AppCompatActivity {
         super.onResume();
 
         // 友盟统计
-//        MobclickAgent.onPageStart(TAG); //统计页面(仅有Activity的应用中SDK自动调用，不需要单独写。"SplashScreen"为页面名称，可自定义)
-//        MobclickAgent.onResume(this);
+        MobclickAgent.onPageStart(TAG); //统计页面(仅有Activity的应用中SDK自动调用，不需要单独写。"SplashScreen"为页面名称，可自定义)
+        MobclickAgent.onResume(this);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
         // 友盟统计
-//        MobclickAgent.onPageEnd(TAG); // （仅有Activity的应用中SDK自动调用，不需要单独写）保证 onPageEnd 在onPause 之前调用,因为 onPause 中会保存信息。"SplashScreen"为页面名称，可自定义
-//        MobclickAgent.onPause(this);
+        MobclickAgent.onPageEnd(TAG); // （仅有Activity的应用中SDK自动调用，不需要单独写）保证 onPageEnd 在onPause 之前调用,因为 onPause 中会保存信息。"SplashScreen"为页面名称，可自定义
+        MobclickAgent.onPause(this);
     }
 
     @Override

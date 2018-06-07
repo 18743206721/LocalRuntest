@@ -1,15 +1,19 @@
-package com.xingguang.localrun.base;
+package com.xingguang.core.base;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.trello.rxlifecycle2.components.support.RxFragment;
+
 import butterknife.ButterKnife;
 
-public abstract class BaseFragment extends Fragment {
+/**
+ * 通用的baseFragment 支持懒加载模式
+ * */
+public abstract class BaseFragment extends RxFragment {
 
     protected View mFragmentView;
 

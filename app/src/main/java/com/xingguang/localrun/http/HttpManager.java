@@ -1,11 +1,32 @@
 package com.xingguang.localrun.http;
 
-import android.content.Context;
+import android.support.annotation.NonNull;
 
-import com.tamic.novate.Novate;
+import com.xingguang.core.base.BaseApplication;
+import com.xingguang.core.http.api.HttpResult;
+import com.xingguang.core.http.cookie.CacheInterceptor;
+import com.xingguang.core.http.exception.ApiException;
+import com.xingguang.core.utils.NetUtil;
+import com.xingguang.localrun.maincode.home.model.ProcurementIndexBean;
 
-import java.util.HashMap;
-import java.util.Map;
+import org.json.JSONObject;
+
+import java.io.File;
+import java.util.concurrent.TimeUnit;
+
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Function;
+import io.reactivex.schedulers.Schedulers;
+import okhttp3.Cache;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.OkHttpClient;
+import okhttp3.RequestBody;
+import okhttp3.logging.HttpLoggingInterceptor;
+import retrofit2.Retrofit;
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * 创建日期：2018/5/22
@@ -16,15 +37,21 @@ public class HttpManager {
 
     //线上
     public static final String BASE_URL = " http://47.52.240.241/app/";
+    //    public static final String BASE_URL = "http://192.168.51.19:8088/app/";
+
 
     private volatile static HttpManager INSTANCE;
-    private final Novate novate;
     private Service httpService;
 
+    //一页加载多少条数据
+    public static int CONTENT_COUNT = 10;
+    //打电话，电话号
+    public static int CALL_PHONE = 10086;
+
     /**
-     * 是否显示log
+     * 超时时间-默认6秒
      */
-    private static final Boolean SHOW_LOG = true;
+    public static int CONNECTION_TIME = 6;
 
     /**
      * 设缓存有效期为两天
@@ -44,74 +71,135 @@ public class HttpManager {
     private static final String CACHE_CONTROL_AGE = "max-age=0";
 
     /**
-     * 超时时间-默认6秒
+     * 是否显示log
      */
-    public static int CONNECTION_TIME = 6;
+    private static final Boolean SHOW_LOG = true;
 
-    //构造方法私有
-    private HttpManager(Context context) {
-        novate = new Novate.Builder(context)
-                .connectTimeout(8)
-                .baseUrl(BASE_URL)
-                //.addApiManager(ApiManager.class)
-                .addLog(true)
-                .build();
-
-        Service myAPI  = novate.create(Service.class);
-//        novate = new Novate.Builder(this)
-//                .addHeader(headers) //添加公共请求头
-//                .addParameters(parameters)//公共参数
-//                .connectTimeout(10)  //连接时间 可以忽略
-//                .addCookie(false)  //是否同步cooike 默认不同步
-//                .addCache(true)  //是否缓存 默认缓存
-//                .addCache(cache, cacheTime)   //自定义缓存
-//                .baseUrl("Url") //base URL
-//                .addLog(true) //是否开启log
-//                .cookieManager(new NovateCookieManager()) // 自定义cooike，可以忽略
-//                .addInterceptor() // 自定义Interceptor
-//                .addNetworkInterceptor() // 自定义NetworkInterceptor
-//                .proxy(proxy) //代理
-//                .client(client)  //clent 默认不需要
-//                .build();
-
+    /**
+     * 根据网络状况获取缓存的策略
+     */
+    @NonNull
+    private String getCacheControl() {
+        return NetUtil.isNetworkAvailable() ? CACHE_CONTROL_AGE : CACHE_CONTROL_CACHE;
     }
 
+    //构造方法私有
+    private HttpManager(String baseUrl) {
 
-    public static HttpManager getInstance(Context context) {
+        //手动创建一个OkHttpClient并设置超时时间缓存等设置
+        OkHttpClient.Builder builder = new OkHttpClient.Builder();
+        if (SHOW_LOG) {
+            HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
+            logging.setLevel(HttpLoggingInterceptor.Level.BODY);
+            builder.addInterceptor(logging);
+        }
+        builder.connectTimeout(CONNECTION_TIME, TimeUnit.SECONDS);
+        builder.addNetworkInterceptor(new CacheInterceptor());
+        /*缓存位置和大小*/
+        builder.cache(new Cache(BaseApplication.app.getCacheDir(), 10 * 1024 * 1024));
+
+        /*创建retrofit对象*/
+        Retrofit retrofit = new Retrofit.Builder()
+                .client(builder.build())
+                .addConverterFactory(GsonConverterFactory.create())
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                .baseUrl(baseUrl)
+                .build();
+        httpService = retrofit.create(Service.class);
+    }
+
+    //获取单例 无缓存
+    public static HttpManager getInstance() {
         if (INSTANCE == null) {
             synchronized (HttpManager.class) {
                 if (INSTANCE == null) {
-                    INSTANCE = new HttpManager(context.getApplicationContext());
+                    INSTANCE = new HttpManager(BASE_URL);
                 }
             }
         }
         return INSTANCE;
     }
 
-    public void userLogin(String username, String password) {
-        Map<String, Object> parameters = new HashMap<>();
+    /**
+     * 用来统一处理Http的resultCode,并将HttpResult的Data部分剥离出来返回给subscriber
+     *
+     * @param <T> Subscriber真正需要的数据类型，也就是Data部分的数据类型
+     */
+    private class HttpResultFunc<T> implements Function<HttpResult<T>, T> {
+
+//        @Override
+//        public T call(HttpResult<T> httpResult) {
+//            if (!"success".equals(httpResult.getState())) {
+//                throw new ApiException(httpResult.getMsg());
+//            }
+//            return httpResult.getData();
+//        }
+
+        @Override
+        public T apply(HttpResult<T> httpResult)  {
+            if (!"success".equals(httpResult.getState())) {
+                throw new ApiException(httpResult.getMsg());
+            }
+            return httpResult.getData();
+        }
+    }
+
+    /**
+     * 用RXAndroid来统一处理网络请求的线程
+     */
+    public Observable initObservable(Observable observable) {
+        /*失败后的retry配置*/
+//        return observable.retryWhen(new RetryWhenNetworkException())
+//                /*http请求线程*/
+//                .subscribeOn(Schedulers.io())
+//                .unsubscribeOn(Schedulers.io())
+//                /*回调线程*/
+//                .observeOn(AndroidSchedulers.mainThread());
+
+        return observable
+                /*http请求线程*/
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                /*回调线程*/
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    /**
+     * 用于配置请求参数为json
+     */
+    public RequestBody initRequestBody(String json) {
+        return RequestBody.create(okhttp3.MediaType.parse("application/json; charset=utf-8"), json);
+    }
+
+    public MultipartBody.Part getRequestBody(File file) {
+
+        if (file == null) {
+            return null;
+        }
+
+        // create RequestBody instance from file
+        RequestBody requestFile =
+                RequestBody.create(MediaType.parse("multipart/form-data"), file);
+
+        // MultipartBody.Part is used to send also the actual file name
+        MultipartBody.Part body =
+                MultipartBody.Part.createFormData("picture", file.getName(), requestFile);
+
+        return body;
+    }
+
+    //办公采购首页
+    public Observable ProcurementIndex() {
+        JSONObject json = new JSONObject();
         try {
-            parameters.put("username", "zhansa");
-            parameters.put("password", "12313");
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-
-
-//        novate.call(myAPI.getSougu(parameters), new MyBaseSubscriber<MyBean>(getActivity()) {
-//            @Override
-//            public void onNext(MyBean souguBean) {
-//            }
-//            @Override
-//            public void onError(Throwable e) {
-//            }
-//        });
-
-//        Observable observable = myAPI.getSougu(parameters)
-//                .map(new HttpResultFunc<MyBean>());
-////        return initObservable(observable);
+        Observable observable = httpService.ProcurementIndex(initRequestBody(json.toString()))
+                .map(new HttpResultFunc<ProcurementIndexBean>());
+        return initObservable(observable);
     }
+
 
 
 }

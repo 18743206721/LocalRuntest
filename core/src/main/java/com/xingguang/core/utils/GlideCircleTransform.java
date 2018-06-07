@@ -1,4 +1,4 @@
-package com.xingguang.localrun.utils;
+package com.xingguang.core.utils;
 
 import android.content.Context;
 import android.graphics.Bitmap;

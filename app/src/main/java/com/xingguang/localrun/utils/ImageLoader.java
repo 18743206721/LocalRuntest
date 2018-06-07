@@ -9,12 +9,14 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
+import com.xingguang.core.utils.GlideCircleTransform;
+import com.xingguang.core.utils.GlideRoundTransform;
 import com.xingguang.localrun.R;
 
 /**
  * 图片加载工具类
  *
- * @author BiHaidong
+ * @author LiuYu
  * @description Glide 封装
  * @date 2017-4-25
  */

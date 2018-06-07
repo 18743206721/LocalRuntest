@@ -1,4 +1,4 @@
-package com.xingguang.localrun.utils;
+package com.xingguang.core.utils;
 
 import android.content.Context;
 import android.widget.Toast;
@@ -6,7 +6,7 @@ import android.widget.Toast;
 /**
  * Toast 工具类
  *
- * @author BiHaidong
+ * @author LiuYu
  * @date 2017-5-15
  */
 public class ToastUtils {

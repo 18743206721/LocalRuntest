@@ -8,15 +8,12 @@ import android.support.v7.widget.RecyclerView;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
+import com.xingguang.core.base.BaseFragment;
 import com.xingguang.localrun.R;
-import com.xingguang.localrun.base.BaseFragment;
 import com.xingguang.localrun.maincode.home.view.activity.LookShopActivity;
 import com.xingguang.localrun.maincode.home.view.adapter.ShopDianAdapter;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import butterknife.BindView;
 
 /**
@@ -25,7 +22,7 @@ import butterknife.BindView;
  * 作者:LiuYu
  */
 @SuppressLint("ValidFragment")
-public class LookClassifShopFragment extends BaseFragment{
+public class LookClassifShopFragment extends BaseFragment {
 
     @BindView(R.id.rv_looksp)
     RecyclerView rvLooksp;

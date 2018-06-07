@@ -1,14 +1,14 @@
 package com.xingguang.localrun.app;
 
 import android.content.Context;
+import android.support.multidex.MultiDex;
 
-import com.xingguang.localrun.base.BaseApplication;
-
+import com.xingguang.core.base.BaseApplication;
 
 /**
  * Application 基类
  *
- * @author BiHaidong
+ * @author LiuYu
  * @date 2017-4-25
  */
 
@@ -23,13 +23,14 @@ public class MyApplication extends BaseApplication {
 //        PlatformConfig.setQQZone("1106595089", "KEYpUll27j3djgCR4jY");
 //        PlatformConfig.setSinaWeibo("2163751088", "f4ac147246f089774295ab3a5480a765", "http://sns.whalecloud.com");
 //        SMSSDK.initSDK(this, "ee879aa47de7", "29bda79d5acb507531eba66ffe8d9abf");
+
     }
 
 
     @Override
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(base);
-//        MultiDex.install(this);
+        MultiDex.install(this);
     }
 
 }

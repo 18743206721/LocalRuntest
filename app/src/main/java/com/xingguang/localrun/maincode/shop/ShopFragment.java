@@ -9,7 +9,7 @@ import android.view.View;
 import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
+import com.xingguang.core.utils.ToastUtils;
 import com.xingguang.localrun.R;
 import com.xingguang.localrun.base.ToolBarFragment;
 import com.xingguang.localrun.maincode.shop.model.GoodInfo;
@@ -17,11 +17,8 @@ import com.xingguang.localrun.maincode.shop.model.ShopBean;
 import com.xingguang.localrun.maincode.shop.view.adapter.ShopCarAdapter;
 import com.xingguang.localrun.popwindow.NowBuyPopUpWindow;
 import com.xingguang.localrun.popwindow.TextPopUpWindow;
-import com.xingguang.localrun.utils.ToastUtils;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import butterknife.BindView;
 import butterknife.OnClick;
 

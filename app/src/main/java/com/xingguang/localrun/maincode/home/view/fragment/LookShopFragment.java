@@ -9,9 +9,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
-
+import com.xingguang.core.base.BaseFragment;
 import com.xingguang.localrun.R;
-import com.xingguang.localrun.base.BaseFragment;
 import com.xingguang.localrun.maincode.home.view.activity.ProductdetailsActivity;
 import com.xingguang.localrun.maincode.home.view.adapter.LookShopAdapter;
 
