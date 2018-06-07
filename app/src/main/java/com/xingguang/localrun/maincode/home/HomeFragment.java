@@ -162,7 +162,6 @@ public class HomeFragment extends BaseFragment {
     @Override
     protected void lazyLoad() {
         //写网络请求
-
     }
 
     @Override
