@@ -3,11 +3,11 @@ package com.xingguang.core.http.subscribers;
 import com.xingguang.core.base.HttpView;
 import com.xingguang.core.http.listener.HttpOnNextListener;
 
-import org.reactivestreams.Subscriber;
-import org.reactivestreams.Subscription;
-
 import java.net.ConnectException;
 import java.net.SocketTimeoutException;
+
+import io.reactivex.Observer;
+import io.reactivex.disposables.Disposable;
 
 /**
  * 用于在Http请求时的缓存处理
@@ -15,7 +15,7 @@ import java.net.SocketTimeoutException;
  * @author LiuYu
  * @date 2016-12-5
  */
-public class BaseSubscriber<T> implements Subscriber<T> {
+public class BaseSubscriber<T> implements Observer<T> {
 
     // 回调接口
     private HttpOnNextListener<T> mSubscriberOnNextListener;
@@ -35,11 +35,11 @@ public class BaseSubscriber<T> implements Subscriber<T> {
     /**
      * 开始
      */
-    @Override
-    public void onSubscribe(Subscription s) {
-        if (mView != null)
-            mView.onLoading();
-    }
+//    @Override
+//    public void onSubscribe(Subscription s) {
+//        if (mView != null)
+//            mView.onLoading();
+//    }
 //    @Override
 //    public void onStart() {
 //        super.onStart();
@@ -78,8 +78,11 @@ public class BaseSubscriber<T> implements Subscriber<T> {
     }
 
 
-
-
+    @Override
+    public void onSubscribe(Disposable disposable) {
+        if (mView != null)
+            mView.onLoading();
+    }
 
     /**
      * 将onNext方法中的返回结果交给Activity或Fragment自己处理

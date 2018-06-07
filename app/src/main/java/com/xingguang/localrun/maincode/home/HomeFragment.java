@@ -7,6 +7,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,9 +16,14 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.xingguang.core.base.HttpFragment;
+import com.xingguang.core.http.listener.HttpOnNextListener;
+import com.xingguang.core.http.subscribers.BaseSubscriber;
+import com.xingguang.core.utils.ToastUtils;
 import com.xingguang.localrun.R;
+import com.xingguang.localrun.http.HttpManager;
 import com.xingguang.localrun.main.view.MainActivity;
 import com.xingguang.localrun.maincode.home.model.GlideImageLoader;
+import com.xingguang.localrun.maincode.home.model.ProcurementIndexBean;
 import com.xingguang.localrun.maincode.home.view.activity.ClassifShopActivity;
 import com.xingguang.localrun.maincode.home.view.activity.DaiBanDetailsActivity;
 import com.xingguang.localrun.maincode.home.view.activity.DaiBanMoreActivity;
@@ -105,31 +111,47 @@ public class HomeFragment extends HttpFragment {
 
         initListener();
 
-//        ProcurementIndex();
+        ProcurementIndex();
     }
 
 
-//    private void ProcurementIndex() {
+    private void ProcurementIndex() {
+        HttpManager.getInstance().ProcurementIndex().compose(bindRecycler())
+                .subscribe(new BaseSubscriber<>(new HttpOnNextListener<ProcurementIndexBean>() {
+                    @Override
+                    public void onNext(ProcurementIndexBean bean) {
+                        loadingFinished();
+                        Log.e("homefragment", "onNext: "+bean.getImgList().get(0) );
+                        ToastUtils.showLongToast(getActivity(),"走了接口"+bean.getCategoryList().get(0).getCategoryName());
+                    }
+                }, this));
+
 //        HttpManager.getInstance().ProcurementIndex().compose(bindRecycler())
-//                .subscribe(new BaseSubscriber<>(new HttpOnNextListener<ProcurementIndexBean>() {
+//                .subscribe(new Observer() {
 //                    @Override
-//                    public void onNext(ProcurementIndexBean bean) {
-//                        loadingFinished();
-//                        Log.e("homefragment", "onNext: "+bean.getImgList().get(0) );
-//                        ToastUtils.showLongToast(getActivity(),"走了接口"+bean.getCategoryList().get(0).getCategoryName());
+//                    public void onSubscribe(Disposable disposable) {
+//
 //                    }
-//                }, this));
+//
+//                    @Override
+//                    public void onNext(Object o) {
+//
+//                    }
+//
+//                    @Override
+//                    public void onError(Throwable throwable) {
+//
+//                    }
+//
+//                    @Override
+//                    public void onComplete() {
+//
+//                    }
+//                });
 
 
-//        loadingFinished();
-//        for (int i = 0; i < bean.getCategoryList().size(); i++) {
-//            titles.add(bean.getCategoryList().get(i).getCategoryName());
-//        }
-//        for (int i = 0; i < bean.getImgList().size(); i++) {
-//        }
 
-
-//    }
+    }
 
 
 
