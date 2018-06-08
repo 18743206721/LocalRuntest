@@ -6,6 +6,7 @@ import android.os.Message;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -13,6 +14,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.xingguang.core.base.BaseActivity;
+import com.xingguang.core.utils.AppManager;
+import com.xingguang.core.utils.ToastUtils;
 import com.xingguang.localrun.R;
 import com.xingguang.localrun.maincode.classify.ClassifFragment;
 import com.xingguang.localrun.maincode.home.HomeFragment;
@@ -20,8 +23,13 @@ import com.xingguang.localrun.maincode.mine.MineFragment;
 import com.xingguang.localrun.maincode.shop.ShopFragment;
 import com.xingguang.localrun.utils.AppUtil;
 
+import java.util.concurrent.TimeUnit;
+
 import butterknife.BindView;
 import butterknife.OnClick;
+import io.reactivex.Observable;
+import io.reactivex.Observer;
+import io.reactivex.disposables.Disposable;
 
 
 public class MainActivity extends BaseActivity {
@@ -286,28 +294,39 @@ public class MainActivity extends BaseActivity {
     /**
      * 按俩次back键退出程序
      */
-//    @Override
-//    public boolean onKeyDown(int keyCode, KeyEvent event) {
-//
-//        if (keyCode == KeyEvent.KEYCODE_BACK) {
-//            if (!isExit) {
-//                isExit = true;
-//                ToastUtils.showToast(this, "再按一次退出程序");
-//                Observable.timer(2000, TimeUnit.MILLISECONDS)
-//                        .subscribe(new Action1<Long>() {
-//                            @Override
-//                            public void call(Long aLong) {
-//                                isExit = false;
-//                            }
-//                        });
-//
-//                return false;
-//            }
-//            AppManager.AppExit(this);
-//        }
-//
-//        return super.onKeyDown(keyCode, event);
-//    }
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            if (!isExit) {
+                isExit = true;
+                ToastUtils.showToast(this, "再按一次退出程序");
+                Observable.timer(2000, TimeUnit.MILLISECONDS)
+                       .subscribe(new Observer<Long>() {
+                           @Override
+                           public void onSubscribe(Disposable d) {
+                           }
+
+                           @Override
+                           public void onNext(Long aLong) {
+                               isExit = false;
+                           }
+
+                           @Override
+                           public void onError(Throwable e) {
+
+                           }
+
+                           @Override
+                           public void onComplete() {
+
+                           }
+                       });
+                return false;
+            }
+            AppManager.AppExit(this);
+        }
+        return super.onKeyDown(keyCode, event);
+    }
 
 
 

@@ -8,9 +8,9 @@ package com.xingguang.core.http.loading;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.graphics.drawable.AnimationDrawable;
 import android.view.Gravity;
-import android.widget.ImageView;
+import android.widget.ProgressBar;
+
 import com.xingguang.core.R;
 
 /**
@@ -52,11 +52,11 @@ public class CustomProgressDialog extends Dialog {
             return;
         }
 
-        ImageView imageView = (ImageView) customProgressDialog
-                .findViewById(R.id.loadingImageView);
-        AnimationDrawable animationDrawable = (AnimationDrawable) imageView
-                .getBackground();
-        animationDrawable.start();
+        ProgressBar imageView = (ProgressBar) customProgressDialog
+                .findViewById(R.id.loading_process);
+//        AnimationDrawable animationDrawable = (AnimationDrawable) imageView
+//                .getBackground();
+//        animationDrawable.start();
     }
 
     /**

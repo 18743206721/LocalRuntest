@@ -9,10 +9,15 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+
+import com.lcodecore.tkrefreshlayout.Footer.LoadingView;
+import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout;
+import com.lcodecore.tkrefreshlayout.header.SinaRefreshView;
 import com.xingguang.core.base.BaseFragment;
 import com.xingguang.localrun.R;
 import com.xingguang.localrun.maincode.home.view.activity.ProductdetailsActivity;
 import com.xingguang.localrun.maincode.home.view.adapter.LookShopAdapter;
+import com.xingguang.localrun.refresh.RefreshUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,17 +30,22 @@ import butterknife.BindView;
  * 作者:LiuYu
  */
 @SuppressLint("ValidFragment")
-public class LookShopFragment extends BaseFragment {
+public class LookShopFragment extends BaseFragment implements RefreshUtil.OnRefreshListener {
 
-    int type;
     @BindView(R.id.rv_looksp)
     RecyclerView rvLooksp;
     @BindView(R.id.my_deco_fg_apply)
     RelativeLayout myDecoFgApply;
     @BindView(R.id.empty)
     ImageView empty;
+    @BindView(R.id.tw_mylook)
+    TwinklingRefreshLayout tw_mylook;
+
+    private boolean isRefresh = false;
+    int total = 0;
     private LookShopAdapter adapter;
     private List<String> looklist = new ArrayList<>();
+    int type;
 
     public static LookShopFragment newInstance(int type) {
         LookShopFragment fragment = new LookShopFragment();
@@ -52,12 +62,17 @@ public class LookShopFragment extends BaseFragment {
 
     @Override
     protected void initView() {
+        tw_mylook.setHeaderView(new SinaRefreshView(getActivity()));
+        tw_mylook.setBottomView(new LoadingView(getActivity()));
+        tw_mylook.setOnRefreshListener(new RefreshUtil(this).refreshListenerAdapter());
+
         Bundle arguments = getArguments();
         if (arguments != null) {
             type = arguments.getInt("type");
         }
 
         initAdapter();
+        load(total);
         initListener();
     }
 
@@ -72,6 +87,16 @@ public class LookShopFragment extends BaseFragment {
             rvLooksp.setLayoutManager(mgr);
             rvLooksp.setAdapter(adapter);
         }
+    }
+
+    private void load(int count) {
+
+        if (isRefresh) {
+            tw_mylook.finishRefreshing();
+        } else {
+            tw_mylook.finishLoadmore();
+        }
+
     }
 
     private void initListener() {
@@ -95,4 +120,15 @@ public class LookShopFragment extends BaseFragment {
     }
 
 
+    @Override
+    public void onRefresh() {
+        isRefresh = true;
+        load(total);
+    }
+
+    @Override
+    public void onLoad() {
+        isRefresh = false;
+        load(looklist.size());
+    }
 }

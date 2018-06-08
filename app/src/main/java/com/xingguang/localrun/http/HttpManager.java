@@ -126,17 +126,8 @@ public class HttpManager {
      * @param <T> Subscriber真正需要的数据类型，也就是Data部分的数据类型
      */
     private class HttpResultFunc<T> implements Function<HttpResult<T>, T> {
-
-//        @Override
-//        public T call(HttpResult<T> httpResult) {
-//            if (!"success".equals(httpResult.getState())) {
-//                throw new ApiException(httpResult.getMsg());
-//            }
-//            return httpResult.getData();
-//        }
-
         @Override
-        public T apply(HttpResult<T> httpResult)  {
+        public T apply(HttpResult<T> httpResult) {
             if (!"success".equals(httpResult.getState())) {
                 throw new ApiException(httpResult.getMsg());
             }
@@ -199,7 +190,6 @@ public class HttpManager {
                 .map(new HttpResultFunc<ProcurementIndexBean>());
         return initObservable(observable);
     }
-
 
 
 }

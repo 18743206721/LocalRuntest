@@ -31,11 +31,9 @@ android {
 //}
 
 dependencies {
-    //    androidTestImplementation('com.android.support.test.espresso:espresso-core:3.0.1', {
-    //        exclude group: 'com.android.support', module: 'support-annotations'
-    //    })
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     testImplementation 'junit:junit:4.12'
+    //butterknife
     implementation 'com.jakewharton:butterknife:8.4.0'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.4.0'
     //5.0控件
@@ -51,6 +49,21 @@ dependencies {
     implementation 'me.iwf.photopicker:PhotoPicker:0.9.0@aar'
     // 城市选择
     implementation 'liji.library.dev:citypickerview:0.9.0'
+    //网络框架
     implementation project(':core')
+    //分包处理
     implementation 'com.android.support:multidex:1.0.0'
+    // 动画库
+    implementation 'com.eftimoff:androidplayer:1.0.3@aar'
+    implementation 'com.nineoldandroids:library:2.4.0'
+    // refreshLayout
+    implementation 'com.lcodecorex:tkrefreshlayout:1.0.5'
+    //友盟
+    implementation files('libs/umeng-common-1.5.3.jar')
+    implementation files('libs/umeng-share-core-6.9.2.jar')
+    implementation files('libs/umeng-share-QQ-simplify-6.9.2.jar')
+    implementation files('libs/umeng-share-sina-simplify-6.9.2.jar')
+    implementation files('libs/umeng-share-wechat-simplify-6.9.2.jar')
+    implementation files('libs/umeng-shareboard-widget-6.9.2.jar')
+    implementation files('libs/umeng-sharetool-6.9.2.jar')
 }

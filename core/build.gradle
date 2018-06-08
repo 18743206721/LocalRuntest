@@ -9,8 +9,8 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-
     }
+
     buildTypes {
         release {
             minifyEnabled false
@@ -29,6 +29,7 @@ dependencies {
     //implementation是私有的，引用库不好使，换成api，gradle4.0以后的引用问题
     //noinspection GradleCompatible
     api 'com.android.support:recyclerview-v7:26.+'
+
     // butterKnife
     api 'com.jakewharton:butterknife:8.4.0'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.4.0'
@@ -37,28 +38,23 @@ dependencies {
     api 'com.squareup.retrofit2:retrofit:2.3.0'//Retrofit2所需要的包
     api 'com.squareup.retrofit2:converter-gson:2.3.0'//ConverterFactory的Gson依赖包
     api 'com.squareup.retrofit2:converter-scalars:2.3.0'//ConverterFactory的String依赖包
-//    api 'com.squareup.retrofit2:adapter-rxjava:2.1.0'
+    api 'com.squareup.retrofit2:adapter-rxjava2:2.3.0'//retrofit对rxjava2的支持
     api 'com.google.code.gson:gson:+'
     api 'com.squareup.okhttp3:logging-interceptor:+'
-    api 'com.squareup.retrofit2:adapter-rxjava2:2.3.0'//retrofit对rxjava2的支持
 
     // RxJava2.0
-//    api "io.reactivex.rxjava2:rxjava:+"
-//    api 'io.reactivex.rxjava2:rxandroid:+'
     api "io.reactivex.rxjava2:rxjava:2.1.14"
     api 'io.reactivex.rxjava2:rxandroid:2.0.2'
     api 'com.trello.rxlifecycle2:rxlifecycle:2.2.1'
     api 'com.trello.rxlifecycle2:rxlifecycle-components:2.2.1'
-    //Rxjava1.0
-//    api 'io.reactivex:rxjava:+'
-//    api 'io.reactivex:rxandroid:+'
-//    api 'com.trello:rxlifecycle:1.0'
-//    api 'com.trello:rxlifecycle-components:1.0'
-
 
     // Glide图片加载库
     api 'com.github.bumptech.glide:glide:+'
 
     // 友盟统计
     api 'com.umeng.analytics:analytics:latest.integration'
+
+    //progressbar
+    api 'me.zhanghai.android.materialprogressbar:library:1.4.2'
+
 }

@@ -23,7 +23,6 @@ public class BaseSubscriber<T> implements Observer<T> {
     // 拿到view的实例，用于处理共同部分
     private HttpView mView;
 
-
     /**
      * 构造 （不需缓存）
      */
@@ -35,17 +34,11 @@ public class BaseSubscriber<T> implements Observer<T> {
     /**
      * 开始
      */
-//    @Override
-//    public void onSubscribe(Subscription s) {
-//        if (mView != null)
-//            mView.onLoading();
-//    }
-//    @Override
-//    public void onStart() {
-//        super.onStart();
-//        if (mView != null)
-//            mView.onLoading();
-//    }
+    @Override
+    public void onSubscribe(Disposable disposable) {
+        if (mView != null)
+            mView.onLoading();
+    }
 
     /**
      * 完成
@@ -75,13 +68,6 @@ public class BaseSubscriber<T> implements Observer<T> {
                 mView.loadingFinished();
             }
         }
-    }
-
-
-    @Override
-    public void onSubscribe(Disposable disposable) {
-        if (mView != null)
-            mView.onLoading();
     }
 
     /**

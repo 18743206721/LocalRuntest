@@ -112,6 +112,7 @@ public class HomeFragment extends HttpFragment {
         initListener();
 
         ProcurementIndex();
+
     }
 
 
@@ -125,31 +126,6 @@ public class HomeFragment extends HttpFragment {
                         ToastUtils.showLongToast(getActivity(),"走了接口"+bean.getCategoryList().get(0).getCategoryName());
                     }
                 }, this));
-
-//        HttpManager.getInstance().ProcurementIndex().compose(bindRecycler())
-//                .subscribe(new Observer() {
-//                    @Override
-//                    public void onSubscribe(Disposable disposable) {
-//
-//                    }
-//
-//                    @Override
-//                    public void onNext(Object o) {
-//
-//                    }
-//
-//                    @Override
-//                    public void onError(Throwable throwable) {
-//
-//                    }
-//
-//                    @Override
-//                    public void onComplete() {
-//
-//                    }
-//                });
-
-
 
     }
 
