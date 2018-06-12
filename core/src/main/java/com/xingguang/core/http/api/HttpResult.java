@@ -9,11 +9,19 @@ package com.xingguang.core.http.api;
 public class HttpResult<T> {
 
     // 判断标示
-    private String state;
+    private String status;
     // 提示信息
     private String msg;
     // 显示数据（用户需要关心的数据）
     private T data;
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
 
     public String getMsg() {
         return msg;
@@ -21,14 +29,6 @@ public class HttpResult<T> {
 
     public void setMsg(String msg) {
         this.msg = msg;
-    }
-
-    public String getState() {
-        return state;
-    }
-
-    public void setState(String state) {
-        this.state = state;
     }
 
     public T getData() {

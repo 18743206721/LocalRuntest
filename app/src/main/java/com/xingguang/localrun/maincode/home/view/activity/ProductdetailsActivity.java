@@ -8,6 +8,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.WindowManager;
@@ -16,6 +17,16 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.tencent.mm.opensdk.modelpay.PayReq;
+import com.tencent.mm.opensdk.openapi.IWXAPI;
+import com.tencent.mm.opensdk.openapi.WXAPIFactory;
+import com.umeng.socialize.ShareAction;
+import com.umeng.socialize.UMShareListener;
+import com.umeng.socialize.bean.SHARE_MEDIA;
+import com.umeng.socialize.media.UMImage;
+import com.umeng.socialize.media.UMWeb;
 import com.xingguang.core.base.BaseActivity;
 import com.xingguang.core.utils.ToastUtils;
 import com.xingguang.localrun.R;
@@ -24,10 +35,13 @@ import com.xingguang.localrun.maincode.home.model.ProductDetailsBean;
 import com.xingguang.localrun.maincode.home.view.adapter.PinglunAdapter;
 import com.xingguang.localrun.popwindow.CrowdPopUpWindow;
 import com.xingguang.localrun.popwindow.NowBuyPopUpWindow;
+import com.xingguang.localrun.popwindow.SharePopUpWindow;
 import com.xingguang.localrun.utils.AppUtil;
 import com.xingguang.localrun.view.TiceScrollview;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import butterknife.BindView;
 import butterknife.OnClick;
 
@@ -37,7 +51,8 @@ import butterknife.OnClick;
  * 描述:商品详情
  * 作者:LiuYu
  */
-public class ProductdetailsActivity extends BaseActivity implements TiceScrollview.onScrollChangedListener {
+public class ProductdetailsActivity extends BaseActivity implements TiceScrollview.onScrollChangedListener,
+        SharePopUpWindow.OnShareListener {
 
     @BindView(R.id.iv_tice_head)
     ImageView ivTiceHead;
@@ -102,6 +117,16 @@ public class ProductdetailsActivity extends BaseActivity implements TiceScrollvi
 
     private String proid; //商品id
 
+    //分享
+    private List<String> headlist = new ArrayList<>();
+    private String shareUrl, shareTitle, shareImg, shareContent;
+    private UMImage image;
+    private UMWeb web;
+
+    //微信支付
+    private IWXAPI iwapi;
+    PayReq request = new PayReq();
+
     @Override
     protected int getLayoutId() {
         return R.layout.activity_productdetails;
@@ -111,10 +136,57 @@ public class ProductdetailsActivity extends BaseActivity implements TiceScrollvi
     protected void initView() {
         proid = getIntent().getStringExtra("proid");
         instance = this;
+        iwapi = WXAPIFactory.createWXAPI(ProductdetailsActivity.this,null);
+        iwapi.registerApp("xxx");
+
         initAdapter();
         initListener();
+        loadshare();
 
     }
+
+    private void loadshare() {
+//        shareUrl = headlist.get(0);
+//        shareTitle = nowApplyMainModel.getOutsourcing().getTitle();
+//        shareImg = nowApplyMainModel.getOutsourcing().getUrl();
+//        shareContent = nowApplyMainModel.getOutsourcing().getContent();
+    }
+
+    @Override
+    public void onShareListener(SHARE_MEDIA share_media) {
+        image = new UMImage(this, R.mipmap.icon_logo);//网络图片
+        web = new UMWeb(shareUrl);
+        web.setTitle(shareTitle);//标题
+        web.setThumb(image);  //缩略图
+        web.setDescription("点击查看更多详情");//描述
+        new ShareAction(ProductdetailsActivity.this)
+                .setPlatform(share_media)
+                .withMedia(web)
+                .setCallback(umShareListener)
+                .share();
+    }
+
+    private UMShareListener umShareListener = new UMShareListener() {
+        @Override
+        public void onStart(SHARE_MEDIA share_media) {
+        }
+
+        @Override
+        public void onResult(SHARE_MEDIA platform) {
+            Log.d("plat", "platform" + platform);
+            Toast.makeText(ProductdetailsActivity.this, "分享成功", Toast.LENGTH_SHORT).show();
+        }
+
+        @Override
+        public void onError(SHARE_MEDIA platform, Throwable t) {
+            Toast.makeText(ProductdetailsActivity.this, "分享失败", Toast.LENGTH_SHORT).show();
+        }
+
+        @Override
+        public void onCancel(SHARE_MEDIA platform) {
+            Toast.makeText(ProductdetailsActivity.this, "分享取消", Toast.LENGTH_SHORT).show();
+        }
+    };
 
     class OnClickLintener implements View.OnClickListener {
         @Override
@@ -201,7 +273,8 @@ public class ProductdetailsActivity extends BaseActivity implements TiceScrollvi
 
     }
 
-    @OnClick({R.id.ll_shop, R.id.collect, R.id.add_shopcar, R.id.commit, R.id.ll_guige,R.id.back, R.id.iv_fenxiang})
+    @OnClick({R.id.ll_shop, R.id.collect, R.id.add_shopcar, R.id.commit, R.id.ll_guige,R.id.back,
+            R.id.iv_fenxiang,R.id.ll_profenxinag})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.ll_shop://店铺
@@ -215,7 +288,14 @@ public class ProductdetailsActivity extends BaseActivity implements TiceScrollvi
                 break;
             case R.id.add_shopcar: //添加购物车
                 break;
+            case R.id.ll_profenxinag: //友盟分享
+                new SharePopUpWindow(ProductdetailsActivity.this, llParent, ProductdetailsActivity.this);
+                break;
             case R.id.commit://立即购买
+
+                request.appId="";
+                iwapi.sendReq(request);
+
                 break;
             case R.id.ll_guige://选择规格
                 new NowBuyPopUpWindow(ProductdetailsActivity.this, llParent, lists, nums,1);

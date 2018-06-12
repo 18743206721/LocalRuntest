@@ -7,7 +7,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,14 +15,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.xingguang.core.base.HttpFragment;
-import com.xingguang.core.http.listener.HttpOnNextListener;
-import com.xingguang.core.http.subscribers.BaseSubscriber;
-import com.xingguang.core.utils.ToastUtils;
 import com.xingguang.localrun.R;
-import com.xingguang.localrun.http.HttpManager;
 import com.xingguang.localrun.main.view.MainActivity;
 import com.xingguang.localrun.maincode.home.model.GlideImageLoader;
-import com.xingguang.localrun.maincode.home.model.ProcurementIndexBean;
 import com.xingguang.localrun.maincode.home.view.activity.ClassifShopActivity;
 import com.xingguang.localrun.maincode.home.view.activity.DaiBanDetailsActivity;
 import com.xingguang.localrun.maincode.home.view.activity.DaiBanMoreActivity;
@@ -86,7 +80,7 @@ public class HomeFragment extends HttpFragment {
     private HomeDaiBanAdapter daibanadapter;
 
 
-    private List<String> networkImages;
+    private List<String> networkImages = new ArrayList<>();
     private String[] images = {"http://img2.imgtn.bdimg.com/it/u=3093785514,1341050958&fm=21&gp=0.jpg",
             "http://img2.3lian.com/2014/f2/37/d/40.jpg",
             "http://d.3987.com/sqmy_131219/001.jpg",
@@ -105,30 +99,32 @@ public class HomeFragment extends HttpFragment {
 
         fm = getFragmentManager();
 
-        initpage();
 
         initAdapter();
 
         initListener();
 
-        ProcurementIndex();
+        loadHeader();
 
     }
 
 
-    private void ProcurementIndex() {
-        HttpManager.getInstance().ProcurementIndex().compose(bindRecycler())
-                .subscribe(new BaseSubscriber<>(new HttpOnNextListener<ProcurementIndexBean>() {
-                    @Override
-                    public void onNext(ProcurementIndexBean bean) {
-                        loadingFinished();
-                        Log.e("homefragment", "onNext: "+bean.getImgList().get(0) );
-                        ToastUtils.showLongToast(getActivity(),"走了接口"+bean.getCategoryList().get(0).getCategoryName());
-                    }
-                }, this));
+    private void loadHeader() {
+//        HttpManager.getInstance().getindex().compose(bindRecycler())
+//                .subscribe(new BaseSubscriber<>(new HttpOnNextListener<HIndexBean>() {
+//                    @Override
+//                    public void onNext(HIndexBean bean) {
+//                        loadingFinished();
+//                        Log.e("homeloadheader", "onNext: "+bean.getBanner1().get(0).getImage() );
+//                        ToastUtils.showLongToast(getActivity(),"走了接口"+bean.getBanner1().get(0).getImage());
+//                        for (int i = 0; i < bean.getBanner1().size(); i++) {
+//                            networkImages.add(HttpManager.INDEX+bean.getBanner1().get(i).getImage());
+//                        }
+//                        initpage();
+//                    }
+//                }, this));
 
     }
-
 
 
     private void initListener() {
@@ -169,10 +165,9 @@ public class HomeFragment extends HttpFragment {
     }
 
     private void initpage() {
-        networkImages = new ArrayList<>();
-        for (int i = 0; i < images.length; i++) {
-            networkImages.add(images[i]);
-        }
+//        for (int i = 0; i < images.length; i++) {
+//            networkImages.add(images[i]);
+//        }
         //设置图片加载器
         banner.setImageLoader(new GlideImageLoader());
         //设置图片集合

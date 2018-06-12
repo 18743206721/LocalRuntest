@@ -34,8 +34,6 @@ public class SharedPreferencesUtils {
     public static final String USERNAME = "username";
     //电话
     public static final String PHONE = "phone";
-    //邀请码
-    public static final String CODE = "code";
 
     //默认地址用户
     public static final String ADDRESSUSER = "addressuser";

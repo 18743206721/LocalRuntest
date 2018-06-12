@@ -5,11 +5,7 @@ import android.support.annotation.NonNull;
 import com.xingguang.core.base.BaseApplication;
 import com.xingguang.core.http.api.HttpResult;
 import com.xingguang.core.http.cookie.CacheInterceptor;
-import com.xingguang.core.http.exception.ApiException;
 import com.xingguang.core.utils.NetUtil;
-import com.xingguang.localrun.maincode.home.model.ProcurementIndexBean;
-
-import org.json.JSONObject;
 
 import java.io.File;
 import java.util.concurrent.TimeUnit;
@@ -36,12 +32,28 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class HttpManager {
 
     //线上
-    public static final String BASE_URL = " http://47.52.240.241/app/";
-    //    public static final String BASE_URL = "http://192.168.51.19:8088/app/";
+    public static final String BASE_URL = "http://140.143.248.102/index.php/";
+    //本地测试
+//    public static final String BASE_URL = "http://192.168.0.230/index.php/";
+
+
+    //登录接口
+    public static final String Login= BASE_URL+"Public/login";
+
+    //发送验证码
+    public static final String sendSms= BASE_URL+"Public/sendSms";
+
+    //注册
+    public static final String register= BASE_URL+"Public/register";
+
+
 
 
     private volatile static HttpManager INSTANCE;
     private Service httpService;
+
+    //index.php
+    public static final String INDEX = "http://192.168.0.230/";
 
     //一页加载多少条数据
     public static int CONTENT_COUNT = 10;
@@ -128,9 +140,9 @@ public class HttpManager {
     private class HttpResultFunc<T> implements Function<HttpResult<T>, T> {
         @Override
         public T apply(HttpResult<T> httpResult) {
-            if (!"success".equals(httpResult.getState())) {
-                throw new ApiException(httpResult.getMsg());
-            }
+//            if (!"SUCCESS".equals(httpResult.getStatus())) {
+//                throw new ApiException(httpResult.getMsg());
+//            }
             return httpResult.getData();
         }
     }
@@ -158,9 +170,25 @@ public class HttpManager {
     /**
      * 用于配置请求参数为json
      */
-    public RequestBody initRequestBody(String json) {
-        return RequestBody.create(okhttp3.MediaType.parse("application/json; charset=utf-8"), json);
-    }
+//    public RequestBody initRequestBody(String json) {
+//        return RequestBody.create(okhttp3.MediaType.parse("application/json; charset=utf-8"), json);
+//    }
+
+    /**
+     * 用于配置请求参数为表单
+     */
+//    public Map<String,Object> initRequestBody(String data) {
+//        return FormBody.create(okhttp3.MediaType.parse("application/x-www-form-urlencoded"), formdata);
+//        return new MultipartBody.Builder().setType(MultipartBody.FORM).addPart(formdata).build();
+//        return RequestBody.create(MediaType.parse("multipart/form-data"),data);
+//        FormBody.Builder builder = new FormBody.Builder();
+//        if (params!=null&&!params.isEmpty()){
+//            for(Map.Entry<String,String> entry:params.entrySet()){
+//                builder.add(entry.getKey(),entry.getValue());
+//            }
+//        }
+//        return MultipartBody.Part
+//    }
 
     public MultipartBody.Part getRequestBody(File file) {
 
@@ -179,17 +207,91 @@ public class HttpManager {
         return body;
     }
 
-    //办公采购首页
-    public Observable ProcurementIndex() {
-        JSONObject json = new JSONObject();
-        try {
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        Observable observable = httpService.ProcurementIndex(initRequestBody(json.toString()))
-                .map(new HttpResultFunc<ProcurementIndexBean>());
-        return initObservable(observable);
-    }
+    //请求验证码
+//    public Observable getsendsms(String mobile, String type) {
+////        RequestBody requestBody = new MultipartBody.Builder().setType(MultipartBody.FORM)
+////                .addFormDataPart("mobile", mobile)
+////                .addFormDataPart("type", type).build();
+////        RequestBody requestApiSecret = RequestBody.create(MediaType.parse("multipart/form-data"), mobile);
+////        RequestBody body = new FormBody.Builder()
+////                .add("mobile", mobile)
+////                .add("type", type)
+////                .build();
+//
+//        HashMap<String, Object> map = new HashMap<>();
+//        map.put("mobile", mobile);
+//        map.put("type",type);
+//
+//        Observable observable = httpService.getsendsms(
+//                initRequestBody(map.toString()))
+//                /*结果判断*/
+//                .map(new HttpResultFunc<SMSBean>());
+//        return initObservable(observable);
+//    }
+
+
+    //首页广告
+//    public Observable getindex() {
+//        RequestBody requestBody = new MultipartBody.Builder().setType(MultipartBody.FORM)
+//                .addFormDataPart("","" )
+//                  .build();
+//        RequestBody body = new FormBody.Builder()
+////                .add("mobile", mobile)
+////                .add("type", type)
+//                .build();
+//        Observable observable = httpService.getindex(initRequestBody(requestBody.toString()));
+////                .map(new HttpResultFunc<HIndexBean>());
+//        return initObservable(observable);
+//    }
+//
+//    //登录
+//    public Observable getlogin(String mobile, String password) {
+
+//        RequestBody requestBody = new MultipartBody.Builder().setType(MultipartBody.FORM)
+//                .addFormDataPart("mobile", mobile)
+//                .addFormDataPart("password", password).build();
+//
+//        Observable observable = httpService.getlogin(initRequestBody(requestBody.toString()))
+//                /*结果判断*/
+//                .map(new HttpResultFunc<LoginBean>());
+//        return Ok;
+//    }
+
+//    public Observable getlogin(String mobile, String password) {
+//
+//        Observable<Response<String>> observable = OkGo.<String>post(BASE_URL)
+//                .params("mobile", mobile)
+//                .converter(new StringConvert())
+//                .adapt(ObservableResponse<String>);
+//
+//
+//        return observable;
+//    }
+
+//    OkGo.<String>post(HttpManager.BASE_URL)
+//                .tag(this)
+//                .cacheKey("cachePostKey")
+//                .cacheMode(CacheMode.DEFAULT)
+//                .converter(new StringConvert())
+//            .adapt(ObservableResponse<String>);
+//                .params("mobile", loginPhone.getText().toString())
+//            .params("password", loginPwd.getText().toString())
+//            .execute(new StringCallback() {
+//        @Override
+//        public void onSuccess(Response<String> response) {
+//        }
+//    });
+
+//    public static Observable<String> getString(String param){
+////        HttpHeaders headers = new HttpHeaders();
+//////        headers.put();
+////        HttpParams params = new HttpParams();
+////        params.put("");
+//
+//        return OkGo.<String>post(BASE_URL)
+//                .converter(new StringConvert())
+//                .adapt(ObservableResponse<String>);
+//    }
 
 
 }

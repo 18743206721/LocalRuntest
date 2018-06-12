@@ -6,8 +6,10 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import com.xingguang.core.base.BaseActivity;
 import com.xingguang.localrun.R;
+
 import butterknife.BindView;
 
 /**
@@ -42,7 +44,6 @@ public abstract class ToolBarActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         initToolBar();
     }
 

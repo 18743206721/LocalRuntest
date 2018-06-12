@@ -15,6 +15,7 @@ public class WebViewActivity extends ToolBarActivity {
 
     @BindView(R.id.webView1)
     WebView webView1;
+    String type = "";
 
     @Override
     protected int getLayoutId() {
@@ -30,7 +31,11 @@ public class WebViewActivity extends ToolBarActivity {
             }
         });
         setToolBarTitle("服务协议");
-        loadxieyi();
+        type = getIntent().getStringExtra("type");
+
+        if ("1".equals(type)){ //注册
+            loadxieyi();
+        }
 
     }
 

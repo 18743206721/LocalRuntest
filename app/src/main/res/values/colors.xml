@@ -55,6 +55,8 @@
     <!-- 订单背景  中灰文字 -->
     <color name="btn_orderall">#E2E2E2</color>
 
+    <!-- 背景颜色 深色 -->
+    <color name="bg_color_deep">#c1c1c1</color>
 
 
 </resources>

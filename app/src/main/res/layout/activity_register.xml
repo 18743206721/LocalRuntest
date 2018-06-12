@@ -204,16 +204,31 @@
             </RelativeLayout>
         </LinearLayout>
 
-        <TextView
-            android:id="@+id/register_user_xieyi"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="40dp"
-            android:layout_marginTop="15dp"
-            android:text="注册协议"
-            android:textColor="@color/textBlack"
-            android:textSize="14sp" />
+        <LinearLayout
+            android:layout_marginLeft="13dp"
+            android:layout_marginTop="20dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
+            <CheckBox
+                android:id="@+id/check_box"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:button="@drawable/check_box_bg"
+                android:gravity="center" />
+
+            <TextView
+                android:id="@+id/register_user_xieyi"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="注册协议"
+                android:layout_marginLeft="10dp"
+                android:textColor="@color/textBlack"
+                android:textSize="14sp" />
+        </LinearLayout>
 
         <!--注册-->
         <LinearLayout
@@ -232,6 +247,7 @@
                 android:background="@drawable/corners30_solidgreen"
                 android:gravity="center"
                 android:text="注册"
+                android:textSize="15sp"
                 android:textColor="#fff" />
         </LinearLayout>
 

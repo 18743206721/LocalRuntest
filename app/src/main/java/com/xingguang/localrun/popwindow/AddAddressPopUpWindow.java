@@ -6,7 +6,6 @@ package com.xingguang.localrun.popwindow;
 import android.content.Context;
 import android.content.res.AssetManager;
 import android.graphics.drawable.ColorDrawable;
-import android.os.Message;
 import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.View;
@@ -18,7 +17,6 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.xingguang.localrun.R;
-import com.xingguang.localrun.maincode.mine.view.activity.AddressDetailActivity;
 import com.xingguang.localrun.wheel.ArrayWheelAdapter;
 import com.xingguang.localrun.wheel.OnWheelChangedListener;
 import com.xingguang.localrun.wheel.WheelView;
@@ -264,11 +262,11 @@ public class AddAddressPopUpWindow extends PopupWindow implements
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.complete:
-                Message msg = null;
-                if (context == AddressDetailActivity.instance) {
-                    msg = AddressDetailActivity.instance.handler.obtainMessage();
-                    msg.what = 1;
-                }
+//                Message msg = null;
+//                if (context == AddressDetailActivity.instance) {
+//                    msg = AddressDetailActivity.instance.handler.obtainMessage();
+//                    msg.what = 1;
+//                }
 //                } else if (context == HiringMessageActivity.instance) {
 //                    msg = HiringMessageActivity.instance.handler.obtainMessage();
 //                    msg.what = 1;
@@ -286,10 +284,10 @@ public class AddAddressPopUpWindow extends PopupWindow implements
 //                    msg.what = Integer.parseInt(from);
 //                }
 
-                msg.obj = mCurrentProviceName + " " + mCurrentCityName + " "
-                        + mCurrentDistrictName;
-                msg.sendToTarget();
-                dismiss();
+//                msg.obj = mCurrentProviceName + " " + mCurrentCityName + " "
+//                        + mCurrentDistrictName;
+//                msg.sendToTarget();
+//                dismiss();
                 break;
             case R.id.cancle:
 //                if (context == HiringMessageActivity.instance) {

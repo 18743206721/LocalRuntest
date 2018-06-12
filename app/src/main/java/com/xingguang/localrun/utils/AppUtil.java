@@ -26,6 +26,13 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
+import com.xingguang.core.utils.SharedPreferencesUtils;
+import com.xingguang.localrun.maincode.mine.model.JsonBean;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
@@ -838,6 +845,50 @@ public class AppUtil {
         }
     }
 
+    /**
+     * 解析实体类数据
+     * */
+    public static ArrayList<JsonBean> parseData(String jsonData) { //gson解析
+        ArrayList<JsonBean> detail = new ArrayList<>();
+        try {
+            JSONArray array = new JSONArray(jsonData);
+            Gson gson = new Gson();
+            for (int i = 0; i < array.length(); i++) {
+                JsonBean entity = gson.fromJson(array.getJSONObject(i).toString(), JsonBean.class); //转换成实体类
+                detail.add(entity);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return detail;
+    }
 
+    /**
+     * 获得用户id
+     *
+     * @param context
+     */
+    public static String getUserId(Context context) {
+        return (String) SharedPreferencesUtils.get(context, SharedPreferencesUtils.USERID, "");
+    }
+
+
+    /**
+     * 获得用户头像
+     *
+     * @param context
+     */
+    public static String getUserImage(Context context) {
+        return (String) SharedPreferencesUtils.get(context, SharedPreferencesUtils.USERIMAGE, "");
+    }
+
+    /**
+     * 获得用户昵称
+     *
+     * @param context
+     */
+    public static String getUserName(Context context) {
+        return (String) SharedPreferencesUtils.get(context, SharedPreferencesUtils.USERNAME, "");
+    }
 
 }
