@@ -31,9 +31,9 @@
 
             <ImageView
                 android:id="@+id/iv_daibande"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="220dp"
-                android:src="@mipmap/home_fruit" />
+                android:scaleType="centerCrop" />
         </LinearLayout>
 
 
@@ -42,7 +42,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="13dp"
-            android:text="新租客的积分看见爱上大路口附近是的离开房间"
+            android:text=""
             android:textColor="@color/textBlack"
             android:textSize="14sp" />
     </LinearLayout>

@@ -5,6 +5,7 @@
     android:layout_height="match_parent"
     android:background="@color/board"
     android:orientation="vertical"
+    android:id="@+id/parent"
     tools:context="com.xingguang.localrun.maincode.mine.view.MineSettingActivity">
 
     <include layout="@layout/toolbar_layout" />
@@ -76,6 +77,15 @@
                 android:textColor="@color/textBlack"
                 android:textSize="14sp" />
 
+            <TextView
+                android:id="@+id/tv_setname"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:layout_marginRight="10dp"
+                android:textColor="@color/textBlack"
+                android:textSize="13sp" />
+
             <ImageView
                 android:layout_width="13dp"
                 android:layout_height="13dp"
@@ -104,6 +114,15 @@
                 android:text="修改手机号"
                 android:textColor="@color/textBlack"
                 android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/tv_setphone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:layout_marginRight="10dp"
+                android:textColor="@color/textBlack"
+                android:textSize="13sp" />
 
             <ImageView
                 android:layout_width="13dp"

@@ -46,6 +46,71 @@ public class HttpManager {
     //注册
     public static final String register= BASE_URL+"Public/register";
 
+    //退出
+    public static final String logout= BASE_URL+"Public/logout";
+
+    //申请入驻
+    public static final String apply= BASE_URL+"User/apply";
+
+    //申请入驻类别
+    public static final String applyindex = BASE_URL+"Goods/index";
+
+    //修改头像
+    public static final String update_avatar= BASE_URL+"User/update_avatar";
+
+    //修改昵称
+    public static final String update_nickname= BASE_URL+"User/update_nickname";
+
+    //修改手机号
+    public static final String update_mobile= BASE_URL+"User/update_mobile";
+
+    //首页轮播图
+    public static final String Index= BASE_URL+"Index/index";
+
+    //忘记密码
+    public static final String forgotPassword= BASE_URL+"Public/forgotPassword";
+
+    //推荐商品
+    public static final String tjgoods= BASE_URL+"Index/tjgoods";
+
+    //推荐代办
+    public static final String tjtask= BASE_URL+"Index/tjtask";
+
+    //代办列表
+    public static final String Taskindex= BASE_URL+"Task/index";
+
+    //代办详情
+    public static final String Taskdetail= BASE_URL+"Task/detail";
+
+    //添加地址
+    public static final String Addadres= BASE_URL+"User/addAddress";
+
+    //收货地址列表
+    public static final String ListAddress= BASE_URL+"User/address";
+
+    //收货地址详情
+    public static final String UserADSdetail= BASE_URL+"User/address_detail";
+
+    //删除收货地址
+    public static final String deletedads= BASE_URL+"User/delAddress";
+
+    //设置默认收货地址
+    public static final String usersetAds= BASE_URL+"User/setAddress";
+
+    //编辑收货地址
+    public static final String editAddress= BASE_URL+"User/editAddress";
+
+    //关注店铺列表
+    public static final String collectShop= BASE_URL+"User/collectShop";
+
+    //取消关注店铺
+    public static final String cancelCollectShop= BASE_URL+"User/cancelCollectShop";
+
+    //足迹列表
+    public static final String visit= BASE_URL+"User/visit";
+
+    //删除足迹
+    public static final String delVisit= BASE_URL+"User/delVisit";
 
 
 
@@ -53,7 +118,7 @@ public class HttpManager {
     private Service httpService;
 
     //index.php
-    public static final String INDEX = "http://192.168.0.230/";
+    public static final String INDEX = "http://140.143.248.102/";
 
     //一页加载多少条数据
     public static int CONTENT_COUNT = 10;

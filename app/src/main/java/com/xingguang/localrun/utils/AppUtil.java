@@ -2,7 +2,9 @@ package com.xingguang.localrun.utils;
 
 import android.app.Activity;
 import android.app.ActivityManager;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
@@ -28,7 +30,9 @@ import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.xingguang.core.utils.SharedPreferencesUtils;
+import com.xingguang.localrun.login.view.activity.LoginActivity;
 import com.xingguang.localrun.maincode.mine.model.JsonBean;
+import com.xingguang.localrun.view.BasicDialog;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -889,6 +893,66 @@ public class AppUtil {
      */
     public static String getUserName(Context context) {
         return (String) SharedPreferencesUtils.get(context, SharedPreferencesUtils.USERNAME, "");
+    }
+
+    /**
+     * 获得用户电话
+     *
+     * @param context
+     */
+    public static String getUserPhone(Context context) {
+        return (String) SharedPreferencesUtils.get(context, SharedPreferencesUtils.PHONE, "");
+    }
+
+
+
+    /**
+     * 是否登录
+     *
+     * @param context
+     */
+    public static boolean isExamine(Context context) {
+        String userId = getUserId(context);
+        Boolean isExamine = false;
+        if (TextUtils.isEmpty(userId)) {
+            isExamine = false;
+        } else {
+            isExamine = true;
+        }
+        return isExamine;
+    }
+
+    /**
+     * 是否登录 如果没登录弹出登录Dialog
+     *
+     * @param context
+     */
+    public static boolean isExamined(final Context context) {
+        if (isExamine(context)) {
+            return true;
+        } else {
+            BasicDialog.Builder builder = new BasicDialog.Builder(context);
+            builder.setMessage("您还没有登录哦!~")
+                    .setPositiveButton("登录", new AlertDialog.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Intent intent = new Intent(context, LoginActivity.class);
+                            intent.putExtra("startFlag", "1");
+                            context.startActivity(intent);
+                            dialog.dismiss();
+                        }
+
+                    })
+                    .setNegativeButton("忽略", new AlertDialog.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
+
+            builder.create().show();
+            return false;
+        }
     }
 
 }

@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.xingguang.localrun.R;
+import com.xingguang.localrun.maincode.home.model.TjtaskBean;
 import com.xingguang.localrun.view.CommonViewHolder;
 
 import java.util.List;
@@ -15,7 +16,7 @@ public class HomeDaiBanAdapter extends RecyclerView.Adapter <CommonViewHolder> {
 
 
     private Context mContext;
-    private List<String> list;
+    private List<TjtaskBean.DataBean> list;
 
     private OnItemClickListener mOnItemClickLitener;
 
@@ -23,8 +24,9 @@ public class HomeDaiBanAdapter extends RecyclerView.Adapter <CommonViewHolder> {
         this.mOnItemClickLitener = mOnItemClickListener;
     }
 
-    public HomeDaiBanAdapter(Context mContext) {
+    public HomeDaiBanAdapter(Context mContext,List<TjtaskBean.DataBean> list) {
         this.mContext = mContext;
+        this.list = list;
     }
 
 
@@ -49,13 +51,21 @@ public class HomeDaiBanAdapter extends RecyclerView.Adapter <CommonViewHolder> {
             });
         }
 
-//        holder.setText(R.id., "");
+        holder.setText(R.id.item_tv_name, list.get(position).getTitle());
+        holder.setText(R.id.item_tvdes, list.get(position).getDescribe());
+        holder.setText(R.id.tv_statrtime, list.get(position).getStart_time());
+        holder.setText(R.id.tv_endtime, list.get(position).getEnd_time());
 
     }
 
     @Override
     public int getItemCount() {
-        return 6;
+        return list.size();
+    }
+
+    public void setList(List<TjtaskBean.DataBean> list) {
+        this.list = list;
+        notifyDataSetChanged();
     }
 
     public interface OnItemClickListener {

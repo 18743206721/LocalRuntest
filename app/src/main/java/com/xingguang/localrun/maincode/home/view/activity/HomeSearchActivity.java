@@ -14,6 +14,7 @@ import com.xingguang.core.base.BaseActivity;
 import com.xingguang.core.utils.SharedPreferencesUtils;
 import com.xingguang.core.utils.ToastUtils;
 import com.xingguang.localrun.R;
+import com.xingguang.localrun.maincode.home.model.DaiBanMoreBean;
 import com.xingguang.localrun.maincode.home.view.adapter.DaiBanMoreAdapter;
 import com.xingguang.localrun.maincode.home.view.adapter.HistoryListAdapter;
 import com.xingguang.localrun.maincode.home.view.adapter.SearchResultAdapter;
@@ -75,7 +76,7 @@ public class HomeSearchActivity extends BaseActivity {
 
     private List<String> proList = new ArrayList<>();
     private List<String> shopList = new ArrayList<>();
-    private List<String> daibanList = new ArrayList<>();
+    private List<DaiBanMoreBean.DataBean> daibanList = new ArrayList<>();
 
     @Override
     protected int getLayoutId() {

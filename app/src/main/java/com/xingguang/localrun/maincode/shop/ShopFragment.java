@@ -188,7 +188,6 @@ public class ShopFragment extends ToolBarFragment implements ShopCarAdapter.Chec
         shopCarAdapter.notifyDataSetChanged();
         ToastUtils.showToast(getActivity(), "删除成功!" + pos);
         statistics();
-
     }
 
     private void load() {
@@ -221,7 +220,6 @@ public class ShopFragment extends ToolBarFragment implements ShopCarAdapter.Chec
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.all_chekbox://全选
-
                 if (shoplist.size() != 0) {
                     if (allChekbox.isChecked()) {
                         for (int i = 0; i < shoplist.size(); i++) {
@@ -236,8 +234,6 @@ public class ShopFragment extends ToolBarFragment implements ShopCarAdapter.Chec
                     }
                 }
                 statistics();
-
-
 //                doCheckAll();
                 break;
             case R.id.tv_go_to_pay: //结算

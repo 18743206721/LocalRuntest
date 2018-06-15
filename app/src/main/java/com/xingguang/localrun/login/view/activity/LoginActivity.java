@@ -151,7 +151,7 @@ public class LoginActivity extends HttpToolBarActivity {
                             SharedPreferencesUtils.put(LoginActivity.this, SharedPreferencesUtils.USERNAME, loginBean.getData().getNickname());
                             SharedPreferencesUtils.put(LoginActivity.this, SharedPreferencesUtils.USERIMAGE, HttpManager.INDEX + loginBean.getData().getAvatar());
                             SharedPreferencesUtils.put(LoginActivity.this, SharedPreferencesUtils.PHONE, loginBean.getData().getMobile());
-                            ToastUtils.showToast(LoginActivity.this, "恭喜您,登录成功!" + loginBean.getData().getNickname());
+                            ToastUtils.showToast(LoginActivity.this, "恭喜您,登录成功!");
                             finish();
                         }else {
                             ToastUtils.showToast(LoginActivity.this, loginBean.getMsg());
@@ -276,6 +276,9 @@ public class LoginActivity extends HttpToolBarActivity {
             return false;
         } else if (loginPwd.getText().toString().length() == 0) {
             ToastUtils.showToast(this, "请填写密码");
+            return false;
+        } else if (loginPwd.getText().toString().length() <= 5) {
+            ToastUtils.showToast(this, "请填写六位以上密码");
             return false;
         } else {
             return true;

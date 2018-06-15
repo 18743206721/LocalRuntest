@@ -1,51 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:id="@+id/rl_parent"
     android:background="@color/board"
     tools:context="com.xingguang.localrun.maincode.mine.view.activity.FootPrintActivity">
 
 
-    <include layout="@layout/toolbar_layout" />
+    <include
+        android:id="@+id/tools"
+        layout="@layout/toolbar_layout" />
 
     <View
+        android:id="@+id/view1"
+        android:layout_below="@+id/tools"
         android:layout_width="match_parent"
-        android:layout_height="0.5dp"
+        android:layout_height="1dp"
         android:background="@color/fengexian" />
 
+
     <RelativeLayout
+        android:id="@+id/rl_bg"
+        android:background="@color/white"
+        android:layout_below="@+id/view1"
+        android:visibility="visible"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
-        <RelativeLayout
-            android:id="@+id/rlmy_footprint"
+        <com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout
+            android:id="@+id/tw_refresh"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:visibility="visible">
+            android:layout_height="match_parent">
 
-            <!--<com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout-->
-                <!--android:id="@+id/tw_mydeco_apply"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="match_parent">-->
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recyclerview"
+                android:overScrollMode="never"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout>
 
-                <android.support.v7.widget.RecyclerView
-                    android:id="@+id/rv_myfoot"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
-            <!--</com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout>-->
-        </RelativeLayout>
-
-
-        <ImageView
-            android:id="@+id/empty"
-            android:layout_width="150dp"
-            android:layout_height="150dp"
-            android:layout_centerInParent="true"
-            android:src="@mipmap/nomessage"
-            android:visibility="gone" />
     </RelativeLayout>
 
 
-</LinearLayout>
+    <ImageView
+        android:id="@+id/empty"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_centerInParent="true"
+        android:src="@mipmap/nomessage"
+        android:visibility="gone" />
+
+</RelativeLayout>

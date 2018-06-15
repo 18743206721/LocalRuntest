@@ -151,7 +151,7 @@ public class RegisterActivity extends HttpToolBarActivity implements CountDownTi
                         Gson gson = new Gson();
                         RegisterBean registerBean = gson.fromJson(response.body().toString(), RegisterBean.class);
                         if (registerBean.getStatus() != 0) {
-                            ToastUtils.showToast(RegisterActivity.this, "恭喜您,注册成功!"+registerBean.getMsg());
+                            ToastUtils.showToast(RegisterActivity.this, "恭喜您,注册成功!");
                             finish();
                         }else {
                             ToastUtils.showToast(RegisterActivity.this, registerBean.getMsg());
@@ -213,6 +213,9 @@ public class RegisterActivity extends HttpToolBarActivity implements CountDownTi
             return false;
         } else if (registerPwd.getText().toString().length() == 0) {
             ToastUtils.showToast(this, "请填写密码");
+            return false;
+        } else if (registerPwd.getText().toString().length() <= 5) {
+            ToastUtils.showToast(this, "请填写六位以上密码");
             return false;
         } else if (registerTwopwd.getText().toString().length() == 0) {
             ToastUtils.showToast(RegisterActivity.this, "请再次输入密码");

@@ -306,8 +306,7 @@
 
                 <LinearLayout
                     android:layout_width="100dp"
-                    android:layout_height="180dp"
-                    android:background="@color/home_read">
+                    android:layout_height="180dp">
                     <ImageView
                         android:id="@+id/iv_img1"
                         android:scaleType="centerCrop"
@@ -325,8 +324,7 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
-                        android:layout_weight="1"
-                        android:background="@color/home_read">
+                        android:layout_weight="1">
                         <ImageView
                             android:id="@+id/iv_img2"
                             android:scaleType="centerCrop"
@@ -344,8 +342,7 @@
                         <LinearLayout
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
-                            android:layout_weight="1"
-                            android:background="@color/home_read">
+                            android:layout_weight="1">
                             <ImageView
                                 android:id="@+id/iv_img3"
                                 android:scaleType="centerCrop"
@@ -358,8 +355,7 @@
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:layout_marginLeft="10dp"
-                            android:layout_weight="1"
-                            android:background="@color/home_read">
+                            android:layout_weight="1">
                             <ImageView
                                 android:id="@+id/iv_img4"
                                 android:scaleType="centerCrop"
@@ -468,6 +464,7 @@
 
             <!--加载更多-->
             <LinearLayout
+                android:id="@+id/ll_daigoupage"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
@@ -555,6 +552,39 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
             </LinearLayout>
+            <!--加载更多-->
+            <LinearLayout
+                android:id="@+id/ll_daibanpage"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:background="@color/white"
+                android:gravity="center">
+
+                <View
+                    android:layout_width="20dp"
+                    android:layout_height="1dp"
+                    android:background="@color/textBlack" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:paddingBottom="10dp"
+                    android:paddingTop="10dp"
+                    android:text="加载更多"
+                    android:textColor="@color/textBlack"
+                    android:textSize="16sp" />
+
+                <View
+                    android:layout_width="20dp"
+                    android:layout_height="1dp"
+                    android:background="@color/textBlack" />
+
+            </LinearLayout>
+
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>
 

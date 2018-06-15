@@ -55,6 +55,7 @@
                 android:background="@drawable/btn_ads_bg"
                 android:gravity="left"
                 android:hint="电话"
+                android:inputType="phone"
                 android:padding="15dp"
                 android:textColor="@color/textBlack"
                 android:textSize="13sp" />
@@ -105,19 +106,21 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="13dp"
-            android:layout_marginLeft="5dp"
             android:layout_marginTop="@dimen/dp10"
             android:gravity="center_vertical"
             android:orientation="horizontal">
 
-            <ImageView
+            <CheckBox
                 android:id="@+id/default_address_img"
+                android:layout_marginLeft="13dp"
                 android:layout_width="35dp"
                 android:layout_height="35dp"
-                android:padding="9dp"
-                android:src="@mipmap/ic_uncheck" />
+                android:layout_gravity="center_vertical"
+                android:button="@drawable/check_box_bg"
+                 />
 
             <TextView
+                android:layout_marginLeft="-10dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="是否设为默认"

@@ -7,7 +7,11 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.xingguang.localrun.R;
+import com.xingguang.localrun.http.HttpManager;
+import com.xingguang.localrun.maincode.mine.model.MineAttentionBean;
+import com.xingguang.localrun.utils.ImageLoader;
 import com.xingguang.localrun.view.CommonViewHolder;
+import com.xingguang.localrun.view.RoundRectImageView;
 
 import java.util.List;
 
@@ -19,8 +23,13 @@ import java.util.List;
 public class MyAttentionAdapter extends RecyclerView.Adapter <CommonViewHolder>{
 
     private Context mContext;
-    private List<String> list;
+    private List<MineAttentionBean.DataBean> list;
     private OnItemCancelClickLitener mOnItemCancelClickLitener;
+
+    public void setList(List<MineAttentionBean.DataBean> list) {
+        this.list = list;
+        notifyDataSetChanged();
+    }
 
     //取消关注
     public interface OnItemCancelClickLitener {
@@ -31,7 +40,7 @@ public class MyAttentionAdapter extends RecyclerView.Adapter <CommonViewHolder>{
         this.mOnItemCancelClickLitener = mOnItemCancelClickLitener;
     }
 
-    public MyAttentionAdapter(Context mContext, List<String> list) {
+    public MyAttentionAdapter(Context mContext, List<MineAttentionBean.DataBean> list) {
         this.mContext = mContext;
         this.list = list;
     }
@@ -54,7 +63,7 @@ public class MyAttentionAdapter extends RecyclerView.Adapter <CommonViewHolder>{
         }
 
         final TextView item_tv_cancel_attention = holder.getItemView().findViewById(R.id.item_tv_cancel_attention);
-
+        final RoundRectImageView item_iv_attention = holder.getItemView().findViewById(R.id.item_iv_attention);
         if (mOnItemCancelClickLitener != null) {
             item_tv_cancel_attention.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -63,15 +72,14 @@ public class MyAttentionAdapter extends RecyclerView.Adapter <CommonViewHolder>{
                 }
             });
         }
-
-//        ImageLoader.loadCircleImage(mContext,list.get(position).getUserImg(),item_iv_avtuar); //图片
-//        holder.setText(R.id.item_tv_headertitle,list.get(position).getUserName()); //店名
+        ImageLoader.loadRoundImage(mContext, HttpManager.INDEX+list.get(position).getLogo(),item_iv_attention,5); //图片
+        holder.setText(R.id.item_tv_attenname,list.get(position).getShop_name()); //店名
 
     }
 
     @Override
     public int getItemCount() {
-        return 10;
+        return list.size();
     }
 
 

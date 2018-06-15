@@ -8,26 +8,41 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
 import com.xingguang.localrun.R;
 import com.xingguang.localrun.maincode.mine.model.AddressModel;
+import com.xingguang.localrun.maincode.mine.model.JsonBean;
+import com.xingguang.localrun.utils.AppUtil;
+import com.xingguang.localrun.utils.GetJsonDataUtil;
+
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Administrator on 2017/6/3.
  */
 
 public class AddressManagementAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements View.OnClickListener {
-    private ArrayList<AddressModel> myContractList;
+    private List<AddressModel.DataBean> myContractList;
     Context mContext;
     private OnItem onItem;
+    private List<AddressModel.DataBean> remove;
 
-    public void setOnItem(OnItem onItem) {
-        this.onItem = onItem;
+
+    public void setList(List<AddressModel.DataBean> list) {
+        this.myContractList = list;
+        notifyDataSetChanged();
+    }
+
+    public void setRemove(List<AddressModel.DataBean> remove, int position) {
+        this.myContractList = remove;
+        myContractList.remove(position);
+        notifyDataSetChanged();
     }
 
     //设置默认
     public interface DefaultListener {
-        void SubClick(int position, String user, String address, String id);
+        void SubClick(ImageView imageView, String isdefult, int position);
     }
 
     DefaultListener mListener;
@@ -40,9 +55,6 @@ public class AddressManagementAdapter extends RecyclerView.Adapter<RecyclerView.
     //行点击
     private OnItemClickListener mOnItemClickListener = null;
 
-    public void setOnItemClickListener(OnItemClickListener listener) {
-        this.mOnItemClickListener = listener;
-    }
 
     //设置修改
     public interface UpdateListener {
@@ -68,7 +80,7 @@ public class AddressManagementAdapter extends RecyclerView.Adapter<RecyclerView.
         this.deteleListener = deteleListener;
     }
 
-    public AddressManagementAdapter(ArrayList<AddressModel> myContractList, Context mContext) {
+    public AddressManagementAdapter(List<AddressModel.DataBean> myContractList, Context mContext) {
         this.myContractList = myContractList;
         this.mContext = mContext;
     }
@@ -80,34 +92,56 @@ public class AddressManagementAdapter extends RecyclerView.Adapter<RecyclerView.
         return new ListviewHolder(view);
     }
 
+    String province;
+    String city;
+    String area;
+
     @Override
     public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position) {
         if (holder instanceof ListviewHolder) {//HomeList布局
-            ListviewHolder mHolder = (ListviewHolder) holder;
+            final ListviewHolder mHolder = (ListviewHolder) holder;
             mHolder.itemView.setTag(position);
 
-//            mHolder.name.setText(myContractList.get(position).getName());
-//            mHolder.phone.setText(myContractList.get(position).getPhone());
-//            mHolder.address.setText(myContractList.get(position).getProv() + myContractList.get(position).getCity() +
-//                    myContractList.get(position).getDist() + myContractList.get(position).getAddress());
+            mHolder.name.setText(myContractList.get(position).getConsignee()); //设置姓名
+            mHolder.phone.setText(myContractList.get(position).getMobile());
 
-//            if ("0".equals(myContractList.get(position).getDefAddress())) {
-//                mHolder.default_address_img.setImageResource(R.mipmap.ic_uncheck);
-//            } else {
-//                mHolder.default_address_img.setImageResource(R.mipmap.ic_checked);
-//            }
+            String JsonData = new GetJsonDataUtil().getJson(mContext, "region.json");//获取assets目录下的json文件数据
+            ArrayList<JsonBean> jsonBean = AppUtil.parseData(JsonData);//用Gson 转成实体
+             List<JsonBean> options1Items = jsonBean;
+            for (int i = 0; i < jsonBean.size(); i++) { //遍历省份
+                if (myContractList.get(position).getProvince()
+                        .equals(options1Items.get(i).getId())){
+                    province = options1Items.get(i).getName();
+                }
+                for (int c = 0; c < jsonBean.get(i).getChild().size(); c++) {  //遍历该省份的所有城市
+                    if (myContractList.get(position).getCity()
+                            .equals(options1Items.get(i).getChild().get(c).getId())){
+                        city = options1Items.get(i).getChild().get(c).getName();
+                    }
+                    for (int d = 0; d < jsonBean.get(i).getChild().get(c).getChild().size(); d++) {
+                        if (myContractList.get(position).getArea()
+                                .equals(options1Items.get(i).getChild().get(c).getChild().get(d).getId())){
+                            area = options1Items.get(i).getChild().get(c).getChild().get(d).getName();
+                        }
+                    }
+                }
+            }
+
+            mHolder.address.setText(province+city+area + myContractList.get(position).getAddress());
+
+            if ("0".equals(myContractList.get(position).getIs_default())) {
+                mHolder.default_address_img.setImageResource(R.mipmap.ic_uncheck);
+            } else {
+                mHolder.default_address_img.setImageResource(R.mipmap.ic_checked);
+            }
 
             mHolder.defaultAddress.setTag(position);
-
             mHolder.defaultAddress.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     int position = Integer.parseInt(v.getTag().toString());
                     if (mListener != null) {
-//                        mListener.SubClick(position,myContractList.get(position).getName()+"      "+myContractList.get(position).getPhone()
-//                                ,myContractList.get(position).getProv() + myContractList.get(position).getCity() +
-//                                        myContractList.get(position).getDist() + myContractList.get(position).getAddress(),
-//                                myContractList.get(position).getId());
+                        mListener.SubClick(mHolder.default_address_img,myContractList.get(position).getIs_default(),position);
                     }
                 }
             });
@@ -136,9 +170,6 @@ public class AddressManagementAdapter extends RecyclerView.Adapter<RecyclerView.
             mHolder.ll_parent.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-//                    onItem.onItem(position,myContractList.get(position).getName()+"      "+myContractList.get(position).getPhone()
-//                    ,myContractList.get(position).getProv() + myContractList.get(position).getCity() +
-//                                    myContractList.get(position).getDist() + myContractList.get(position).getAddress());
                 }
             });
         }
@@ -151,7 +182,7 @@ public class AddressManagementAdapter extends RecyclerView.Adapter<RecyclerView.
 
     @Override
     public int getItemCount() {
-        return 5;
+        return myContractList.size();
     }
 
     @Override
@@ -161,7 +192,6 @@ public class AddressManagementAdapter extends RecyclerView.Adapter<RecyclerView.
             mOnItemClickListener.onItemClick(view, Integer.parseInt(view.getTag().toString()));
         }
     }
-
 
     /**
      * HomeList布局

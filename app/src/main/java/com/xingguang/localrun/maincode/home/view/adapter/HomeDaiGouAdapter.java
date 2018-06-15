@@ -7,6 +7,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.xingguang.localrun.R;
+import com.xingguang.localrun.http.HttpManager;
+import com.xingguang.localrun.maincode.home.model.TjgoodsBean;
 import com.xingguang.localrun.view.CommonViewHolder;
 
 import java.util.List;
@@ -14,7 +16,7 @@ import java.util.List;
 public class HomeDaiGouAdapter extends RecyclerView.Adapter <CommonViewHolder> {
 
     private Context mContext;
-    private List<String> list;
+    private List<TjgoodsBean.DataBean> list;
 
     private OnItemClickListener mOnItemClickLitener;
 
@@ -29,8 +31,9 @@ public class HomeDaiGouAdapter extends RecyclerView.Adapter <CommonViewHolder> {
         this.mOnItemClickLitener = mOnItemClickListener;
     }
 
-    public HomeDaiGouAdapter(Context mContext) {
+    public HomeDaiGouAdapter(Context mContext,List<TjgoodsBean.DataBean> list) {
         this.mContext = mContext;
+        this.list = list;
     }
 
 
@@ -55,7 +58,9 @@ public class HomeDaiGouAdapter extends RecyclerView.Adapter <CommonViewHolder> {
         }
         final TextView item_tv_look = holder.getItemView().findViewById(R.id.item_tv_look);
 
-        holder.setText(R.id.item_tv_name, "好吃的蛋糕");
+        holder.setText(R.id.item_tv_name, list.get(position).getGoods_name());
+        holder.setUrlImage(R.id.item_ivds_bg, HttpManager.INDEX+list.get(position).getOriginal_img());
+        holder.setText(R.id.tvpm_money,"¥"+list.get(position).getShop_price());
 
 //        item_tv_look.setOnClickListener(new View.OnClickListener() {
 //            @Override
@@ -69,7 +74,12 @@ public class HomeDaiGouAdapter extends RecyclerView.Adapter <CommonViewHolder> {
 
     @Override
     public int getItemCount() {
-        return 4;
+        return list.size();
+    }
+
+    public void setList(List<TjgoodsBean.DataBean> list) {
+        this.list = list;
+        notifyDataSetChanged();
     }
 
     public interface OnItemClickListener {

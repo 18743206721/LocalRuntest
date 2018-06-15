@@ -12,9 +12,18 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import com.lzy.okgo.OkGo;
+import com.lzy.okgo.cache.CacheMode;
+import com.lzy.okgo.model.Response;
 import com.xingguang.core.base.BaseFragment;
+import com.xingguang.core.utils.SharedPreferencesUtils;
+import com.xingguang.core.utils.ToastUtils;
 import com.xingguang.localrun.R;
+import com.xingguang.localrun.http.DialogCallback;
+import com.xingguang.localrun.http.HttpManager;
 import com.xingguang.localrun.login.view.activity.LoginActivity;
+import com.xingguang.localrun.maincode.mine.model.MessageEvent;
 import com.xingguang.localrun.maincode.mine.view.activity.AboutActivity;
 import com.xingguang.localrun.maincode.mine.view.activity.AddressManagementActivity;
 import com.xingguang.localrun.maincode.mine.view.activity.FootPrintActivity;
@@ -23,8 +32,15 @@ import com.xingguang.localrun.maincode.mine.view.activity.MineSettingActivity;
 import com.xingguang.localrun.maincode.mine.view.activity.MyCollectionActivity;
 import com.xingguang.localrun.maincode.mine.view.activity.MyGuanzhuActivity;
 import com.xingguang.localrun.maincode.mine.view.activity.MyOrderAllActivity;
+import com.xingguang.localrun.popwindow.TextPopUpWindow;
 import com.xingguang.localrun.utils.AppUtil;
+import com.xingguang.localrun.utils.ImageLoader;
 import com.xingguang.localrun.view.RoundImageView;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -79,6 +95,10 @@ public class MineFragment extends BaseFragment {
     @BindView(R.id.my_tv_setting)
     TextView my_tv_setting;
 
+    private TextPopUpWindow pop;
+    private View.OnClickListener no;
+    private View.OnClickListener yes;
+    private Intent intent;
 
     Unbinder unbinder;
 
@@ -98,6 +118,45 @@ public class MineFragment extends BaseFragment {
             }
         });
 
+        EventBus.getDefault().register(this);
+        initListener();
+
+    }
+
+    private void initListener() {
+        no = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                pop.dismiss();
+            }
+        };
+        yes = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                loadbacklogin();
+            }
+        };
+    }
+
+    /**
+     * 退出登录
+     * */
+    private void loadbacklogin() {
+        OkGo.<String>post(HttpManager.logout)
+                .tag(this)
+                .cacheKey("cachePostKey")
+                .cacheMode(CacheMode.DEFAULT)
+                .params("token", AppUtil.getUserId(getActivity()))
+                .execute(new DialogCallback<String>(getActivity()) {
+                    @Override
+                    public void onSuccess(Response<String> response) {
+                        SharedPreferencesUtils.clear(getActivity());
+                        pop.dismiss();
+                        ToastUtils.showToast(getActivity(), "已退出登录");
+                        myUserName.setText("未登录");
+                        ImageLoader.loadCircleImage(getActivity(), R.mipmap.defaultavatar123, myUserImg);
+                    }
+                });
     }
 
     @Override
@@ -106,13 +165,38 @@ public class MineFragment extends BaseFragment {
 
     }
 
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (!AppUtil.getUserId(getActivity()).equals("")) {
+            AppUtil.getUserImage(getActivity());
+            myUserName.setText(AppUtil.getUserName(getActivity()));
+            ImageLoader.loadCircleImage(getActivity(), AppUtil.getUserImage(getActivity()), myUserImg);
+        } else {
+            myUserName.setText("未登录");
+            ImageLoader.loadCircleImage(getActivity(), R.mipmap.defaultavatar123, myUserImg);
+        }
+
+
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void applyenter(MessageEvent messageEvent) {
+        if (messageEvent.equals("1")){
+            btnShenqing.setVisibility(View.GONE);
+        }
+    }
+
     @OnClick({R.id.rl_my_header, R.id.ll_my_collection, R.id.ll_my_attention, R.id.ll_my_zuji, R.id.ll_my_allorder, R.id.ll_daipay, R.id.ll_mydai_fahuo,
             R.id.ll_complete, R.id.ll_getads, R.id.ll_about,
             R.id.btn_shenqing, R.id.bt_back,R.id.my_tv_setting})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.rl_my_header://登录头布局
-                startActivity(new Intent(getActivity(), LoginActivity.class));
+                if (AppUtil.getUserId(getActivity()).equals("")) {
+                    startActivity(new Intent(getActivity(), LoginActivity.class));
+                }
                 break;
             case R.id.ll_my_collection://我的收藏
                 startActivity(new Intent(getActivity(), MyCollectionActivity.class));
@@ -146,12 +230,19 @@ public class MineFragment extends BaseFragment {
                 startActivity(new Intent(getActivity(), AboutActivity.class));
                 break;
             case R.id.btn_shenqing://申请入驻
-                startActivity(new Intent(getActivity(), MineApplyEnterActivity.class));
+                if (AppUtil.isExamined(getActivity())) {
+                    startActivity(new Intent(getActivity(), MineApplyEnterActivity.class));
+                }
                 break;
             case R.id.bt_back://返回
+                if (!AppUtil.getUserId(getActivity()).equals("")) {
+                    pop = new TextPopUpWindow(getActivity(), llReadilyParent, "确定退出登录?", "取消", "确定", no, yes);
+                }
                 break;
             case R.id.my_tv_setting://设置
-                startActivity(new Intent(getActivity(), MineSettingActivity.class));
+                if (AppUtil.isExamined(getActivity())) {
+                    startActivity(new Intent(getActivity(), MineSettingActivity.class));
+                }
                 break;
         }
     }
@@ -169,5 +260,8 @@ public class MineFragment extends BaseFragment {
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
+        //取消注册事件
+        EventBus.getDefault().unregister(this);
     }
+
 }

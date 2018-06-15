@@ -39,7 +39,7 @@
                 android:layout_marginLeft="5dp"
                 android:ellipsize="end"
                 android:lines="1"
-                android:text="梅河口香酥蛋卷店"
+                android:text=""
                 android:textColor="@color/textBlack"
                 android:textSize="14sp" />
         </LinearLayout>

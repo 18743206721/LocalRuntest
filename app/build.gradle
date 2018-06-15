@@ -90,6 +90,8 @@ dependencies {
     implementation 'com.lzy.net:okrx2:2.0.2'
     implementation 'com.readystatesoftware.chuck:library:1.0.4'
 
+    implementation 'org.greenrobot:eventbus:3.0.0'
+
     //友盟
     implementation files('libs/umeng-common-1.5.3.jar')
     implementation files('libs/umeng-share-core-6.9.2.jar')

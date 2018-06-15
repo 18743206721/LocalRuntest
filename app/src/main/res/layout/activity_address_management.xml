@@ -3,8 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:background="@color/board"
+    android:orientation="vertical"
     tools:context="com.xingguang.localrun.maincode.mine.view.activity.AddressManagementActivity">
 
     <include layout="@layout/toolbar_layout" />
@@ -16,50 +16,51 @@
 
     <android.support.v4.widget.NestedScrollView
         android:id="@+id/scorl"
-        android:scrollbars="none"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:scrollbars="none">
 
         <LinearLayout
-            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
             <LinearLayout
                 android:id="@+id/main_fl"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:orientation="vertical"
                 android:visibility="visible">
 
-                <!--<com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout-->
-                <!--android:id="@+id/twinklingRefresh"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="match_parent">-->
-
-                <android.support.v7.widget.RecyclerView
-                    android:id="@+id/address_management_recycle"
+                <com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout
+                    android:id="@+id/tw_Refresh"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="match_parent">
+
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/address_management_recycle"
+                        android:overScrollMode="never"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
 
 
-                <!--</com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout>-->
+                </com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout>
             </LinearLayout>
 
             <TextView
                 android:id="@+id/bottom"
-                android:visibility="visible"
                 android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:layout_marginTop="25dp"
+                android:layout_height="36dp"
                 android:layout_marginBottom="@dimen/dp30"
-                android:layout_marginLeft="@dimen/dp20"
-                android:layout_marginRight="@dimen/dp20"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp"
+                android:layout_marginTop="25dp"
                 android:background="@drawable/corners30_solidgreen"
                 android:gravity="center"
                 android:text="添加新地址"
                 android:textColor="#fff"
-                android:textSize="16sp" />
+                android:textSize="15sp"
+                android:visibility="visible" />
 
             <ImageView
                 android:id="@+id/empty"

@@ -3,8 +3,12 @@ package com.xingguang.localrun.maincode.mine.view.adapter;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import com.xingguang.localrun.R;
+import com.xingguang.localrun.http.HttpManager;
+import com.xingguang.localrun.maincode.mine.model.ZujiBean;
+import com.xingguang.localrun.utils.ImageLoader;
 import com.xingguang.localrun.view.CommonViewHolder;
 
 import java.util.List;
@@ -17,9 +21,9 @@ import java.util.List;
 public class MyItemFootAdapter extends RecyclerView.Adapter<CommonViewHolder> {
 
     private Context mContext;
-    private List<String> list;
+    private List<ZujiBean.DataBean.GoodsBean> list;
 
-    public MyItemFootAdapter(Context mContext) {
+    public MyItemFootAdapter(Context mContext, List<ZujiBean.DataBean.GoodsBean> list) {
         this.mContext = mContext;
         this.list = list;
     }
@@ -33,14 +37,16 @@ public class MyItemFootAdapter extends RecyclerView.Adapter<CommonViewHolder> {
 
     @Override
     public void onBindViewHolder(CommonViewHolder holder, int position) {
-
+        ImageView item_iv_backimg = holder.getItemView().findViewById(R.id.item_iv_backimg);
+        ImageLoader.getInstance().initGlide(mContext).loadImage(
+                HttpManager.INDEX + list.get(position).getOriginal_img(), item_iv_backimg);
+        holder.setText(R.id.tv_shop_price, "¥" + list.get(position).getShop_price());
     }
 
     @Override
     public int getItemCount() {
-        return 5;
+        return list.size();
     }
-
 
 
 }

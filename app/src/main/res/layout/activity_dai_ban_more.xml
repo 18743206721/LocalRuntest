@@ -7,26 +7,42 @@
     android:orientation="vertical"
     tools:context="com.xingguang.localrun.maincode.home.view.activity.DaiBanMoreActivity">
 
-
     <include layout="@layout/toolbar_layout" />
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="0.5dp"
+        android:layout_height="1dp"
         android:background="@color/fengexian" />
 
-    <LinearLayout
+    <RelativeLayout
+        android:id="@+id/my_deco_fg_apply"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:background="@color/white"
-        android:orientation="vertical">
+        android:visibility="visible">
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/rv_daiban"
+        <com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout
+            android:id="@+id/tw_mylook"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="match_parent">
 
-    </LinearLayout>
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rv_daiban"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:overScrollMode="never" />
+        </com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout>
+
+    </RelativeLayout>
+
+
+    <ImageView
+        android:id="@+id/empty"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_centerInParent="true"
+        android:src="@mipmap/nomessage"
+        android:visibility="gone" />
 
 
 </LinearLayout>

@@ -14,10 +14,20 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
+import com.lzy.okgo.OkGo;
+import com.lzy.okgo.cache.CacheMode;
+import com.lzy.okgo.model.Response;
 import com.xingguang.core.base.HttpFragment;
+import com.xingguang.core.utils.ToastUtils;
 import com.xingguang.localrun.R;
+import com.xingguang.localrun.http.DialogCallback;
+import com.xingguang.localrun.http.HttpManager;
 import com.xingguang.localrun.main.view.MainActivity;
 import com.xingguang.localrun.maincode.home.model.GlideImageLoader;
+import com.xingguang.localrun.maincode.home.model.HIndexBean;
+import com.xingguang.localrun.maincode.home.model.TjgoodsBean;
+import com.xingguang.localrun.maincode.home.model.TjtaskBean;
 import com.xingguang.localrun.maincode.home.view.activity.ClassifShopActivity;
 import com.xingguang.localrun.maincode.home.view.activity.DaiBanDetailsActivity;
 import com.xingguang.localrun.maincode.home.view.activity.DaiBanMoreActivity;
@@ -25,6 +35,8 @@ import com.xingguang.localrun.maincode.home.view.activity.HomeSearchActivity;
 import com.xingguang.localrun.maincode.home.view.activity.LookShopActivity;
 import com.xingguang.localrun.maincode.home.view.adapter.HomeDaiBanAdapter;
 import com.xingguang.localrun.maincode.home.view.adapter.HomeDaiGouAdapter;
+import com.xingguang.localrun.utils.AppUtil;
+import com.xingguang.localrun.utils.ImageLoader;
 import com.youth.banner.Banner;
 
 import java.util.ArrayList;
@@ -73,6 +85,10 @@ public class HomeFragment extends HttpFragment {
     ImageView iv_img3;
     @BindView(R.id.iv_img4)
     ImageView iv_img4;
+    @BindView(R.id.ll_daigoupage)
+    LinearLayout ll_daigoupage;
+    @BindView(R.id.ll_daibanpage)
+    LinearLayout ll_daibanpage;
 
     Unbinder unbinder;
 
@@ -81,13 +97,17 @@ public class HomeFragment extends HttpFragment {
 
 
     private List<String> networkImages = new ArrayList<>();
-    private String[] images = {"http://img2.imgtn.bdimg.com/it/u=3093785514,1341050958&fm=21&gp=0.jpg",
-            "http://img2.3lian.com/2014/f2/37/d/40.jpg",
-            "http://d.3987.com/sqmy_131219/001.jpg",
-            "http://img2.3lian.com/2014/f2/37/d/39.jpg"};
     private Intent intent;
     private FragmentManager fm;
+    private int page = 0; //代购分页
+    private int count = 0; //代办分页
 
+    //banner2
+    private List<HIndexBean.DataBean.Banner2Bean> banner2BeanList = new ArrayList<>();
+    //代购数据
+    private List<TjgoodsBean.DataBean> daigoulist = new ArrayList<>();
+    //代办数据
+    private List<TjtaskBean.DataBean> daibanlist = new ArrayList<>();
 
     @Override
     protected int getLayoutId() {
@@ -99,31 +119,90 @@ public class HomeFragment extends HttpFragment {
 
         fm = getFragmentManager();
 
-
         initAdapter();
-
         initListener();
 
         loadHeader();
+        initDaiGou(0);
+        initDaiBan(0);
 
+    }
+
+    /**
+     * 代办接口
+     * */
+    private void initDaiBan(int count) {
+        OkGo.<String>post(HttpManager.tjtask)
+                .tag(this)
+                .cacheKey("cachePostKey")
+                .cacheMode(CacheMode.DEFAULT)
+                .params("page", count)
+                .execute(new DialogCallback<String>(getActivity()) {
+                    @Override
+                    public void onSuccess(Response<String> response) {
+                        Gson gson = new Gson();
+                        TjtaskBean tjtaskBean = gson.fromJson(response.body().toString(), TjtaskBean.class);
+                        daibanlist.addAll(tjtaskBean.getData());
+                        if (tjtaskBean.getData().size() == 0){
+                            ToastUtils.showToast(getActivity(),"暂无更多数据!");
+                        }else {
+                            daibanadapter.setList(daibanlist);
+                        }
+                    }
+                });
+    }
+
+    /**
+     * 代购接口
+     * */
+    private void initDaiGou(int page) {
+        OkGo.<String>post(HttpManager.tjgoods)
+                .tag(this)
+                .cacheKey("cachePostKey")
+                .cacheMode(CacheMode.DEFAULT)
+                .params("page", page)
+                .execute(new DialogCallback<String>(getActivity()) {
+                    @Override
+                    public void onSuccess(Response<String> response) {
+                        Gson gson = new Gson();
+                        TjgoodsBean tjgoodsBean = gson.fromJson(response.body().toString(), TjgoodsBean.class);
+                        daigoulist.addAll(tjgoodsBean.getData());
+                        if (tjgoodsBean.getData().size() == 0){
+                            ToastUtils.showToast(getActivity(),"暂无更多商铺!");
+                        }else {
+                            daigouadapter.setList(daigoulist);
+                        }
+                    }
+                });
     }
 
 
     private void loadHeader() {
-//        HttpManager.getInstance().getindex().compose(bindRecycler())
-//                .subscribe(new BaseSubscriber<>(new HttpOnNextListener<HIndexBean>() {
-//                    @Override
-//                    public void onNext(HIndexBean bean) {
-//                        loadingFinished();
-//                        Log.e("homeloadheader", "onNext: "+bean.getBanner1().get(0).getImage() );
-//                        ToastUtils.showLongToast(getActivity(),"走了接口"+bean.getBanner1().get(0).getImage());
-//                        for (int i = 0; i < bean.getBanner1().size(); i++) {
-//                            networkImages.add(HttpManager.INDEX+bean.getBanner1().get(i).getImage());
-//                        }
-//                        initpage();
-//                    }
-//                }, this));
+        OkGo.<String>post(HttpManager.Index)
+                .tag(this)
+                .cacheKey("cachePostKey")
+                .cacheMode(CacheMode.DEFAULT)
+                .params("token", AppUtil.getUserId(getActivity()))
+                .execute(new DialogCallback<String>(getActivity()) {
+                    @Override
+                    public void onSuccess(Response<String> response) {
+                        Gson gson = new Gson();
+                        HIndexBean hIndexBean = gson.fromJson(response.body().toString(), HIndexBean.class);
+//                        Type type = new TypeToken<List<HIndexBean.Banner1Bean>>(){}.getType();
+//                        List<HIndexBean.Banner1Bean> banner1BeanList = gson.fromJson(.toString(),type);
+                        banner2BeanList.addAll(hIndexBean.getData().getBanner2());
+                        for (int i = 0; i < hIndexBean.getData().getBanner1().size(); i++) {
+                            networkImages.add(HttpManager.INDEX + hIndexBean.getData().getBanner1().get(i).getImage());
+                        }
+                        initpage();
 
+                        ImageLoader.getInstance().initGlide(getActivity()).loadImage(HttpManager.INDEX+banner2BeanList.get(0).getImage(),iv_img1);
+                        ImageLoader.getInstance().initGlide(getActivity()).loadImage(HttpManager.INDEX+banner2BeanList.get(1).getImage(),iv_img2);
+//                        ImageLoader.getInstance().initGlide(getActivity()).loadImage(HttpManager.INDEX+banner2BeanList.get(2).getImage(),iv_img3);
+//                        ImageLoader.getInstance().initGlide(getActivity()).loadImage(HttpManager.INDEX+banner2BeanList.get(3).getImage(),iv_img4);
+
+                    }
+                });
     }
 
 
@@ -150,13 +229,13 @@ public class HomeFragment extends HttpFragment {
     }
 
     private void initAdapter() {
-        daigouadapter = new HomeDaiGouAdapter(getActivity());
+        daigouadapter = new HomeDaiGouAdapter(getActivity(),daigoulist);
         GridLayoutManager mgr = new GridLayoutManager(getActivity(), 2);
         mainHomeLv.setLayoutManager(mgr);
         mainHomeLv.setAdapter(daigouadapter);
         mainHomeLv.setNestedScrollingEnabled(false);
 
-        daibanadapter = new HomeDaiBanAdapter(getActivity());
+        daibanadapter = new HomeDaiBanAdapter(getActivity(),daibanlist);
         LinearLayoutManager lmg = new LinearLayoutManager(getActivity());
         mainHomelvDaiban.setLayoutManager(lmg);
         mainHomelvDaiban.setAdapter(daibanadapter);
@@ -165,9 +244,6 @@ public class HomeFragment extends HttpFragment {
     }
 
     private void initpage() {
-//        for (int i = 0; i < images.length; i++) {
-//            networkImages.add(images[i]);
-//        }
         //设置图片加载器
         banner.setImageLoader(new GlideImageLoader());
         //设置图片集合
@@ -198,12 +274,12 @@ public class HomeFragment extends HttpFragment {
 
     @OnClick({R.id.ll_main_fenlei, R.id.ll_main_selecte, R.id.ll_home_dijia, R.id.ll_home_food,
             R.id.ll_outfit, R.id.ll_supermarket, R.id.ll_home_fruit, R.id.ll_home_hardware,
-            R.id.ll_sousuo_serch,R.id.ll_daigou_more,R.id.ll_daiban_more,
-            R.id.iv_img1,R.id.iv_img2,R.id.iv_img3,R.id.iv_img4})
+            R.id.ll_sousuo_serch, R.id.ll_daigou_more, R.id.ll_daiban_more,
+            R.id.iv_img1, R.id.iv_img2, R.id.iv_img3, R.id.iv_img4,R.id.ll_daigoupage,R.id.ll_daibanpage})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.ll_sousuo_serch://搜索
-                startActivity(new Intent(getActivity(),HomeSearchActivity.class));
+                startActivity(new Intent(getActivity(), HomeSearchActivity.class));
                 break;
             case R.id.ll_main_fenlei://分类
                 MainActivity.instance.setBg(2);
@@ -235,26 +311,34 @@ public class HomeFragment extends HttpFragment {
                 MainActivity.instance.setToProjectFragment();
                 break;
             case R.id.ll_daiban_more://代办更多跳转到代办
-                startActivity(new Intent(getActivity(),DaiBanMoreActivity.class));
+                startActivity(new Intent(getActivity(), DaiBanMoreActivity.class));
                 break;
             case R.id.iv_img1://优速办1
-                startActivity(new Intent(getActivity(),DaiBanDetailsActivity.class));
+                startActivity(new Intent(getActivity(), DaiBanDetailsActivity.class));
                 break;
             case R.id.iv_img2://优速办2
-                startActivity(new Intent(getActivity(),DaiBanDetailsActivity.class));
+                startActivity(new Intent(getActivity(), DaiBanDetailsActivity.class));
                 break;
             case R.id.iv_img3://优速办3
-                startActivity(new Intent(getActivity(),DaiBanDetailsActivity.class));
+                startActivity(new Intent(getActivity(), DaiBanDetailsActivity.class));
                 break;
             case R.id.iv_img4://优速办4
-                startActivity(new Intent(getActivity(),DaiBanDetailsActivity.class));
+                startActivity(new Intent(getActivity(), DaiBanDetailsActivity.class));
+                break;
+            case R.id.ll_daigoupage://代购加载更多
+                 page++;
+                 initDaiGou(page);
+                break;
+            case R.id.ll_daibanpage://代办加载更多
+                count++;
+                initDaiBan(count);
                 break;
         }
     }
 
     private void startfenlei(String text) {
-        startActivity(new Intent(getActivity(),ClassifShopActivity.class)
-                .putExtra("name",text));
+        startActivity(new Intent(getActivity(), ClassifShopActivity.class)
+                .putExtra("name", text));
     }
 
     @Override
@@ -270,8 +354,6 @@ public class HomeFragment extends HttpFragment {
         super.onDestroyView();
         unbinder.unbind();
     }
-
-
 
 
 }

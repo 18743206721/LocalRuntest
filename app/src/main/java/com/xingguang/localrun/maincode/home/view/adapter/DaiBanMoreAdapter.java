@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.xingguang.localrun.R;
+import com.xingguang.localrun.maincode.home.model.DaiBanMoreBean;
 import com.xingguang.localrun.view.CommonViewHolder;
 
 import java.util.List;
@@ -19,8 +20,13 @@ import java.util.List;
 public class DaiBanMoreAdapter extends RecyclerView.Adapter <CommonViewHolder> {
 
     private Context mContext;
-    private List<String> list;
+    private List<DaiBanMoreBean.DataBean> list;
     private OnItemClickLitener mOnItemClickLitener;
+
+    public void setList(List<DaiBanMoreBean.DataBean> list) {
+        this.list = list;
+        notifyDataSetChanged();
+    }
 
     public interface OnItemClickLitener {
         void onItemClick(TextView view, int position);
@@ -30,7 +36,7 @@ public class DaiBanMoreAdapter extends RecyclerView.Adapter <CommonViewHolder> {
         this.mOnItemClickLitener = mOnItemClickLitener;
     }
 
-    public DaiBanMoreAdapter(Context mContext, List<String> list) {
+    public DaiBanMoreAdapter(Context mContext, List<DaiBanMoreBean.DataBean> list) {
         this.mContext = mContext;
         this.list = list;
     }
@@ -55,14 +61,13 @@ public class DaiBanMoreAdapter extends RecyclerView.Adapter <CommonViewHolder> {
             });
         }
 
-//        holder.setText(R.id.item_tv_headertitle,list.get(position).getUserName()); //店名
-
+        holder.setText(R.id.item_tv_ads,list.get(position).getDescribe());
 
     }
 
     @Override
     public int getItemCount() {
-        return 5;
+        return list.size();
     }
 
 

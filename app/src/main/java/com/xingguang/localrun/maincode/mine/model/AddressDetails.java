@@ -1,20 +1,22 @@
 package com.xingguang.localrun.maincode.mine.model;
 
+/**
+ * 创建日期：2018/6/14
+ * 描述:
+ * 作者:LiuYu
+ */
+public class AddressDetails {
 
-import java.io.Serializable;
-import java.util.List;
-
-public class AddressModel implements Serializable {
 
     /**
      * status : 1
      * msg : SUCCESS
-     * data : [{"address_id":"8","user_id":"4","consignee":"吴青松","mobile":"17743142373","province":"1955","city":"1956","area":"1966","address":"金色华尔兹大厦2栋2门1204室","location":"125.289217,43.898283","is_default":"1"}]
+     * data : {"address_id":"9","user_id":"6","consignee":"刘宇","mobile":"18743206721","province":"1955","city":"1956","area":"1957","address":"纳吉布","location":"125.728620,44.521785","is_default":"1"}
      */
 
     private int status;
     private String msg;
-    private List<AddressModel.DataBean> data;
+    private DataBean data;
 
     public int getStatus() {
         return status;
@@ -32,25 +34,25 @@ public class AddressModel implements Serializable {
         this.msg = msg;
     }
 
-    public List<AddressModel.DataBean> getData() {
+    public DataBean getData() {
         return data;
     }
 
-    public void setData(List<AddressModel.DataBean> data) {
+    public void setData(DataBean data) {
         this.data = data;
     }
 
     public static class DataBean {
         /**
-         * address_id : 8
-         * user_id : 4
-         * consignee : 吴青松
-         * mobile : 17743142373
+         * address_id : 9
+         * user_id : 6
+         * consignee : 刘宇
+         * mobile : 18743206721
          * province : 1955
          * city : 1956
-         * area : 1966
-         * address : 金色华尔兹大厦2栋2门1204室
-         * location : 125.289217,43.898283
+         * area : 1957
+         * address : 纳吉布
+         * location : 125.728620,44.521785
          * is_default : 1
          */
 
@@ -64,22 +66,6 @@ public class AddressModel implements Serializable {
         private String address;
         private String location;
         private String is_default;
-        private boolean isChecked;
-
-        public DataBean(){
-
-        }
-        public DataBean(boolean isCheched) {
-            this.isChecked = isCheched;
-        }
-
-        public boolean isChecked() {
-            return isChecked;
-        }
-
-        public void setChecked(boolean checked) {
-            isChecked = checked;
-        }
 
         public String getAddress_id() {
             return address_id;
