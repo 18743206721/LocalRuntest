@@ -32,19 +32,19 @@ import okhttp3.Response;
  * 修订历史：
  * ================================================
  */
-public abstract class JsonCallback<T> extends AbsCallback<T> {
+public abstract class JsonCallBack<T> extends AbsCallback<T> {
 
     private Type type;
     private Class<T> clazz;
 
-    public JsonCallback() {
+    public JsonCallBack() {
     }
 
-    public JsonCallback(Type type) {
+    public JsonCallBack(Type type) {
         this.type = type;
     }
 
-    public JsonCallback(Class<T> clazz) {
+    public JsonCallBack(Class<T> clazz) {
         this.clazz = clazz;
     }
 

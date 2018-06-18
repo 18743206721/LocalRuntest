@@ -115,7 +115,7 @@ public class ProductdetailsActivity extends BaseActivity implements TiceScrollvi
 
     private CrowdPopUpWindow mPopUpWindow;
 
-    private String proid; //商品id
+    private String goods_id; //商品id
 
     //分享
     private List<String> headlist = new ArrayList<>();
@@ -134,7 +134,8 @@ public class ProductdetailsActivity extends BaseActivity implements TiceScrollvi
 
     @Override
     protected void initView() {
-        proid = getIntent().getStringExtra("proid");
+        goods_id = getIntent().getStringExtra("goods_id");
+        ToastUtils.showToast(ProductdetailsActivity.this,"goods_id   "+goods_id);
         instance = this;
         iwapi = WXAPIFactory.createWXAPI(ProductdetailsActivity.this,null);
         iwapi.registerApp("xxx");

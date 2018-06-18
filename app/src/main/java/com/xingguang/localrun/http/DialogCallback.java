@@ -31,7 +31,7 @@ import com.xingguang.localrun.R;
  * 修订历史：
  * ================================================
  */
-public abstract class DialogCallback<T> extends JsonCallback<T> {
+public abstract class DialogCallback<T> extends JsonCallBack<T> {
 
     private ProgressDialog dialog;
 

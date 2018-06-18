@@ -44,7 +44,7 @@ public class LookShopActivity extends BaseActivity {
     public static LookShopActivity instance;
     //是否关注
     private boolean isshow;
-
+    private String shopid;
 
     @Override
     protected int getLayoutId() {
@@ -54,6 +54,7 @@ public class LookShopActivity extends BaseActivity {
     @Override
     protected void initView() {
         instance = this;
+        shopid = getIntent().getStringExtra("shopid");
         toolbarSubtitle.setText("商店");
         initViewPage();
         initListener();
@@ -82,7 +83,7 @@ public class LookShopActivity extends BaseActivity {
     private void initViewPage() {
         mFragments = new ArrayList<>();
         for (int i = 0; i < mTitles.length; i++) {
-            listFragment = LookShopFragment.newInstance(i + 1);
+            listFragment = LookShopFragment.newInstance(i + 1,shopid);
             mFragments.add(listFragment);
         }
         BaseFragmentAdapter adapter = new BaseFragmentAdapter(getSupportFragmentManager(), mFragments, mTitles);

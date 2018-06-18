@@ -213,6 +213,7 @@ public class HomeFragment extends HttpFragment {
             public void OnItemClick(View view, int position) {
                 //跳转到店铺页面
                 intent = new Intent(getActivity(), LookShopActivity.class);
+                intent.putExtra("shopid",daigoulist.get(position).getShop_id());
                 startActivity(intent);
             }
         });
@@ -248,6 +249,7 @@ public class HomeFragment extends HttpFragment {
         banner.setImageLoader(new GlideImageLoader());
         //设置图片集合
         banner.setImages(networkImages);
+        banner.setDelayTime(3000);
         //banner设置方法全部调用完毕时最后调用
         banner.start();
 

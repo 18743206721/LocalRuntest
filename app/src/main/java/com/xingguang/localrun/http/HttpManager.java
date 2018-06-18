@@ -112,6 +112,21 @@ public class HttpManager {
     //删除足迹
     public static final String delVisit= BASE_URL+"User/delVisit";
 
+    //店铺首页——轮播图
+    public static final String Shopbanner= BASE_URL+"Shop/banner";
+
+    //店铺首页——推荐新品
+    public static final String Shopindex= BASE_URL+"Shop/index";
+
+    //店铺首页——店铺简介
+    public static final String Shopjianjie= BASE_URL+"Shop/detail";
+
+    //店铺全部宝贝
+    public static final String Shopgoods= BASE_URL+"Shop/goods";
+
+    //店铺新品
+    public static final String shopnews= BASE_URL+"Shop/newGoods";
+
 
 
     private volatile static HttpManager INSTANCE;

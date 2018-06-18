@@ -4,8 +4,12 @@ import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import com.xingguang.localrun.R;
+import com.xingguang.localrun.http.HttpManager;
+import com.xingguang.localrun.maincode.home.model.ShopIndex;
+import com.xingguang.localrun.utils.ImageLoader;
 import com.xingguang.localrun.view.CommonViewHolder;
 
 import java.util.List;
@@ -18,7 +22,7 @@ import java.util.List;
 public class LookShopItemAdapter  extends RecyclerView.Adapter<CommonViewHolder> {
 
     private Context mContext;
-    private List<String> list;
+    private List<ShopIndex.DataBean> indexlist;
     private int type;
 
     private OnItemClickListener mOnItemClickListener = null;
@@ -27,9 +31,9 @@ public class LookShopItemAdapter  extends RecyclerView.Adapter<CommonViewHolder>
         this.mOnItemClickListener = listener;
     }
 
-    public LookShopItemAdapter(Context mContext, List<String> list, int type) {
+    public LookShopItemAdapter(Context mContext, List<ShopIndex.DataBean> indexlist, int type) {
         this.mContext = mContext;
-        this.list = list;
+        this.indexlist = indexlist;
         this.type = type;
     }
 
@@ -52,13 +56,15 @@ public class LookShopItemAdapter  extends RecyclerView.Adapter<CommonViewHolder>
                 }
             });
         }
-
-
+        ImageView item_iv_backimg = holder.getItemView().findViewById(R.id.item_iv_backimg);
+        ImageLoader.getInstance().initGlide(mContext).loadImage(HttpManager.INDEX+
+        indexlist.get(position).getOriginal_img(),item_iv_backimg);
+        holder.setText(R.id.tv_shop_price,"¥"+indexlist.get(position).getShop_price());
     }
 
     @Override
     public int getItemCount() {
-        return 4;
+        return indexlist.size();
     }
 
     //define interface
