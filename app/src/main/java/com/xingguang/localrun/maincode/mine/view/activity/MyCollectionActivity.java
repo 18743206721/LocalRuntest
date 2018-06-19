@@ -2,14 +2,25 @@ package com.xingguang.localrun.maincode.mine.view.activity;
 
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
+
+import com.google.gson.Gson;
+import com.lzy.okgo.OkGo;
+import com.lzy.okgo.cache.CacheMode;
+import com.lzy.okgo.model.Response;
 import com.xingguang.core.utils.ToastUtils;
 import com.xingguang.localrun.R;
 import com.xingguang.localrun.base.ToolBarActivity;
+import com.xingguang.localrun.http.DialogCallback;
+import com.xingguang.localrun.http.HttpManager;
+import com.xingguang.localrun.maincode.mine.model.MyCollectionBean;
 import com.xingguang.localrun.maincode.mine.view.adapter.MyCollectionAdapter;
 import com.xingguang.localrun.maincode.mine.view.adapter.OnItemClickListener;
+import com.xingguang.localrun.utils.AppUtil;
 import com.xingguang.localrun.view.DeleteRecyclerView;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import butterknife.BindView;
 
 
@@ -24,7 +35,7 @@ public class MyCollectionActivity extends ToolBarActivity {
     DeleteRecyclerView rvCollection;
 
     MyCollectionAdapter coladapter;
-    List<String> list = new ArrayList<>();
+    List<MyCollectionBean.DataBean> list = new ArrayList<>();
 
     @Override
     protected int getLayoutId() {
@@ -47,11 +58,6 @@ public class MyCollectionActivity extends ToolBarActivity {
     }
 
     private void initAdapter() {
-        for (int i = 0; i < 10; i++) {
-
-            list.add(i + "");
-        }
-
         coladapter = new MyCollectionAdapter(MyCollectionActivity.this,list);
         LinearLayoutManager lmg = new LinearLayoutManager(MyCollectionActivity.this);
         rvCollection.setLayoutManager(lmg);
@@ -78,7 +84,20 @@ public class MyCollectionActivity extends ToolBarActivity {
     }
 
     private void load() {
-
+        OkGo.<String>post(HttpManager.collectGoods)
+                .tag(this)
+                .cacheKey("cachePostKey")
+                .cacheMode(CacheMode.DEFAULT)
+                .params("token", AppUtil.getUserId(this))
+                .execute(new DialogCallback<String>(this) {
+                    @Override
+                    public void onSuccess(Response<String> response) {
+                        Gson gson = new Gson();
+                        MyCollectionBean bean = gson.fromJson(response.body().toString(), MyCollectionBean.class);
+                        list.addAll(bean.getData());
+                        coladapter.setList(list);
+                    }
+                });
     }
 
 
