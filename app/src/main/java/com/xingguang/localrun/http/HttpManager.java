@@ -106,6 +106,9 @@ public class HttpManager {
     //取消关注店铺
     public static final String cancelCollectShop= BASE_URL+"User/cancelCollectShop";
 
+    //关注店铺
+    public static final String Shopcollect= BASE_URL+"Shop/collect";
+
     //足迹列表
     public static final String visit= BASE_URL+"User/visit";
 
@@ -126,6 +129,7 @@ public class HttpManager {
 
     //店铺新品
     public static final String shopnews= BASE_URL+"Shop/newGoods";
+
 
 
 

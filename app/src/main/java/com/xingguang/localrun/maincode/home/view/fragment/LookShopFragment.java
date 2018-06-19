@@ -310,13 +310,7 @@ public class LookShopFragment extends BaseFragment implements RefreshUtil.OnRefr
 
 
     @Override
-    protected void lazyLoad() {
-//        if (type == 1) {
-//            loadbanner(0);
-//            loadIndex(0);
-//        }
-
-    }
+    protected void lazyLoad() {}
 
 
     @Override

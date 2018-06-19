@@ -182,7 +182,6 @@ public class HomeFragment extends HttpFragment {
                 .tag(this)
                 .cacheKey("cachePostKey")
                 .cacheMode(CacheMode.DEFAULT)
-                .params("token", AppUtil.getUserId(getActivity()))
                 .execute(new DialogCallback<String>(getActivity()) {
                     @Override
                     public void onSuccess(Response<String> response) {
@@ -212,9 +211,11 @@ public class HomeFragment extends HttpFragment {
             @Override
             public void OnItemClick(View view, int position) {
                 //跳转到店铺页面
-                intent = new Intent(getActivity(), LookShopActivity.class);
-                intent.putExtra("shopid",daigoulist.get(position).getShop_id());
-                startActivity(intent);
+                if (AppUtil.isExamined(getActivity())) {
+                    intent = new Intent(getActivity(), LookShopActivity.class);
+                    intent.putExtra("shopid", daigoulist.get(position).getShop_id());
+                    startActivity(intent);
+                }
             }
         });
 

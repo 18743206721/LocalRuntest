@@ -138,7 +138,7 @@ public class LoginActivity extends HttpToolBarActivity {
                 .tag(this)
                 .cacheKey("cachePostKey")
                 .cacheMode(CacheMode.DEFAULT)
-                .params("mobile", loginPhone.getText().toString())
+                .params("mobile",loginPhone.getText().toString() )
                 .params("password", loginPwd.getText().toString())
                 .execute(new DialogCallback<String>(this) {
                     @Override

@@ -139,10 +139,12 @@
             <include layout="@layout/texts"/>
 
             <TextView
+                android:id="@+id/tv_baifenbi"
+                android:visibility="visible"
                 android:layout_marginLeft="@dimen/dp10"
                 android:textColor="@color/textGray"
                 android:textSize="14sp"
-                android:text="72%"
+                android:text="%"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 

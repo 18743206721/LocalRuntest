@@ -7,11 +7,19 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.androidkun.xtablayout.XTabLayout;
+import com.google.gson.Gson;
+import com.lzy.okgo.OkGo;
+import com.lzy.okgo.cache.CacheMode;
+import com.lzy.okgo.model.Response;
 import com.xingguang.core.base.BaseActivity;
 import com.xingguang.core.utils.ToastUtils;
 import com.xingguang.localrun.R;
 import com.xingguang.localrun.base.BaseFragmentAdapter;
+import com.xingguang.localrun.http.CommonBean;
+import com.xingguang.localrun.http.DialogCallback;
+import com.xingguang.localrun.http.HttpManager;
 import com.xingguang.localrun.maincode.home.view.fragment.LookShopFragment;
+import com.xingguang.localrun.utils.AppUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -69,13 +77,40 @@ public class LookShopActivity extends BaseActivity {
      * 关注
      */
     private void loadAttention() {
+
         isshow = !isshow;
         if (isshow) {
-            toolbarSubimg.setImageResource(R.mipmap.attention_cancel);
-            ToastUtils.showToast(LookShopActivity.this, "关注成功!");
+            OkGo.<String>post(HttpManager.Shopcollect)
+                    .tag(this)
+                    .cacheKey("cachePostKey")
+                    .cacheMode(CacheMode.DEFAULT)
+                    .params("token", AppUtil.getUserId(this))
+                    .params("id", shopid)
+                    .execute(new DialogCallback<String>(this) {
+                        @Override
+                        public void onSuccess(Response<String> response) {
+                            Gson gson = new Gson();
+                            CommonBean bean = gson.fromJson(response.body().toString(), CommonBean.class);
+                            toolbarSubimg.setImageResource(R.mipmap.attention_cancel);
+                            ToastUtils.showToast(LookShopActivity.this,bean.getMsg());
+                        }
+                    });
         } else {
-            toolbarSubimg.setImageResource(R.mipmap.attention_bg);
-            ToastUtils.showToast(LookShopActivity.this, "已取消关注!");
+            OkGo.<String>post(HttpManager.cancelCollectShop)
+                    .tag(this)
+                    .cacheKey("cachePostKey")
+                    .cacheMode(CacheMode.DEFAULT)
+                    .params("token", AppUtil.getUserId(this))
+                    .params("id", shopid)
+                    .execute(new DialogCallback<String>(this) {
+                        @Override
+                        public void onSuccess(Response<String> response) {
+                            Gson gson = new Gson();
+                            CommonBean bean = gson.fromJson(response.body().toString(), CommonBean.class);
+                            toolbarSubimg.setImageResource(R.mipmap.attention_bg);
+                            ToastUtils.showToast(LookShopActivity.this,bean.getMsg());
+                        }
+                    });
         }
     }
 
@@ -83,7 +118,7 @@ public class LookShopActivity extends BaseActivity {
     private void initViewPage() {
         mFragments = new ArrayList<>();
         for (int i = 0; i < mTitles.length; i++) {
-            listFragment = LookShopFragment.newInstance(i + 1,shopid);
+            listFragment = LookShopFragment.newInstance(i + 1, shopid);
             mFragments.add(listFragment);
         }
         BaseFragmentAdapter adapter = new BaseFragmentAdapter(getSupportFragmentManager(), mFragments, mTitles);

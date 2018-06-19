@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.xingguang.localrun.R;
 import com.xingguang.localrun.http.HttpManager;
@@ -83,9 +84,17 @@ public class LookShopAdapter extends RecyclerView.Adapter<CommonViewHolder> {
             RecyclerView item_rv_lookshop = holder.getItemView().findViewById(R.id.item_rv_lookshop);
             banner = holder.getItemView().findViewById(R.id.banner);
             Star iv_tice_star = holder.getItemView().findViewById(R.id.iv_tice_star);
+            TextView tv_baifenbi = holder.getItemView().findViewById(R.id.tv_baifenbi);
+            TextView tv_attention = holder.getItemView().findViewById(R.id.tv_attention);
 
-//            iv_tice_star.setMark(Float.parseFloat(ticemodule.getMagicerLevel() + "f")/2);
-            iv_tice_star.setMark(4f);//设置星星的充满度
+            //设置星星的充满度
+            if (jianjieBean.getPercent() == 0){
+                tv_baifenbi.setVisibility(View.GONE);
+            }else {
+                tv_baifenbi.setText(jianjieBean.getPercent()+"%");
+                tv_baifenbi.setVisibility(View.VISIBLE);
+            }
+            iv_tice_star.setMark(Float.parseFloat(jianjieBean.getPercent() + "f"));
 
             adapter = new LookShopItemAdapter(mContext, indexlist, type);
             GridLayoutManager mgr = new GridLayoutManager(mContext, 2);
@@ -114,6 +123,22 @@ public class LookShopAdapter extends RecyclerView.Adapter<CommonViewHolder> {
             ImageLoader.getInstance().initGlide(mContext).loadImage(HttpManager.INDEX+jianjieBean.getLicence(),item_iv_zizhi);
             ImageView iv_logo = holder.getItemView().findViewById(R.id.iv_logo);//logo
             ImageLoader.getInstance().initGlide(mContext).loadImage(HttpManager.INDEX+jianjieBean.getLogo(),iv_logo);
+
+            if (jianjieBean.getIs_collected() == 0){ //未关注
+                holder.setText(R.id.tv_attention,"关注");
+            }else{ //已关注
+                holder.setText(R.id.tv_attention,"已关注");
+            }
+
+            tv_attention.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (jianjieBean.getIs_collected() == 0){ //未关注
+                        holder.setText(R.id.tv_attention,"已关注");
+                    }
+
+                }
+            });
 
         } else if (type == 2) {
             if (mOnItemClickListener != null) {

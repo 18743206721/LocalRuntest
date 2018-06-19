@@ -58,6 +58,15 @@ public class ShopJianjieBean {
         private String join_time;
         private String status;
         private int percent;
+        private int is_collected;
+
+        public int getIs_collected() {
+            return is_collected;
+        }
+
+        public void setIs_collected(int is_collected) {
+            this.is_collected = is_collected;
+        }
 
         public String getId() {
             return id;

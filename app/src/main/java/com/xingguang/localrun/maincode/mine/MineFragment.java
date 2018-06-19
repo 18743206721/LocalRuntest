@@ -199,13 +199,19 @@ public class MineFragment extends BaseFragment {
                 }
                 break;
             case R.id.ll_my_collection://我的收藏
-                startActivity(new Intent(getActivity(), MyCollectionActivity.class));
+                if (AppUtil.isExamined(getActivity())) {
+                    startActivity(new Intent(getActivity(), MyCollectionActivity.class));
+                }
                 break;
             case R.id.ll_my_attention://我的关注
-                startActivity(new Intent(getActivity(), MyGuanzhuActivity.class));
+                if (AppUtil.isExamined(getActivity())) {
+                    startActivity(new Intent(getActivity(), MyGuanzhuActivity.class));
+                }
                 break;
             case R.id.ll_my_zuji://我的足迹
-                startActivity(new Intent(getActivity(), FootPrintActivity.class));
+                if (AppUtil.isExamined(getActivity())) {
+                    startActivity(new Intent(getActivity(), FootPrintActivity.class));
+                }
                 break;
             case R.id.ll_my_allorder://我的全部订单
                 startActivity(new Intent(getActivity(), MyOrderAllActivity.class)
