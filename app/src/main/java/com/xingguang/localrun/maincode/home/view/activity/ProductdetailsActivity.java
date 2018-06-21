@@ -4,13 +4,15 @@ import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.os.Message;
+import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewTreeObserver;
 import android.view.WindowManager;
 import android.webkit.WebView;
 import android.widget.ImageView;
@@ -37,7 +39,6 @@ import com.xingguang.localrun.popwindow.CrowdPopUpWindow;
 import com.xingguang.localrun.popwindow.NowBuyPopUpWindow;
 import com.xingguang.localrun.popwindow.SharePopUpWindow;
 import com.xingguang.localrun.utils.AppUtil;
-import com.xingguang.localrun.view.TiceScrollview;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,11 +52,22 @@ import butterknife.OnClick;
  * 描述:商品详情
  * 作者:LiuYu
  */
-public class ProductdetailsActivity extends BaseActivity implements TiceScrollview.onScrollChangedListener,
-        SharePopUpWindow.OnShareListener {
+public class ProductdetailsActivity extends BaseActivity implements SharePopUpWindow.OnShareListener {
 
     @BindView(R.id.iv_tice_head)
     ImageView ivTiceHead;
+    @BindView(R.id.rl_my_header)
+    RelativeLayout rlMyHeader;
+    @BindView(R.id.back)
+    ImageView back;
+    @BindView(R.id.iv_fenxiang)
+    ImageView ivFenxiang;
+    @BindView(R.id.mtoolbar)
+    Toolbar mtoolbar;
+    @BindView(R.id.mcollasptoobarlayout)
+    CollapsingToolbarLayout mcollasptoobarlayout;
+    @BindView(R.id.mAppbarlayout)
+    AppBarLayout mAppbarlayout;
     @BindView(R.id.tv_pro_price)
     TextView tvProPrice;
     @BindView(R.id.ll_profenxinag)
@@ -64,18 +76,26 @@ public class ProductdetailsActivity extends BaseActivity implements TiceScrollvi
     TextView tvProName;
     @BindView(R.id.tv_pro_guige)
     TextView tvProGuige;
+    @BindView(R.id.ll_guige)
+    LinearLayout llGuige;
     @BindView(R.id.webView1)
     WebView webView1;
     @BindView(R.id.rv_comment)
     RecyclerView rvComment;
+    @BindView(R.id.ll_liebiao)
+    LinearLayout llLiebiao;
     @BindView(R.id.ll_wpl)
     LinearLayout llWpl;
-    @BindView(R.id.sc_head_view)
-    NestedScrollView scHeadView;
+    @BindView(R.id.coordinator)
+    CoordinatorLayout coordinator;
+    @BindView(R.id.line_two)
+    TextView lineTwo;
     @BindView(R.id.ll_shop)
     LinearLayout llShop;
     @BindView(R.id.collect_img)
     ImageView collectImg;
+    @BindView(R.id.tv_pro)
+    TextView tvPro;
     @BindView(R.id.collect)
     LinearLayout collect;
     @BindView(R.id.add_shopcar)
@@ -86,18 +106,9 @@ public class ProductdetailsActivity extends BaseActivity implements TiceScrollvi
     RelativeLayout bottom;
     @BindView(R.id.ll_parent)
     RelativeLayout llParent;
-    @BindView(R.id.ll_guige)
-    LinearLayout ll_guige;
-    @BindView(R.id.tv_pro)
-    TextView tv_pro;
-    @BindView(R.id.back)
-    ImageView back;
-    @BindView(R.id.iv_fenxiang)
-    ImageView ivFenxiang;
-    @BindView(R.id.ll_liebiao)
-    LinearLayout llLiebiao;
-    @BindView(R.id.line_two)
-    TextView lineTwo;
+    @BindView(R.id.tv_title)
+    TextView tv_title;
+
 
     private boolean isshow;
     private int mHeight;
@@ -135,9 +146,9 @@ public class ProductdetailsActivity extends BaseActivity implements TiceScrollvi
     @Override
     protected void initView() {
         goods_id = getIntent().getStringExtra("goods_id");
-        ToastUtils.showToast(ProductdetailsActivity.this,"goods_id   "+goods_id);
+        ToastUtils.showToast(ProductdetailsActivity.this, "goods_id   " + goods_id);
         instance = this;
-        iwapi = WXAPIFactory.createWXAPI(ProductdetailsActivity.this,null);
+        iwapi = WXAPIFactory.createWXAPI(ProductdetailsActivity.this, null);
         iwapi.registerApp("xxx");
 
         initAdapter();
@@ -199,7 +210,7 @@ public class ProductdetailsActivity extends BaseActivity implements TiceScrollvi
                         LookShopActivity.instance.finish();
                         ProductdetailsActivity.this.finish();
                         MainActivity.instance.finish();
-                        startActivity(new Intent(ProductdetailsActivity.this,MainActivity.class));
+                        startActivity(new Intent(ProductdetailsActivity.this, MainActivity.class));
                     }
                     break;
                 case R.id.ll_btn2://个人中心
@@ -217,7 +228,7 @@ public class ProductdetailsActivity extends BaseActivity implements TiceScrollvi
 //                        msg1.obj = a;
 //                        MainActivity.instance.handler.sendMessage(msg1);
                         Intent intent = new Intent();
-                        intent.setClass(ProductdetailsActivity.this,MainActivity.class);
+                        intent.setClass(ProductdetailsActivity.this, MainActivity.class);
 //                        intent.putExtra("type","2");
                         startActivity(intent);
 
@@ -244,38 +255,30 @@ public class ProductdetailsActivity extends BaseActivity implements TiceScrollvi
     }
 
     private void initListener() {
-        // 获取顶部图片高度后，设置滚动监听
-        llParent.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+        //設置appbar的滑動颜色渐变效果
+        mAppbarlayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
             @Override
-            public void onGlobalLayout() {
-                llParent.getViewTreeObserver().removeGlobalOnLayoutListener(this);
-                mHeight = ivTiceHead.getHeight() / 2;
-                onScrollChanged(scHeadView.getScrollY());
+            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+                mtoolbar.setBackgroundColor(AppUtil.changeAlpha(getResources().getColor(R.color.white),
+                        Math.abs(verticalOffset * 1.0f) / appBarLayout.getTotalScrollRange()));
+                //如果相等，设置图片
+                if (appBarLayout.getTotalScrollRange() == -verticalOffset) {
+                    tv_title.setVisibility(View.VISIBLE);
+                    back.setImageResource(R.mipmap.back_black);
+                    ivFenxiang.setImageResource(R.mipmap.pro_more);
+                }else {
+                    tv_title.setVisibility(View.GONE);
+                    back.setImageResource(R.mipmap.back_details);
+                    ivFenxiang.setImageResource(R.mipmap.message_details);
+                }
+
             }
         });
 
     }
 
-    @Override
-    public void onScrollChanged(int y) {
-//        if (y <= 0) {//未滑动
-//            title.setBackgroundColor(Color.argb((int) 0, 255, 255, 255));
-//            getToolbarBack().setImageResource(R.mipmap.pro_back);
-//            setSubImg(R.mipmap.pro_more);
-//        } else if (y > 0 && y <= mHeight) { //滑动过程中 并且在mHeight之内
-//            float scale = (float) y / mHeight;
-//            float alpha = (255 * scale);
-//            getToolbarBack().setImageResource(R.mipmap.pro_back);
-//            setSubImg(R.mipmap.pro_more);
-//            title.setBackgroundColor(Color.argb((int) alpha, 255, 255, 255));
-//        } else {//超过mHeight
-//            title.setBackgroundColor(Color.argb((int) 255, 255, 255, 255));
-//        }
-
-    }
-
-    @OnClick({R.id.ll_shop, R.id.collect, R.id.add_shopcar, R.id.commit, R.id.ll_guige,R.id.back,
-            R.id.iv_fenxiang,R.id.ll_profenxinag})
+    @OnClick({R.id.ll_shop, R.id.collect, R.id.add_shopcar, R.id.commit, R.id.ll_guige, R.id.back,
+            R.id.iv_fenxiang, R.id.ll_profenxinag})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.ll_shop://店铺
@@ -294,12 +297,12 @@ public class ProductdetailsActivity extends BaseActivity implements TiceScrollvi
                 break;
             case R.id.commit://立即购买
 
-                request.appId="";
+                request.appId = "";
                 iwapi.sendReq(request);
 
                 break;
             case R.id.ll_guige://选择规格
-                new NowBuyPopUpWindow(ProductdetailsActivity.this, llParent, lists, nums,1);
+                new NowBuyPopUpWindow(ProductdetailsActivity.this, llParent, lists, nums, 1);
                 break;
             case R.id.back:
                 finish();
@@ -338,12 +341,12 @@ public class ProductdetailsActivity extends BaseActivity implements TiceScrollvi
         isshow = !isshow;
         if (isshow) {
             setThemeColor(collectImg, R.mipmap.pro_collection);
-            tv_pro.setText("已收藏");
-            tv_pro.setTextColor(ContextCompat.getColor(ProductdetailsActivity.this, R.color.home_read));
+            tvPro.setText("已收藏");
+            tvPro.setTextColor(ContextCompat.getColor(ProductdetailsActivity.this, R.color.home_read));
             ToastUtils.showToast(ProductdetailsActivity.this, "已收藏!");
         } else {
-            tv_pro.setText("收藏");
-            tv_pro.setTextColor(ContextCompat.getColor(ProductdetailsActivity.this, R.color.textDarkGray));
+            tvPro.setText("收藏");
+            tvPro.setTextColor(ContextCompat.getColor(ProductdetailsActivity.this, R.color.textDarkGray));
             setThemeColor2(collectImg, R.mipmap.pro_collection);
             ToastUtils.showToast(ProductdetailsActivity.this, "已取消收藏!");
         }
