@@ -21,6 +21,10 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+import com.lzy.okgo.OkGo;
+import com.lzy.okgo.cache.CacheMode;
+import com.lzy.okgo.model.Response;
 import com.tencent.mm.opensdk.modelpay.PayReq;
 import com.tencent.mm.opensdk.openapi.IWXAPI;
 import com.tencent.mm.opensdk.openapi.WXAPIFactory;
@@ -32,13 +36,17 @@ import com.umeng.socialize.media.UMWeb;
 import com.xingguang.core.base.BaseActivity;
 import com.xingguang.core.utils.ToastUtils;
 import com.xingguang.localrun.R;
+import com.xingguang.localrun.http.DialogCallback;
+import com.xingguang.localrun.http.HttpManager;
 import com.xingguang.localrun.main.view.MainActivity;
+import com.xingguang.localrun.maincode.home.model.GoodsDetailsBean;
 import com.xingguang.localrun.maincode.home.model.ProductDetailsBean;
 import com.xingguang.localrun.maincode.home.view.adapter.PinglunAdapter;
 import com.xingguang.localrun.popwindow.CrowdPopUpWindow;
 import com.xingguang.localrun.popwindow.NowBuyPopUpWindow;
 import com.xingguang.localrun.popwindow.SharePopUpWindow;
 import com.xingguang.localrun.utils.AppUtil;
+import com.xingguang.localrun.utils.ImageLoader;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -152,9 +160,42 @@ public class ProductdetailsActivity extends BaseActivity implements SharePopUpWi
         iwapi.registerApp("xxx");
 
         initAdapter();
+        loadDetails();
         initListener();
         loadshare();
 
+    }
+
+    /**商品详情接口*/
+    private void loadDetails() {
+        OkGo.<String>post(HttpManager.GoodsDetail)
+                .tag(this)
+                .cacheKey("cachePostKey")
+                .cacheMode(CacheMode.DEFAULT)
+                .params("token", AppUtil.getUserId(this))
+                .params("goods_id",goods_id)
+                .execute(new DialogCallback<String>(this) {
+                    @Override
+                    public void onSuccess(Response<String> response) {
+                        Gson gson = new Gson();
+                        GoodsDetailsBean bean = gson.fromJson(response.body().toString(), GoodsDetailsBean.class);
+                        if (bean.getData()!=null){
+                            GoodsDetailsBean.DataBean dataBean = bean.getData();
+                            ImageLoader.getInstance().initGlide(ProductdetailsActivity.this)
+                                    .loadImage(HttpManager.INDEX+dataBean.getOriginal_img(),ivTiceHead); //头部图片
+                            //webview
+                            String html =dataBean.getGoods_content();
+                            String data = html.replace("%@", html);
+                            webView1.loadData(data, "text/html; charset=UTF-8", null);
+
+                            tvProName.setText(dataBean.getGoods_name());//商品名称
+
+                        }else {
+                            ToastUtils.showToast(ProductdetailsActivity.this,bean.getMsg());
+                        }
+
+                    }
+                });
     }
 
     private void loadshare() {

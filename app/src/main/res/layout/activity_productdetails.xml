@@ -19,6 +19,7 @@
             android:id="@+id/mAppbarlayout"
             android:layout_width="match_parent"
             android:layout_height="240dp"
+            android:background="@color/white"
             android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
             <android.support.design.widget.CollapsingToolbarLayout
@@ -38,7 +39,7 @@
                         android:layout_height="240dp"
                         android:adjustViewBounds="true"
                         android:scaleType="fitXY"
-                        android:src="@mipmap/productdetails" />
+                         />
 
                 </RelativeLayout>
 

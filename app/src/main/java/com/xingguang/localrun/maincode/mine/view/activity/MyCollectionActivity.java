@@ -1,5 +1,6 @@
 package com.xingguang.localrun.maincode.mine.view.activity;
 
+import android.content.Intent;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
 
@@ -10,8 +11,10 @@ import com.lzy.okgo.model.Response;
 import com.xingguang.core.utils.ToastUtils;
 import com.xingguang.localrun.R;
 import com.xingguang.localrun.base.ToolBarActivity;
+import com.xingguang.localrun.http.CommonBean;
 import com.xingguang.localrun.http.DialogCallback;
 import com.xingguang.localrun.http.HttpManager;
+import com.xingguang.localrun.maincode.home.view.activity.LookShopActivity;
 import com.xingguang.localrun.maincode.mine.model.MyCollectionBean;
 import com.xingguang.localrun.maincode.mine.view.adapter.MyCollectionAdapter;
 import com.xingguang.localrun.maincode.mine.view.adapter.OnItemClickListener;
@@ -55,6 +58,7 @@ public class MyCollectionActivity extends ToolBarActivity {
 
         initAdapter();
         load();
+        initListener();
     }
 
     private void initAdapter() {
@@ -62,25 +66,6 @@ public class MyCollectionActivity extends ToolBarActivity {
         LinearLayoutManager lmg = new LinearLayoutManager(MyCollectionActivity.this);
         rvCollection.setLayoutManager(lmg);
         rvCollection.setAdapter(coladapter);
-
-        rvCollection.setOnItemClickListener(new OnItemClickListener() {
-            @Override
-            public void onItemClick(View view, int position) {
-                ToastUtils.showToast(MyCollectionActivity.this,"点击"+position);
-            }
-
-            @Override
-            public void onDeleteClick(int position) {
-                coladapter.removeItem(position);
-            }
-
-            @Override
-            public void onJinDianClick(int position) {
-                ToastUtils.showToast(MyCollectionActivity.this,"进店"+position);
-            }
-        });
-
-
     }
 
     private void load() {
@@ -96,6 +81,48 @@ public class MyCollectionActivity extends ToolBarActivity {
                         MyCollectionBean bean = gson.fromJson(response.body().toString(), MyCollectionBean.class);
                         list.addAll(bean.getData());
                         coladapter.setList(list);
+                    }
+                });
+    }
+
+
+    private void initListener() {
+        rvCollection.setOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                ToastUtils.showToast(MyCollectionActivity.this,"点击"+position);
+            }
+
+            @Override
+            public void onDeleteClick(int position) {
+                loadcancel(position);
+            }
+
+            @Override
+            public void onJinDianClick(int position) {
+                Intent intent = new Intent(MyCollectionActivity.this, LookShopActivity.class);
+                intent.putExtra("shopid", list.get(position).getShop_id());
+                startActivity(intent);
+            }
+        });
+    }
+
+    /**取消收藏
+     * @param position*/
+    private void loadcancel(final int position) {
+        OkGo.<String>post(HttpManager.delCollectGoods)
+                .tag(this)
+                .cacheKey("cachePostKey")
+                .cacheMode(CacheMode.DEFAULT)
+                .params("token", AppUtil.getUserId(this))
+                .params("collect_id",list.get(position).getCollect_id())
+                .execute(new DialogCallback<String>(this) {
+                    @Override
+                    public void onSuccess(Response<String> response) {
+                        Gson gson = new Gson();
+                        CommonBean bean = gson.fromJson(response.body().toString(), CommonBean.class);
+                        ToastUtils.showToast(MyCollectionActivity.this,bean.getMsg());
+                        coladapter.removeItem(position);
                     }
                 });
     }
