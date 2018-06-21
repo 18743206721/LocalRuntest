@@ -19,6 +19,7 @@ import com.xingguang.localrun.base.BaseFragmentAdapter;
 import com.xingguang.localrun.http.CommonBean;
 import com.xingguang.localrun.http.DialogCallback;
 import com.xingguang.localrun.http.HttpManager;
+import com.xingguang.localrun.maincode.home.model.ShopJianjieBean;
 import com.xingguang.localrun.maincode.home.view.fragment.LookShopFragment;
 import com.xingguang.localrun.utils.AppUtil;
 
@@ -68,7 +69,7 @@ public class LookShopActivity extends BaseActivity {
         toolbarSubtitle.setText("商店");
         initViewPage();
         initListener();
-
+        loadjianjie();
     }
 
 
@@ -76,10 +77,32 @@ public class LookShopActivity extends BaseActivity {
     }
 
     /**
+     * 店铺简介
+     * */
+    private void loadjianjie() {
+        OkGo.<String>post(HttpManager.Shopjianjie)
+                .tag(this)
+                .cacheKey("cachePostKey")
+                .cacheMode(CacheMode.DEFAULT)
+                .params("id", shopid)
+                .execute(new DialogCallback<String>(this) {
+                    @Override
+                    public void onSuccess(Response<String> response) {
+                        Gson gson = new Gson();
+                        ShopJianjieBean jianjieBean = gson.fromJson(response.body().toString(), ShopJianjieBean.class);
+                        if (jianjieBean.getData().getIs_collected() == 0){ //未关注
+                            toolbarSubimg.setImageResource(R.mipmap.attention_bg);
+                        }else{ //已关注
+                            toolbarSubimg.setImageResource(R.mipmap.attention_cancel);
+                        }
+                    }
+                });
+    }
+
+    /**
      * 关注
      */
     private void loadAttention() {
-
         isshow = !isshow;
         if (isshow) {
             OkGo.<String>post(HttpManager.Shopcollect)

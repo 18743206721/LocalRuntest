@@ -130,6 +130,8 @@ public class HttpManager {
     //店铺新品
     public static final String shopnews= BASE_URL+"Shop/newGoods";
 
+    //店铺新品
+    public static final String collectGoods= BASE_URL+"User/collectGoods";
 
 
 
