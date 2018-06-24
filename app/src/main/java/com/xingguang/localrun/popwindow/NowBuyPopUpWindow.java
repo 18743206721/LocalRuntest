@@ -17,6 +17,7 @@ import com.xingguang.localrun.R;
 import com.xingguang.localrun.main.view.MainActivity;
 import com.xingguang.localrun.maincode.home.view.activity.ProductdetailsActivity;
 import com.xingguang.localrun.maincode.home.view.adapter.ProductTagAdapter;
+import com.xingguang.localrun.maincode.shop.model.GoodInfo;
 import com.xingguang.localrun.view.TagCloudLayout;
 
 import java.util.ArrayList;
@@ -24,7 +25,7 @@ import java.util.ArrayList;
 /**
  * @param
  */
-public class NowBuyPopUpWindow<T> extends PopupWindow implements View.OnClickListener {
+public class NowBuyPopUpWindow extends PopupWindow implements View.OnClickListener {
 
     //图片  减号   加号
     private ImageView title_img, subtract_btn, plus_btn;
@@ -41,15 +42,17 @@ public class NowBuyPopUpWindow<T> extends PopupWindow implements View.OnClickLis
     private Context context;
 
     private ProductTagAdapter mAdapter;
-    private ArrayList<T> lists = new ArrayList<T>();
+    private ArrayList<GoodInfo.DataBean.CartListBean> lists;
 
     private int nums = 1;
     private int type = 0;
+    private int position;
 
-    public NowBuyPopUpWindow(Context contexts, View parent, ArrayList<T> listss, int nums,int type) {
+    public NowBuyPopUpWindow(Context contexts, View parent, ArrayList<GoodInfo.DataBean.CartListBean> listss, int nums, int position, int type) {
         this.context = contexts;
         this.lists = listss;
         this.nums = nums;
+        this.position = position;
         this.type = type;
 
         View view = View.inflate(context, R.layout.popup_now_buy, null);
@@ -127,7 +130,7 @@ public class NowBuyPopUpWindow<T> extends PopupWindow implements View.OnClickLis
         switch (v.getId()) {
             case R.id.commit: //确认购买
 
-                if (type == 1){ //产品
+                if (type == 1) { //产品
                     ProductdetailsActivity activity = (ProductdetailsActivity) context;
 
                     Message msg1 = activity.handler
@@ -146,23 +149,23 @@ public class NowBuyPopUpWindow<T> extends PopupWindow implements View.OnClickLis
                     ProductdetailsActivity.instance.handler.sendMessage(msg1);
                     dismiss();
 
-                }else if (type == 2){ //购物车
+                } else if (type == 2) { //购物车
                     MainActivity activity = (MainActivity) context;
 
-                    Message msg1 = activity.handler
-                            .obtainMessage();
+                    Message msg1 = activity.handler.obtainMessage();
                     msg1.what = 1;
-                    String specificationId = "";
-                    String specification = "";
-//                for (int i = 0, j = lists.size(); i < j; i++) {
-//                    if ("1".equals(lists.get(i).getIsClick())) {
-//                        specificationId = lists.get(i).getId();
-//                        specification = lists.get(i).getName();
-//                    }
-//                }
-                    msg1.obj = nums + " " + specificationId + " " + specification
-                            + " " + newPrice + " " + oldPrice;
+                    String itemid = "";
+                    String goodsid = "";
+                    for (int i = 0; i < lists.size(); i++) {
+                        if (position == i) {
+                            itemid = lists.get(i).getId();
+                            goodsid = lists.get(i).getGoods_id();
+                        }
+                    }
+                    msg1.obj = nums + " " + itemid + " " + goodsid;
+//                            + " " + newPrice + " " + oldPrice;
                     MainActivity.instance.handler.sendMessage(msg1);
+
                     dismiss();
 
                 }
@@ -179,9 +182,9 @@ public class NowBuyPopUpWindow<T> extends PopupWindow implements View.OnClickLis
                 num_tv.setText(nums + "");
                 break;
             case R.id.plus_btn: //加号
-                if (nums < Integer.parseInt(purchasenum)) {
+//                if (nums < Integer.parseInt(purchasenum)) {
                     nums = nums + 1;
-                }
+//                }
                 num_tv.setText(nums + "");
                 break;
             default:

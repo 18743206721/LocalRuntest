@@ -9,16 +9,25 @@ import android.view.View;
 import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.google.gson.Gson;
+import com.lzy.okgo.OkGo;
+import com.lzy.okgo.cache.CacheMode;
+import com.lzy.okgo.model.Response;
 import com.xingguang.core.utils.ToastUtils;
 import com.xingguang.localrun.R;
 import com.xingguang.localrun.base.ToolBarFragment;
+import com.xingguang.localrun.http.CommonBean;
+import com.xingguang.localrun.http.DialogCallback;
+import com.xingguang.localrun.http.HttpManager;
 import com.xingguang.localrun.maincode.shop.model.GoodInfo;
-import com.xingguang.localrun.maincode.shop.model.ShopBean;
 import com.xingguang.localrun.maincode.shop.view.adapter.ShopCarAdapter;
 import com.xingguang.localrun.popwindow.NowBuyPopUpWindow;
 import com.xingguang.localrun.popwindow.TextPopUpWindow;
+import com.xingguang.localrun.utils.AppUtil;
+
 import java.util.ArrayList;
-import java.util.List;
+
 import butterknife.BindView;
 import butterknife.OnClick;
 
@@ -45,19 +54,22 @@ public class ShopFragment extends ToolBarFragment implements ShopCarAdapter.Chec
     private double totalPrice = 0.00;// 购买的商品总价
     private int totalCount = 0;// 购买的商品总数量
 
-    List<GoodInfo> shoplist = new ArrayList<>();
+    ArrayList<GoodInfo.DataBean.CartListBean> shoplist = new ArrayList<>();
     private boolean flag = false;
 
     private int currentPositon = 0;
     private TextPopUpWindow popde;
     private View.OnClickListener node;
     private View.OnClickListener yesde;
-    private ArrayList<ShopBean> lists = new ArrayList<ShopBean>();
+    private ArrayList<GoodInfo.DataBean.CartListBean> lists = new ArrayList<>();
     //购买件数
     private int nums = 1;
     //规格ID   类型  提醒
     private String id, specificationId, type;
     TextView tvGuige;//规格
+
+    String itemid;
+    String goodsid;
 
     @Override
     protected int getLayoutId() {
@@ -91,8 +103,8 @@ public class ShopFragment extends ToolBarFragment implements ShopCarAdapter.Chec
 
         shopCarAdapter.setCheckInterface(this);
 
-        initListener();
         load();
+        initListener();
     }
 
 
@@ -109,9 +121,11 @@ public class ShopFragment extends ToolBarFragment implements ShopCarAdapter.Chec
         //修改
         shopCarAdapter.setmOnItemEditListener(new ShopCarAdapter.OnItemEditListener() {
             @Override
-            public void OnItemEdit(TextView edit,TextView tv_shop_guige, int position) {
+            public void OnItemEdit(TextView edit, TextView tv_shop_guige, int position) {
                 tvGuige = tv_shop_guige;
-                new NowBuyPopUpWindow(getActivity(), fragment_ll_shop, lists, nums,2);
+
+                nums = Integer.parseInt(shoplist.get(position).getGoods_num());
+                new NowBuyPopUpWindow(getActivity(), fragment_ll_shop, shoplist, nums, position, 2);
             }
         });
 
@@ -154,8 +168,10 @@ public class ShopFragment extends ToolBarFragment implements ShopCarAdapter.Chec
             switch (msg.what) {
                 case 1:
                     nums = Integer.parseInt(msg.obj.toString().split("\\ ")[0]);
-                    specificationId = msg.obj.toString().split("\\ ")[1];
-                    tvGuige.setText(msg.obj.toString().split("\\ ")[2]);
+                    itemid = msg.obj.toString().split("\\ ")[1];
+                    goodsid = msg.obj.toString().split("\\ ")[2];
+
+//                    loadedit(nums, itemid, goodsid);
 //                    newPrice.setText(msg.obj.toString().split("\\ ")[3]);
 //                    oldPrice.setText("¥" + msg.obj.toString().split("\\ ")[4]);
 //                    oldPrice.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG | Paint.ANTI_ALIAS_FLAG); // 设置中划线并加清晰
@@ -170,6 +186,29 @@ public class ShopFragment extends ToolBarFragment implements ShopCarAdapter.Chec
         }
 
     };
+
+    /**
+     * 修改购物车数量接口
+     */
+    public void loadedit(int nums, String itemid, String goodsid) {
+        OkGo.<String>post(HttpManager.updateCart)
+                .tag(this)
+                .cacheKey("cachePostKey")
+                .cacheMode(CacheMode.DEFAULT)
+                .params("token", AppUtil.getUserId(getActivity()))
+                .params("id", goodsid)
+                .params("goods_num", nums)
+                .params("item_id", itemid)
+                .execute(new DialogCallback<String>(getActivity()) {
+                    @Override
+                    public void onSuccess(Response<String> response) {
+                        Gson gson = new Gson();
+                        CommonBean jianjieBean = gson.fromJson(response.body().toString(), CommonBean.class);
+                        ToastUtils.showToast(getActivity(), jianjieBean.getMsg());
+                        shopCarAdapter.notifyDataSetChanged();
+                    }
+                });
+    }
 
     /**
      * 商品规格
@@ -190,24 +229,28 @@ public class ShopFragment extends ToolBarFragment implements ShopCarAdapter.Chec
         statistics();
     }
 
+    /**
+     * 购物车列表
+     */
     private void load() {
-        for (int i = 0; i < 2; i++) {
-            GoodInfo shoppingCartBean = new GoodInfo();
-            shoppingCartBean.setName("保时捷商店");
-            shoppingCartBean.setId(i + "");
-            shoppingCartBean.setPrice(30.6);
-            shoppingCartBean.setCount("1");
-            shoplist.add(shoppingCartBean);
-        }
-        for (int i = 0; i < 2; i++) {
-            GoodInfo shoppingCartBean = new GoodInfo();
-            shoppingCartBean.setName("三国第二刑道荣");
-            shoppingCartBean.setId(i + "");
-            shoppingCartBean.setPrice(10.6);
-            shoppingCartBean.setCount("1");
-            shoplist.add(shoppingCartBean);
-        }
-        shopCarAdapter.setList(shoplist);
+        OkGo.<String>post(HttpManager.Cartcart2)
+                .tag(this)
+                .cacheKey("cachePostKey")
+                .cacheMode(CacheMode.DEFAULT)
+                .params("token", AppUtil.getUserId(getActivity()))
+                .execute(new DialogCallback<String>(getActivity()) {
+                    @Override
+                    public void onSuccess(Response<String> response) {
+                        Gson gson = new Gson();
+                        GoodInfo jianjieBean = gson.fromJson(response.body().toString(), GoodInfo.class);
+                        if (jianjieBean.getData() != null) {
+                            shoplist.addAll(jianjieBean.getData().getCartList());
+                            shopCarAdapter.setList(jianjieBean.getData().getCartList());
+                        } else {
+                            ToastUtils.showToast(getActivity(), jianjieBean.getMsg());
+                        }
+                    }
+                });
     }
 
     @Override
@@ -276,7 +319,7 @@ public class ShopFragment extends ToolBarFragment implements ShopCarAdapter.Chec
      * @return
      */
     private boolean isAllCheck() {
-        for (GoodInfo group : shoplist) {
+        for (GoodInfo.DataBean.CartListBean group : shoplist) {
             if (!group.isChoose())
                 return false;
         }
@@ -293,10 +336,10 @@ public class ShopFragment extends ToolBarFragment implements ShopCarAdapter.Chec
         totalCount = 0;
         totalPrice = 0.00;
         for (int i = 0; i < shoplist.size(); i++) {
-            GoodInfo shoppingCartBean = shoplist.get(i);
+            GoodInfo.DataBean.CartListBean shoppingCartBean = shoplist.get(i);
             if (shoppingCartBean.isChoose()) {
                 totalCount++;
-                totalPrice += shoppingCartBean.getPrice() * Integer.parseInt(shoppingCartBean.getCount());
+                totalPrice += Double.parseDouble(shoppingCartBean.getGoods_price()) * Double.parseDouble(shoppingCartBean.getGoods_num());
             }
         }
         tvTotalPrice.setText("合计:" + totalPrice);
@@ -308,20 +351,19 @@ public class ShopFragment extends ToolBarFragment implements ShopCarAdapter.Chec
      */
     private void lementOnder() {
         //选中的需要提交的商品清单
-        for (GoodInfo bean:shoplist ){
+        for (GoodInfo.DataBean.CartListBean bean : shoplist) {
             boolean choosed = bean.isChoose();
-            if (choosed){
-                String shoppingName = bean.getName();
-                String count = bean.getCount();
-                double price = bean.getPrice();
+            if (choosed) {
+                String shoppingName = bean.getGoods_name();
+                String count = bean.getGoods_num();
+                double price = Double.parseDouble(bean.getGoods_price());
                 String id = bean.getId();
-                Log.d("shopfragment",id+"----id---"+shoppingName+"---"+count+"---"+price);
+                Log.d("shopfragment", id + "----id---" + shoppingName + "---" + count + "---" + price);
             }
         }
-        ToastUtils.showToast(getActivity(),"总价："+totalPrice);
+        ToastUtils.showToast(getActivity(), "总价：" + totalPrice);
         //跳转到支付界面
     }
-
 
 
 }

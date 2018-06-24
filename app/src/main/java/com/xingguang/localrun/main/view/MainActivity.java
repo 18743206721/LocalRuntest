@@ -1,8 +1,6 @@
 package com.xingguang.localrun.main.view;
 
 import android.graphics.drawable.Drawable;
-import android.os.Handler;
-import android.os.Message;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
@@ -105,34 +103,6 @@ public class MainActivity extends BaseActivity {
 
     }
 
-    public Handler handler = new Handler() {
-
-        @Override
-        public void handleMessage(Message msg) {
-            // TODO Auto-generated method stub
-            super.handleMessage(msg);
-            switch (msg.what) {
-                case 1:
-
-
-//                    nums = Integer.parseInt(msg.obj.toString().split("\\ ")[0]);
-//                    specificationId = msg.obj.toString().split("\\ ")[1];
-//                    tvProGuige.setText(msg.obj.toString().split("\\ ")[2]);
-//                    newPrice.setText(msg.obj.toString().split("\\ ")[3]);
-//                    oldPrice.setText("¥" + msg.obj.toString().split("\\ ")[4]);
-//                    oldPrice.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG | Paint.ANTI_ALIAS_FLAG); // 设置中划线并加清晰
-                    break;
-                case 2:
-                    //列表数据
-//                    falshsaleCommoditySize(id);
-                    break;
-                default:
-                    break;
-            }
-        }
-
-    };
-
     @OnClick({R.id.tab_one, R.id.tab_two, R.id.tab_three, R.id.tab_four})
     public void onclick(View view) {
         switch (view.getId()) {
@@ -145,8 +115,10 @@ public class MainActivity extends BaseActivity {
                 setToProjectFragment();
                 break;
             case R.id.tab_three:// 购物车
-                setBg(3);
-                setToActivityFragment();
+                if (AppUtil.isExamined(MainActivity.this)) {
+                    setBg(3);
+                    setToActivityFragment();
+                }
                 break;
             case R.id.tab_four:// 我的
                 setBg(4);

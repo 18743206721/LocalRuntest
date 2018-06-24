@@ -130,7 +130,7 @@ public class HttpManager {
     //店铺新品
     public static final String shopnews= BASE_URL+"Shop/newGoods";
 
-    //收藏
+    //收藏商品列表
     public static final String collectGoods= BASE_URL+"User/collectGoods";
 
     //取消收藏
@@ -138,6 +138,13 @@ public class HttpManager {
 
     //商品详情
     public static final String GoodsDetail= BASE_URL+"Goods/detail";
+
+    //购物车列表
+    public static final String Cartcart2 = BASE_URL+"Cart/cart2";
+
+    //修改购物车商品
+    public static final String updateCart = BASE_URL+"Cart/updateCart";
+
 
 
 

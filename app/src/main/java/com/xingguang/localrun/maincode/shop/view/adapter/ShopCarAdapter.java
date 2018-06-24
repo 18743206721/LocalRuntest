@@ -16,7 +16,7 @@ import java.util.List;
 public class ShopCarAdapter extends RecyclerView.Adapter <CommonViewHolder> {
 
     private Context mContext;
-    private List<GoodInfo> list;
+    private List<GoodInfo.DataBean.CartListBean> list;
     private boolean isShow = true;//是否显示编辑/完成
 
     private OnItemClickListener mOnItemClickLitener;
@@ -47,7 +47,7 @@ public class ShopCarAdapter extends RecyclerView.Adapter <CommonViewHolder> {
         this.mOnItemClickLitener = mOnItemClickListener;
     }
 
-    public ShopCarAdapter(Context mContext,List<GoodInfo> mList) {
+    public ShopCarAdapter(Context mContext,List<GoodInfo.DataBean.CartListBean> mList) {
         this.mContext = mContext;
         this.list = mList;
     }
@@ -67,7 +67,7 @@ public class ShopCarAdapter extends RecyclerView.Adapter <CommonViewHolder> {
         final CheckBox check_box = holder.getItemView().findViewById(R.id.check_box);
         final TextView tv_shop_guige = holder.getItemView().findViewById(R.id.tv_shop_guige);
 
-        final GoodInfo shoppingCartBean = list.get(position);
+        final GoodInfo.DataBean.CartListBean shoppingCartBean = list.get(position);
 
         boolean choosed = shoppingCartBean.isChoose();
         if (choosed){
@@ -117,10 +117,11 @@ public class ShopCarAdapter extends RecyclerView.Adapter <CommonViewHolder> {
         }
 
 
-        holder.setText(R.id.tv_intro, shoppingCartBean.getName());
-        holder.setText(R.id.tv_shop_count,shoppingCartBean.getCount());
-        holder.setText(R.id.tv_shop_price, String.valueOf(shoppingCartBean.getPrice()));
+        holder.setText(R.id.tv_intro, shoppingCartBean.getGoods_name());
+        holder.setText(R.id.tv_shop_count,shoppingCartBean.getGoods_num());
+        holder.setText(R.id.tv_shop_price, String.valueOf(shoppingCartBean.getGoods_price()) + "元");
 
+//        ImageLoader.getInstance().initGlide(mContext).loadImage(HttpManager.INDEX+shoppingCartBean.g);
 
 
 
@@ -158,7 +159,7 @@ public class ShopCarAdapter extends RecyclerView.Adapter <CommonViewHolder> {
         return list.size();
     }
 
-    public void setList(List<GoodInfo> list) {
+    public void setList(List<GoodInfo.DataBean.CartListBean> list) {
         this.list = list;
         notifyDataSetChanged();
     }

@@ -43,7 +43,6 @@ import com.xingguang.localrun.maincode.home.model.GoodsDetailsBean;
 import com.xingguang.localrun.maincode.home.model.ProductDetailsBean;
 import com.xingguang.localrun.maincode.home.view.adapter.PinglunAdapter;
 import com.xingguang.localrun.popwindow.CrowdPopUpWindow;
-import com.xingguang.localrun.popwindow.NowBuyPopUpWindow;
 import com.xingguang.localrun.popwindow.SharePopUpWindow;
 import com.xingguang.localrun.utils.AppUtil;
 import com.xingguang.localrun.utils.ImageLoader;
@@ -343,7 +342,7 @@ public class ProductdetailsActivity extends BaseActivity implements SharePopUpWi
 
                 break;
             case R.id.ll_guige://选择规格
-                new NowBuyPopUpWindow(ProductdetailsActivity.this, llParent, lists, nums, 1);
+//                new NowBuyPopUpWindow(ProductdetailsActivity.this, llParent, lists, nums,position, 1);
                 break;
             case R.id.back:
                 finish();
@@ -378,7 +377,12 @@ public class ProductdetailsActivity extends BaseActivity implements SharePopUpWi
         }
     }
 
+    /**
+     * 收藏接口
+     * */
     private void collection() {
+
+
         isshow = !isshow;
         if (isshow) {
             setThemeColor(collectImg, R.mipmap.pro_collection);
