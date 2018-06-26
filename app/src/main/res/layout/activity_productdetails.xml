@@ -33,16 +33,14 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
 
-                    <ImageView
+                    <com.youth.banner.Banner
                         android:id="@+id/iv_tice_head"
                         android:layout_width="match_parent"
                         android:layout_height="240dp"
                         android:adjustViewBounds="true"
-                        android:scaleType="fitXY"
-                         />
+                        android:scaleType="fitXY" />
 
                 </RelativeLayout>
-
 
                 <android.support.v7.widget.Toolbar
                     android:id="@+id/mtoolbar"
@@ -64,21 +62,21 @@
 
                         <TextView
                             android:id="@+id/tv_title"
-                            android:textColor="@color/textBlack"
-                            android:visibility="gone"
-                            android:layout_centerInParent="true"
-                            android:textSize="14sp"
-                            android:text="商品详情"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content" />
+                            android:layout_height="wrap_content"
+                            android:layout_centerInParent="true"
+                            android:text="商品详情"
+                            android:textColor="@color/textBlack"
+                            android:textSize="14sp"
+                            android:visibility="gone" />
 
                         <ImageView
                             android:id="@+id/iv_fenxiang"
                             android:layout_width="25dp"
-                            android:layout_centerVertical="true"
                             android:layout_height="25dp"
-                            android:layout_marginRight="13dp"
                             android:layout_alignParentRight="true"
+                            android:layout_centerVertical="true"
+                            android:layout_marginRight="13dp"
                             android:src="@mipmap/message_details" />
 
                     </RelativeLayout>
@@ -86,7 +84,6 @@
                 </android.support.v7.widget.Toolbar>
 
             </android.support.design.widget.CollapsingToolbarLayout>
-
         </android.support.design.widget.AppBarLayout>
 
         <android.support.v4.widget.NestedScrollView
@@ -103,7 +100,13 @@
                 android:layout_height="match_parent"
                 android:orientation="vertical">
 
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:background="@color/fengexian" />
+
                 <include layout="@layout/layout_producted" />
+
             </LinearLayout>
 
         </android.support.v4.widget.NestedScrollView>

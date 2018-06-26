@@ -16,13 +16,12 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-            <ImageView
+            <com.xingguang.localrun.view.RoundRectImageView
                 android:id="@+id/imageItem"
-                android:layout_width="@dimen/dp50"
-                android:layout_height="@dimen/dp50"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
                 android:layout_marginLeft="13dp"
-                android:scaleType="fitXY"
-                android:src="@mipmap/load_faile" />
+                android:scaleType="fitXY" />
 
             <TextView
                 android:id="@+id/textItem"
@@ -32,7 +31,7 @@
                 android:layout_weight="1"
                 android:gravity="center_vertical"
                 android:paddingLeft="@dimen/dp6"
-                android:text="香酥蛋卷店"
+                android:text=""
                 android:textColor="@color/textBlack" />
 
             <TextView
@@ -49,6 +48,7 @@
                 android:textColor="@color/white"
                 android:textSize="13sp" />
         </LinearLayout>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -63,8 +63,7 @@
                     android:id="@+id/item_iv_backimg1"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="@color/home_bule"
-                    android:scaleType="centerCrop" />
+                    android:scaleType="fitXY" />
 
                 <RelativeLayout
                     android:id="@+id/rl_item_price1"
@@ -80,7 +79,7 @@
                         android:id="@+id/tv_shop_price1"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="¥799"
+                        android:text="¥"
                         android:textColor="@color/white"
                         android:textSize="14sp" />
                 </RelativeLayout>
@@ -97,8 +96,7 @@
                     android:id="@+id/item_iv_backimg2"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="@color/home_bule"
-                    android:scaleType="centerCrop" />
+                    android:scaleType="fitXY" />
 
                 <RelativeLayout
                     android:layout_width="wrap_content"
@@ -113,7 +111,7 @@
                         android:id="@+id/tv_shop_price2"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="¥799"
+                        android:text="¥"
                         android:textColor="@color/white"
                         android:textSize="14sp" />
                 </RelativeLayout>
@@ -130,8 +128,7 @@
                     android:id="@+id/item_iv_backimg3"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="@color/home_bule"
-                    android:scaleType="centerCrop" />
+                    android:scaleType="fitXY" />
 
                 <RelativeLayout
                     android:layout_width="wrap_content"
@@ -146,7 +143,7 @@
                         android:id="@+id/tv_shop_price3"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="¥799"
+                        android:text="¥"
                         android:textColor="@color/white"
                         android:textSize="14sp" />
                 </RelativeLayout>

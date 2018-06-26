@@ -26,10 +26,12 @@ import android.view.ViewTreeObserver;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.xingguang.core.utils.SharedPreferencesUtils;
+import com.xingguang.localrun.R;
 import com.xingguang.localrun.login.view.activity.LoginActivity;
 import com.xingguang.localrun.maincode.mine.model.JsonBean;
 import com.xingguang.localrun.view.BasicDialog;
@@ -954,5 +956,24 @@ public class AppUtil {
             return false;
         }
     }
+
+
+    public static void setThemeColor(Context mContext,ImageView mImage, int icon) {
+        //利用ContextCompat工具类获取drawable图片资源
+        Drawable drawable = ContextCompat.getDrawable(mContext, icon);
+        //简单的使用tint改变drawable颜色
+        Drawable drawable1 = AppUtil.tintDrawable(drawable, ContextCompat.getColor(mContext, R.color.home_read));
+        mImage.setImageDrawable(drawable1);
+    }
+
+
+    public static void setThemeColor2(Context mContext, ImageView mImage, int icon) {
+        //利用ContextCompat工具类获取drawable图片资源
+        Drawable drawable = ContextCompat.getDrawable(mContext, icon);
+        //简单的使用tint改变drawable颜色
+        Drawable drawable1 = AppUtil.tintDrawable(drawable, ContextCompat.getColor(mContext, R.color.textGray));
+        mImage.setImageDrawable(drawable1);
+    }
+
 
 }

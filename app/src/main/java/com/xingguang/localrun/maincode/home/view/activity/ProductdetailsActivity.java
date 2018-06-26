@@ -1,7 +1,6 @@
 package com.xingguang.localrun.maincode.home.view.activity;
 
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.os.Message;
 import android.support.design.widget.AppBarLayout;
@@ -36,16 +35,20 @@ import com.umeng.socialize.media.UMWeb;
 import com.xingguang.core.base.BaseActivity;
 import com.xingguang.core.utils.ToastUtils;
 import com.xingguang.localrun.R;
+import com.xingguang.localrun.http.CommonBean;
 import com.xingguang.localrun.http.DialogCallback;
 import com.xingguang.localrun.http.HttpManager;
 import com.xingguang.localrun.main.view.MainActivity;
+import com.xingguang.localrun.maincode.home.model.GlideImageLoader;
 import com.xingguang.localrun.maincode.home.model.GoodsDetailsBean;
 import com.xingguang.localrun.maincode.home.model.ProductDetailsBean;
+import com.xingguang.localrun.maincode.home.model.SpecBean;
 import com.xingguang.localrun.maincode.home.view.adapter.PinglunAdapter;
 import com.xingguang.localrun.popwindow.CrowdPopUpWindow;
+import com.xingguang.localrun.popwindow.NowBuyPopUpWindow;
 import com.xingguang.localrun.popwindow.SharePopUpWindow;
 import com.xingguang.localrun.utils.AppUtil;
-import com.xingguang.localrun.utils.ImageLoader;
+import com.youth.banner.Banner;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -62,7 +65,7 @@ import butterknife.OnClick;
 public class ProductdetailsActivity extends BaseActivity implements SharePopUpWindow.OnShareListener {
 
     @BindView(R.id.iv_tice_head)
-    ImageView ivTiceHead;
+    Banner ivTiceHead;
     @BindView(R.id.rl_my_header)
     RelativeLayout rlMyHeader;
     @BindView(R.id.back)
@@ -123,12 +126,15 @@ public class ProductdetailsActivity extends BaseActivity implements SharePopUpWi
 
     private ArrayList<ProductDetailsBean> lists = new ArrayList<ProductDetailsBean>();
 
+    //商品规格列表
+    private ArrayList<SpecBean.DataBean> specBeanList = new ArrayList<>();
+
     private List<String> mdatas = new ArrayList<>();
     //购买件数
     private int nums = 1;
 
-    //规格ID   类型  提醒
-    private String id, specificationId, type;
+    //规格ID
+    private String itemid = "";
     private Intent intent;
 
     private CrowdPopUpWindow mPopUpWindow;
@@ -144,6 +150,10 @@ public class ProductdetailsActivity extends BaseActivity implements SharePopUpWi
     //微信支付
     private IWXAPI iwapi;
     PayReq request = new PayReq();
+    private int collect_id; //取消收藏id
+    private List<String> networkImages = new ArrayList<>(); //轮播图集合
+    String original_img = ""; //规格里的图片
+
 
     @Override
     protected int getLayoutId() {
@@ -162,35 +172,58 @@ public class ProductdetailsActivity extends BaseActivity implements SharePopUpWi
         loadDetails();
         initListener();
         loadshare();
-
+        loadGuiGe();
     }
 
-    /**商品详情接口*/
+    /**
+     * 商品详情接口
+     */
     private void loadDetails() {
         OkGo.<String>post(HttpManager.GoodsDetail)
                 .tag(this)
                 .cacheKey("cachePostKey")
                 .cacheMode(CacheMode.DEFAULT)
                 .params("token", AppUtil.getUserId(this))
-                .params("goods_id",goods_id)
+                .params("goods_id", goods_id)
                 .execute(new DialogCallback<String>(this) {
                     @Override
                     public void onSuccess(Response<String> response) {
                         Gson gson = new Gson();
                         GoodsDetailsBean bean = gson.fromJson(response.body().toString(), GoodsDetailsBean.class);
-                        if (bean.getData()!=null){
+                        if (bean.getData() != null) {
                             GoodsDetailsBean.DataBean dataBean = bean.getData();
-                            ImageLoader.getInstance().initGlide(ProductdetailsActivity.this)
-                                    .loadImage(HttpManager.INDEX+dataBean.getOriginal_img(),ivTiceHead); //头部图片
-                            //webview
-                            String html =dataBean.getGoods_content();
-                            String data = html.replace("%@", html);
-                            webView1.loadData(data, "text/html; charset=UTF-8", null);
 
+                            //加载头部轮播图
+                            for (int i = 0; i < dataBean.getGoods_images().size(); i++) {
+                                networkImages.add(HttpManager.INDEX + dataBean.getGoods_images().get(i).getImage_url());
+                            }
+                            initpage();
+
+                            //webview，商品详情
+//                            if ("".equals(dataBean.getGoods_content())) {
+//                                webView1.setVisibility(View.GONE);
+//                            } else {
+                                webView1.setVisibility(View.VISIBLE);
+                                String html = dataBean.getGoods_content();
+                                String data = html.replace("%@", html);
+                                webView1.loadData(data, "text/html; charset=UTF-8", null);
+//                            }
+                            original_img = HttpManager.INDEX + dataBean.getOriginal_img();
                             tvProName.setText(dataBean.getGoods_name());//商品名称
+                            collect_id = bean.getData().getCollect_id();//收藏id
+                            tvProPrice.setText("¥" + dataBean.getShop_price());//优惠价
+                            if (bean.getData().getIs_collected() == 1) { //收藏过该商品
+                                AppUtil.setThemeColor(ProductdetailsActivity.this, collectImg, R.mipmap.pro_collection);
+                                tvPro.setText("已收藏");
+                                tvPro.setTextColor(ContextCompat.getColor(ProductdetailsActivity.this, R.color.home_read));
+                            } else { //没收藏
+                                tvPro.setText("收藏");
+                                tvPro.setTextColor(ContextCompat.getColor(ProductdetailsActivity.this, R.color.textDarkGray));
+                                AppUtil.setThemeColor2(ProductdetailsActivity.this, collectImg, R.mipmap.pro_collection);
+                            }
 
-                        }else {
-                            ToastUtils.showToast(ProductdetailsActivity.this,bean.getMsg());
+                        } else {
+                            ToastUtils.showToast(ProductdetailsActivity.this, bean.getMsg());
                         }
 
                     }
@@ -240,52 +273,6 @@ public class ProductdetailsActivity extends BaseActivity implements SharePopUpWi
         }
     };
 
-    class OnClickLintener implements View.OnClickListener {
-        @Override
-        public void onClick(View v) {
-            switch (v.getId()) {
-                case R.id.ll_btn1: //首页
-                    if (mPopUpWindow != null) {
-                        mPopUpWindow.dismiss();
-                        LookShopActivity.instance.finish();
-                        ProductdetailsActivity.this.finish();
-                        MainActivity.instance.finish();
-                        startActivity(new Intent(ProductdetailsActivity.this, MainActivity.class));
-                    }
-                    break;
-                case R.id.ll_btn2://个人中心
-                    if (mPopUpWindow != null) {
-
-                        mPopUpWindow.dismiss();
-                        LookShopActivity.instance.finish();
-                        ProductdetailsActivity.this.finish();
-                        MainActivity.instance.finish();
-
-//                        Message msg1 = MainActivity.instance.handler
-//                                .obtainMessage();
-//                        msg1.what = 1;
-//                        String a = "2";
-//                        msg1.obj = a;
-//                        MainActivity.instance.handler.sendMessage(msg1);
-                        Intent intent = new Intent();
-                        intent.setClass(ProductdetailsActivity.this, MainActivity.class);
-//                        intent.putExtra("type","2");
-                        startActivity(intent);
-
-
-                    }
-                    break;
-                case R.id.ll_btn3://分享
-                    if (mPopUpWindow != null) {
-                        mPopUpWindow.dismiss();
-                    }
-                    break;
-                default:
-                    break;
-            }
-        }
-    }
-
     private void initAdapter() {
         PinglunAdapter adapter = new PinglunAdapter(ProductdetailsActivity.this, mdatas);
         LinearLayoutManager manager = new LinearLayoutManager(ProductdetailsActivity.this);
@@ -306,12 +293,11 @@ public class ProductdetailsActivity extends BaseActivity implements SharePopUpWi
                     tv_title.setVisibility(View.VISIBLE);
                     back.setImageResource(R.mipmap.back_black);
                     ivFenxiang.setImageResource(R.mipmap.pro_more);
-                }else {
+                } else {
                     tv_title.setVisibility(View.GONE);
                     back.setImageResource(R.mipmap.back_details);
                     ivFenxiang.setImageResource(R.mipmap.message_details);
                 }
-
             }
         });
 
@@ -331,6 +317,11 @@ public class ProductdetailsActivity extends BaseActivity implements SharePopUpWi
                 collection();
                 break;
             case R.id.add_shopcar: //添加购物车
+                if (itemid.equals("")) {
+                    ToastUtils.showToast(ProductdetailsActivity.this,"请选择规格!");
+                }else {
+                    loadaddCar();
+                }
                 break;
             case R.id.ll_profenxinag: //友盟分享
                 new SharePopUpWindow(ProductdetailsActivity.this, llParent, ProductdetailsActivity.this);
@@ -342,7 +333,14 @@ public class ProductdetailsActivity extends BaseActivity implements SharePopUpWi
 
                 break;
             case R.id.ll_guige://选择规格
-//                new NowBuyPopUpWindow(ProductdetailsActivity.this, llParent, lists, nums,position, 1);
+                for (int i = 0, j = specBeanList.size(); i < j; i++) {
+                    if (itemid.equals(specBeanList.get(i).getItem_id())) {
+                        specBeanList.get(i).setIsClick("1");
+                    } else {
+                        specBeanList.get(i).setIsClick("0");
+                    }
+                }
+                new NowBuyPopUpWindow(ProductdetailsActivity.this, llParent, specBeanList, original_img, nums);
                 break;
             case R.id.back:
                 finish();
@@ -377,26 +375,52 @@ public class ProductdetailsActivity extends BaseActivity implements SharePopUpWi
         }
     }
 
+
     /**
-     * 收藏接口
-     * */
-    private void collection() {
-
-
-        isshow = !isshow;
-        if (isshow) {
-            setThemeColor(collectImg, R.mipmap.pro_collection);
-            tvPro.setText("已收藏");
-            tvPro.setTextColor(ContextCompat.getColor(ProductdetailsActivity.this, R.color.home_read));
-            ToastUtils.showToast(ProductdetailsActivity.this, "已收藏!");
-        } else {
-            tvPro.setText("收藏");
-            tvPro.setTextColor(ContextCompat.getColor(ProductdetailsActivity.this, R.color.textDarkGray));
-            setThemeColor2(collectImg, R.mipmap.pro_collection);
-            ToastUtils.showToast(ProductdetailsActivity.this, "已取消收藏!");
-        }
-
+     * 添加到购物车
+     */
+    private void loadaddCar() {
+        OkGo.<String>post(HttpManager.addCart)
+                .tag(this)
+                .cacheKey("cachePostKey")
+                .cacheMode(CacheMode.DEFAULT)
+                .params("token", AppUtil.getUserId(ProductdetailsActivity.this))
+                .params("goods_id", goods_id)
+                .params("goods_num", nums)
+                .params("item_id", itemid)
+                .execute(new DialogCallback<String>(this) {
+                    @Override
+                    public void onSuccess(Response<String> response) {
+                        Gson gson = new Gson();
+                        CommonBean bean = gson.fromJson(response.body().toString(), CommonBean.class);
+                        ToastUtils.showToast(ProductdetailsActivity.this, bean.getMsg());
+                    }
+                });
     }
+
+    /**
+     * 商品规格
+     */
+    private void loadGuiGe() {
+        OkGo.<String>post(HttpManager.spec)
+                .tag(this)
+                .cacheKey("cachePostKey")
+                .cacheMode(CacheMode.DEFAULT)
+                .params("goods_id", goods_id)
+                .execute(new DialogCallback<String>(this) {
+                    @Override
+                    public void onSuccess(Response<String> response) {
+                        Gson gson = new Gson();
+                        SpecBean bean = gson.fromJson(response.body().toString(), SpecBean.class);
+                        if (bean.getData() != null) {
+                            specBeanList.addAll(bean.getData());
+                        } else {
+                            ToastUtils.showToast(ProductdetailsActivity.this, bean.getMsg());
+                        }
+                    }
+                });
+    }
+
 
     public Handler handler = new Handler() {
 
@@ -407,15 +431,16 @@ public class ProductdetailsActivity extends BaseActivity implements SharePopUpWi
             switch (msg.what) {
                 case 1:
                     nums = Integer.parseInt(msg.obj.toString().split("\\ ")[0]);
-                    specificationId = msg.obj.toString().split("\\ ")[1];
-                    tvProGuige.setText(msg.obj.toString().split("\\ ")[2]);
+                    itemid = msg.obj.toString().split("\\ ")[1];
+                    String keyname = msg.obj.toString().split("\\ ")[2];
+                    tvProGuige.setText(keyname + " x " + nums);
 //                    newPrice.setText(msg.obj.toString().split("\\ ")[3]);
 //                    oldPrice.setText("¥" + msg.obj.toString().split("\\ ")[4]);
 //                    oldPrice.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG | Paint.ANTI_ALIAS_FLAG); // 设置中划线并加清晰
                     break;
                 case 2:
                     //列表数据
-                    falshsaleCommoditySize(id);
+//                    falshsaleCommoditySize(id);
                     break;
                 default:
                     break;
@@ -432,20 +457,95 @@ public class ProductdetailsActivity extends BaseActivity implements SharePopUpWi
 //        lists.addAll(model.getList());
     }
 
-    private void setThemeColor(ImageView mImage, int icon) {
-        //利用ContextCompat工具类获取drawable图片资源
-        Drawable drawable = ContextCompat.getDrawable(this, icon);
-        //简单的使用tint改变drawable颜色
-        Drawable drawable1 = AppUtil.tintDrawable(drawable, ContextCompat.getColor(this, R.color.home_read));
-        mImage.setImageDrawable(drawable1);
+
+    //头部轮播图
+    private void initpage() {
+        //设置图片加载器
+        ivTiceHead.setImageLoader(new GlideImageLoader());
+        //设置图片集合
+        ivTiceHead.setImages(networkImages);
+        ivTiceHead.setDelayTime(3000);
+        //banner设置方法全部调用完毕时最后调用
+        ivTiceHead.start();
     }
 
-    private void setThemeColor2(ImageView mImage, int icon) {
-        //利用ContextCompat工具类获取drawable图片资源
-        Drawable drawable = ContextCompat.getDrawable(this, icon);
-        //简单的使用tint改变drawable颜色
-        Drawable drawable1 = AppUtil.tintDrawable(drawable, ContextCompat.getColor(this, R.color.textGray));
-        mImage.setImageDrawable(drawable1);
+    /**
+     * 收藏接口
+     */
+    private void collection() {
+        isshow = !isshow;
+        if (isshow) {
+            OkGo.<String>post(HttpManager.collect)
+                    .tag(this)
+                    .cacheKey("cachePostKey")
+                    .cacheMode(CacheMode.DEFAULT)
+                    .params("token", AppUtil.getUserId(this))
+                    .params("goods_id", goods_id)
+                    .execute(new DialogCallback<String>(this) {
+                        @Override
+                        public void onSuccess(Response<String> response) {
+                            Gson gson = new Gson();
+                            CommonBean bean = gson.fromJson(response.body().toString(), CommonBean.class);
+                            AppUtil.setThemeColor(ProductdetailsActivity.this, collectImg, R.mipmap.pro_collection);
+                            tvPro.setText("已收藏");
+                            tvPro.setTextColor(ContextCompat.getColor(ProductdetailsActivity.this, R.color.home_read));
+                            ToastUtils.showToast(ProductdetailsActivity.this, bean.getMsg());
+                        }
+                    });
+        } else {
+            OkGo.<String>post(HttpManager.delCollectGoods)
+                    .tag(this)
+                    .cacheKey("cachePostKey")
+                    .cacheMode(CacheMode.DEFAULT)
+                    .params("token", AppUtil.getUserId(this))
+                    .params("collect_id", collect_id)
+                    .execute(new DialogCallback<String>(this) {
+                        @Override
+                        public void onSuccess(Response<String> response) {
+                            Gson gson = new Gson();
+                            CommonBean bean = gson.fromJson(response.body().toString(), CommonBean.class);
+                            tvPro.setText("收藏");
+                            tvPro.setTextColor(ContextCompat.getColor(ProductdetailsActivity.this, R.color.textDarkGray));
+                            AppUtil.setThemeColor2(ProductdetailsActivity.this, collectImg, R.mipmap.pro_collection);
+                            ToastUtils.showToast(ProductdetailsActivity.this, bean.getMsg());
+                        }
+                    });
+        }
     }
+
+    class OnClickLintener implements View.OnClickListener {
+        @Override
+        public void onClick(View v) {
+            switch (v.getId()) {
+                case R.id.ll_btn1: //首页
+                    if (mPopUpWindow != null) {
+                        mPopUpWindow.dismiss();
+                        LookShopActivity.instance.finish();
+                        ProductdetailsActivity.this.finish();
+                        MainActivity.instance.finish();
+                        startActivity(new Intent(ProductdetailsActivity.this, MainActivity.class)
+                                .putExtra("typeid", 1));
+                    }
+                    break;
+                case R.id.ll_btn2://个人中心
+                    if (mPopUpWindow != null) {
+                        mPopUpWindow.dismiss();
+                        LookShopActivity.instance.finish();
+                        ProductdetailsActivity.this.finish();
+                        MainActivity.instance.finish();
+                        startActivity(new Intent(ProductdetailsActivity.this, MainActivity.class)
+                                .putExtra("typeid", 2));
+                    }
+                    break;
+                case R.id.ll_btn3://分享
+                    if (mPopUpWindow != null) {
+                        mPopUpWindow.dismiss();
+                        new SharePopUpWindow(ProductdetailsActivity.this, llParent, ProductdetailsActivity.this);
+                    }
+                    break;
+            }
+        }
+    }
+
 
 }

@@ -2,7 +2,6 @@ package com.xingguang.localrun.maincode.home.view.activity;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -65,7 +64,6 @@ public class LookShopActivity extends BaseActivity {
     protected void initView() {
         instance = this;
         shopid = getIntent().getStringExtra("shopid");
-        Log.e("shopid", "initView: "+shopid +",,"+AppUtil.getUserId(LookShopActivity.this));
         toolbarSubtitle.setText("商店");
         initViewPage();
         initListener();

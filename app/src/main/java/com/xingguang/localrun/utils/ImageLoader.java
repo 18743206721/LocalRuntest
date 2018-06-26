@@ -23,7 +23,7 @@ import com.xingguang.localrun.R;
 public class ImageLoader {
 
     //  加载失败图片
-    private static int errorImageView = R.mipmap.load_faile;
+    private static int errorImageView = R.mipmap.pinglun;
 
     private static RequestManager requestManager;
 

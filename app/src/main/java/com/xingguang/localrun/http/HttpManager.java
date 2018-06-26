@@ -52,7 +52,7 @@ public class HttpManager {
     //申请入驻
     public static final String apply= BASE_URL+"User/apply";
 
-    //申请入驻类别
+    //申请入驻类别,获取店铺分类
     public static final String applyindex = BASE_URL+"Goods/index";
 
     //修改头像
@@ -144,6 +144,22 @@ public class HttpManager {
 
     //修改购物车商品
     public static final String updateCart = BASE_URL+"Cart/updateCart";
+
+    //收藏商品
+    public static final String collect = BASE_URL+"Goods/collect";
+
+    //商品规格
+    public static final String spec = BASE_URL+"Goods/spec";
+
+    //加入购物车
+    public static final String addCart = BASE_URL+"Cart/addCart";
+
+    //分类右侧列表
+    public static final String classifshop = BASE_URL+"Goods/shop";
+
+
+
+
 
 
 

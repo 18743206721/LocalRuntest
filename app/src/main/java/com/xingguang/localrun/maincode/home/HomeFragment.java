@@ -19,6 +19,7 @@ import com.lzy.okgo.OkGo;
 import com.lzy.okgo.cache.CacheMode;
 import com.lzy.okgo.model.Response;
 import com.xingguang.core.base.HttpFragment;
+import com.xingguang.core.utils.LogUtils;
 import com.xingguang.core.utils.ToastUtils;
 import com.xingguang.localrun.R;
 import com.xingguang.localrun.http.DialogCallback;
@@ -215,6 +216,7 @@ public class HomeFragment extends HttpFragment {
                     intent = new Intent(getActivity(), LookShopActivity.class);
                     intent.putExtra("shopid", daigoulist.get(position).getShop_id());
                     startActivity(intent);
+                    LogUtils.e("homefragment_shopid",daigoulist.get(position).getShop_id());
                 }
             }
         });
@@ -222,9 +224,11 @@ public class HomeFragment extends HttpFragment {
         daibanadapter.setmOnItemClickListener(new HomeDaiBanAdapter.OnItemClickListener() {
             @Override
             public void OnItemClick(TextView view, int position) {
-                Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + 1008655));
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(intent);
+                if (AppUtil.isExamined(getActivity())) {
+                    Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + 1008655));
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
+                }
             }
         });
 

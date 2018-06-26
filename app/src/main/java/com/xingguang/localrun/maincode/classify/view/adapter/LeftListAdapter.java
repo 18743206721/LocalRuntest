@@ -8,7 +8,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
+
 import com.xingguang.localrun.R;
+import com.xingguang.localrun.maincode.mine.model.MineApplyBean;
+
+import java.util.List;
 
 /**
  * 基本功能：左侧Adapter
@@ -17,24 +21,24 @@ import com.xingguang.localrun.R;
  * 邮箱：w489657152@gmail.com
  */
 public class LeftListAdapter extends BaseAdapter {
-    private String[] leftStr;
-    boolean[] flagArray;
     private Context context;
+    private List<MineApplyBean.DataBean> list;
+    boolean[] flagArray;
 
-    public LeftListAdapter(Context context, String[] leftStr,boolean[] flagArray) {
-        this.leftStr = leftStr;
-        this.flagArray = flagArray;
+    public LeftListAdapter(Context context,List<MineApplyBean.DataBean> list,boolean[] flagArray) {
         this.context = context;
+        this.list = list;
+        this.flagArray = flagArray;
     }
 
     @Override
     public int getCount() {
-        return leftStr.length;
+        return list.size();
     }
 
     @Override
     public Object getItem(int arg0) {
-        return leftStr[arg0];
+        return list.get(arg0);
     }
 
     @Override
@@ -58,14 +62,19 @@ public class LeftListAdapter extends BaseAdapter {
     }
 
     public int indexOf(String title) {
-        return leftStr.length;
+        return list.size();
+    }
+
+    public void setList(List<MineApplyBean.DataBean> list) {
+        this.list = list;
+        notifyDataSetChanged();
     }
 
     private class Holder {
         private TextView left_list_item;
 
         public void updataView(final int position) {
-            left_list_item.setText(leftStr[position]);
+            left_list_item.setText(list.get(position).getName());
             if (flagArray[position]) {
                 left_list_item.setBackgroundColor(Color.rgb(255, 255, 255));
                 left_list_item.setTextColor(ContextCompat.getColor(context,R.color.text_color_red));

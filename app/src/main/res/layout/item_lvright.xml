@@ -7,68 +7,68 @@
     android:padding="5dp">
 
     <LinearLayout
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <ImageView
-            android:layout_marginLeft="10dp"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <com.xingguang.localrun.view.RoundRectImageView
             android:id="@+id/imageItem"
             android:layout_width="35dp"
             android:layout_height="35dp"
-            android:scaleType="fitXY"
-            android:src="@mipmap/load_faile"/>
+            android:layout_marginLeft="10dp"
+            android:scaleType="fitXY" />
 
         <TextView
-            android:text="香酥蛋卷店"
             android:id="@+id/textItem"
-            android:layout_weight="1"
             android:layout_width="match_parent"
             android:layout_height="@dimen/dp50"
+            android:layout_toRightOf="@+id/imageItem"
+            android:layout_weight="1"
             android:gravity="center_vertical"
             android:paddingLeft="@dimen/dp6"
-            android:layout_toRightOf="@+id/imageItem"
+            android:text=""
             android:textColor="@color/textBlack" />
 
         <TextView
             android:id="@+id/item_tv_inshop"
-            android:layout_marginRight="@dimen/dp10"
-            android:layout_marginLeft="@dimen/dp10"
-            android:paddingBottom="2dp"
-            android:paddingRight="@dimen/dp10"
-            android:paddingLeft="@dimen/dp10"
-            android:background="@drawable/bg_red"
-            android:textSize="13sp"
-            android:textColor="@color/white"
-            android:text="进店"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp10"
+            android:layout_marginRight="@dimen/dp10"
+            android:background="@drawable/bg_red"
+            android:paddingBottom="2dp"
+            android:paddingLeft="@dimen/dp10"
+            android:paddingRight="@dimen/dp10"
+            android:text="进店"
+            android:textColor="@color/white"
+            android:textSize="13sp" />
 
     </LinearLayout>
 
     <LinearLayout
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
-        android:layout_marginTop="8dp"
         android:layout_width="match_parent"
+        android:layout_height="110dp"
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="8dp"
         android:orientation="horizontal"
-        android:layout_height="110dp">
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp">
 
         <ImageView
-            android:layout_weight="1"
-            android:scaleType="centerCrop"
-            android:src="@mipmap/shop_img"
+            android:id="@+id/iv1"
             android:layout_width="0dp"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:scaleType="fitXY" />
 
         <ImageView
-            android:scaleType="centerCrop"
-            android:src="@mipmap/pinglun"
+            android:id="@+id/iv2"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
             android:layout_marginLeft="10dp"
-            android:background="@color/home_read"
             android:layout_weight="1"
-            android:layout_width="0dp"
-            android:layout_height="match_parent" />
+            android:scaleType="fitXY" />
 
     </LinearLayout>
 

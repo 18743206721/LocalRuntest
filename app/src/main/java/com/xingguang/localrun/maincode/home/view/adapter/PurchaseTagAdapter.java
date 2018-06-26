@@ -7,14 +7,14 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 import com.xingguang.localrun.R;
-import com.xingguang.localrun.maincode.home.model.ProductDetailsBean;
+import com.xingguang.localrun.maincode.home.model.SpecBean;
 import java.util.ArrayList;
 
 
-public class ProductTagAdapter extends BaseAdapter {
+public class PurchaseTagAdapter extends BaseAdapter {
 
     private Context mContext;
-    private ArrayList<ProductDetailsBean> list;
+    private ArrayList<SpecBean.DataBean> list;
     private boolean isSelected = false;
 
 
@@ -30,7 +30,7 @@ public class ProductTagAdapter extends BaseAdapter {
         this.updateListener = updateListener;
     }
 
-    public ProductTagAdapter(Context context, ArrayList<ProductDetailsBean> list) {
+    public PurchaseTagAdapter(Context context, ArrayList<SpecBean.DataBean> list) {
         this.mContext = context;
         this.list = list;
     }
@@ -61,16 +61,16 @@ public class ProductTagAdapter extends BaseAdapter {
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-        ProductDetailsBean lists = list.get(position);
-//        holder.tv_tag.setText(lists.getName());
+        SpecBean.DataBean lists = list.get(position);
+        holder.tv_tag.setText(lists.getKey_name());
 
-//        if ("1".equals(lists.getIsClick())) {
-//            holder.tv_tag.setTextColor(mContext.getResources().getColor(R.color.theme_color));
-//            holder.tv_tag.setBackgroundResource(R.drawable.checked_bg);
-//        } else {
-//            holder.tv_tag.setTextColor(mContext.getResources().getColor(R.color.textBlack));
-//            holder.tv_tag.setBackgroundResource(R.drawable.normal_bg);
-//        }
+        if ("1".equals(lists.getIsClick())) {
+            holder.tv_tag.setTextColor(mContext.getResources().getColor(R.color.home_read));
+            holder.tv_tag.setBackgroundResource(R.drawable.checked_bg);
+        } else {
+            holder.tv_tag.setTextColor(mContext.getResources().getColor(R.color.textBlack));
+            holder.tv_tag.setBackgroundResource(R.drawable.normal_bg);
+        }
 //
 //        if (0 == lists.getStock()) {
 //            holder.tv_tag.setEnabled(false);

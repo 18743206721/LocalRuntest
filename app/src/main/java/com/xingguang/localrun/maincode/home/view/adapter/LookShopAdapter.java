@@ -40,11 +40,6 @@ public class LookShopAdapter extends RecyclerView.Adapter<CommonViewHolder> {
     private List<ShopAllGoodBean.DataBean> goodsList;
     private int type;
     LookShopItemAdapter adapter;
-
-    private String[] images = {"http://img2.imgtn.bdimg.com/it/u=3093785514,1341050958&fm=21&gp=0.jpg",
-            "http://img2.3lian.com/2014/f2/37/d/40.jpg",
-            "http://d.3987.com/sqmy_131219/001.jpg",
-            "http://img2.3lian.com/2014/f2/37/d/39.jpg"};
     private List<String> networkImages;
     private Banner banner;
 
@@ -93,8 +88,8 @@ public class LookShopAdapter extends RecyclerView.Adapter<CommonViewHolder> {
             }else {
                 tv_baifenbi.setText(jianjieBean.getPercent()+"%");
                 tv_baifenbi.setVisibility(View.VISIBLE);
+                iv_tice_star.setMark(Float.parseFloat(  (5/100)*jianjieBean.getPercent()+"f"));
             }
-            iv_tice_star.setMark(Float.parseFloat(jianjieBean.getPercent() + "f"));
 
             adapter = new LookShopItemAdapter(mContext, indexlist, type);
             GridLayoutManager mgr = new GridLayoutManager(mContext, 2);
@@ -102,7 +97,7 @@ public class LookShopAdapter extends RecyclerView.Adapter<CommonViewHolder> {
             item_rv_lookshop.setAdapter(adapter);
             adapter.notifyDataSetChanged();
 
-            initpage();
+            initpage(bannerlist);
 
             adapter.setOnItemClickListener(new LookShopItemAdapter.OnItemClickListener() {
                 @Override
@@ -184,10 +179,10 @@ public class LookShopAdapter extends RecyclerView.Adapter<CommonViewHolder> {
 
     }
 
-    private void initpage() {
+    private void initpage(List<ShopBannerBean.DataBean> bannerlist) {
         networkImages = new ArrayList<>();
         for (int i = 0; i < bannerlist.size(); i++) {
-            networkImages.add(HttpManager.INDEX + bannerlist.get(i).getImage());
+            networkImages.add(HttpManager.INDEX + this.bannerlist.get(i).getImage());
         }
         //设置图片加载器
         banner.setImageLoader(new GlideImageLoader());

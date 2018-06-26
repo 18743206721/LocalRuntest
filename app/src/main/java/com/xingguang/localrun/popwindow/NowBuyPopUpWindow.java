@@ -14,10 +14,10 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.xingguang.localrun.R;
-import com.xingguang.localrun.main.view.MainActivity;
+import com.xingguang.localrun.maincode.home.model.SpecBean;
 import com.xingguang.localrun.maincode.home.view.activity.ProductdetailsActivity;
-import com.xingguang.localrun.maincode.home.view.adapter.ProductTagAdapter;
-import com.xingguang.localrun.maincode.shop.model.GoodInfo;
+import com.xingguang.localrun.maincode.home.view.adapter.PurchaseTagAdapter;
+import com.xingguang.localrun.utils.ImageLoader;
 import com.xingguang.localrun.view.TagCloudLayout;
 
 import java.util.ArrayList;
@@ -36,24 +36,27 @@ public class NowBuyPopUpWindow extends PopupWindow implements View.OnClickListen
 
     //规格
     private TagCloudLayout id_flowlayout;
-    //限购份数
+    //购买数量
     private String purchasenum, newPrice, oldPrice;
 
     private Context context;
+    //规格id
+    String itemid = "";
+    String store_count = "";//库存
 
-    private ProductTagAdapter mAdapter;
-    private ArrayList<GoodInfo.DataBean.CartListBean> lists;
 
+    private PurchaseTagAdapter mAdapter;
+    private ArrayList<SpecBean.DataBean> lists;
     private int nums = 1;
-    private int type = 0;
-    private int position;
+    private String original_img; //图片
+    private String keyname; //规格名字
 
-    public NowBuyPopUpWindow(Context contexts, View parent, ArrayList<GoodInfo.DataBean.CartListBean> listss, int nums, int position, int type) {
+
+    public NowBuyPopUpWindow(Context contexts, View parent, ArrayList<SpecBean.DataBean> listss, String original_img, int nums) {
         this.context = contexts;
         this.lists = listss;
+        this.original_img = original_img;
         this.nums = nums;
-        this.position = position;
-        this.type = type;
 
         View view = View.inflate(context, R.layout.popup_now_buy, null);
 
@@ -84,36 +87,34 @@ public class NowBuyPopUpWindow extends PopupWindow implements View.OnClickListen
         //取消
         cancel.setOnClickListener(this);
 
-//        for (int i = 0, j = lists.size(); i < j; i++) {
-//            if ("1".equals(lists.get(i).getIsClick())) {
-//                ImageLoader.loadRoundImage(context, lists.get(i).getImg(), title_img, 10);
-//                money.setText(lists.get(i).getNewprice());
-//                inventory.setText("库存：" + lists.get(i).getStock());
-//                purchasenum = lists.get(i).getStock() + "";
-//                newPrice = lists.get(i).getNewprice();
-//                oldPrice = lists.get(i).getOldPrice();
-//            }
-//        }
+        ImageLoader.getInstance().initGlide(contexts).loadImage(original_img, title_img);
+
+
+        for (int i = 0, j = lists.size(); i < j; i++) {
+            if ("1".equals(lists.get(i).getIsClick())) {
+                money.setText(lists.get(i).getPrice());
+                inventory.setText("库存：" + lists.get(i).getStore_count());
+                store_count = lists.get(i).getStore_count();
+                purchasenum = nums + "";
+            }
+        }
 
         //规格
-//        mAdapter = new PurchaseTagAdapter(context, lists);
-//        id_flowlayout.setAdapter(mAdapter);
-//        mAdapter.setUpdateClick(new PurchaseTagAdapter.UpdateListener() {
-//            @Override
-//            public void UpdateClick(int position) {
-//                for (int i = 0, j = lists.size(); i < j; i++) {
-//                    lists.get(i).setIsClick("0");
-//                }
-//                lists.get(position).setIsClick("1");
-//                ImageLoader.loadRoundImage(context, lists.get(position).getImg(), title_img, 10);
-//                money.setText(lists.get(position).getNewprice());
-//                inventory.setText("库存：" + lists.get(position).getStock());
-//                purchasenum = lists.get(position).getStock() + "";
-//                newPrice = lists.get(position).getNewprice();
-//                oldPrice = lists.get(position).getOldPrice();
-//                mAdapter.notifyDataSetChanged();
-//            }
-//        });
+        mAdapter = new PurchaseTagAdapter(context, lists);
+        id_flowlayout.setAdapter(mAdapter);
+        mAdapter.setUpdateClick(new PurchaseTagAdapter.UpdateListener() {
+            @Override
+            public void UpdateClick(int position) {
+                for (int i = 0, j = lists.size(); i < j; i++) {
+                    lists.get(i).setIsClick("0");
+                }
+                lists.get(position).setIsClick("1");
+                money.setText(lists.get(position).getPrice());
+                store_count = lists.get(position).getStore_count();
+                inventory.setText("库存：" + lists.get(position).getStore_count());
+                mAdapter.notifyDataSetChanged();
+            }
+        });
 
         setWidth(LayoutParams.MATCH_PARENT);
         setHeight(LayoutParams.MATCH_PARENT);
@@ -128,47 +129,42 @@ public class NowBuyPopUpWindow extends PopupWindow implements View.OnClickListen
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.commit: //确认购买
+            case R.id.commit: //确认
 
-                if (type == 1) { //产品
-                    ProductdetailsActivity activity = (ProductdetailsActivity) context;
-
-                    Message msg1 = activity.handler
-                            .obtainMessage();
-                    msg1.what = 1;
-                    String specificationId = "";
-                    String specification = "";
-//                for (int i = 0, j = lists.size(); i < j; i++) {
-//                    if ("1".equals(lists.get(i).getIsClick())) {
-//                        specificationId = lists.get(i).getId();
-//                        specification = lists.get(i).getName();
-//                    }
-//                }
-                    msg1.obj = nums + " " + specificationId + " " + specification
-                            + " " + newPrice + " " + oldPrice;
-                    ProductdetailsActivity.instance.handler.sendMessage(msg1);
-                    dismiss();
-
-                } else if (type == 2) { //购物车
-                    MainActivity activity = (MainActivity) context;
-
-                    Message msg1 = activity.handler.obtainMessage();
-                    msg1.what = 1;
-                    String itemid = "";
-                    String goodsid = "";
-                    for (int i = 0; i < lists.size(); i++) {
-                        if (position == i) {
-                            itemid = lists.get(i).getId();
-                            goodsid = lists.get(i).getGoods_id();
-                        }
+//                if (type == 1) { //产品
+                ProductdetailsActivity activity = (ProductdetailsActivity) context;
+                Message msg1 = activity.handler.obtainMessage();
+                msg1.what = 1;
+                for (int i = 0, j = lists.size(); i < j; i++) {
+                    if ("1".equals(lists.get(i).getIsClick())) {
+                        keyname = lists.get(i).getKey_name();
+                        itemid = lists.get(i).getItem_id();
                     }
-                    msg1.obj = nums + " " + itemid + " " + goodsid;
-//                            + " " + newPrice + " " + oldPrice;
-                    MainActivity.instance.handler.sendMessage(msg1);
-
-                    dismiss();
-
                 }
+                msg1.obj = nums + " " + itemid + " " + keyname + " " ;
+                ProductdetailsActivity.instance.handler.sendMessage(msg1);
+                dismiss();
+
+//                } else if (type == 2) { //购物车
+//                    MainActivity activity = (MainActivity) context;
+//
+////                    Message msg1 = activity.handler.obtainMessage();
+////                    msg1.what = 1;
+//                    String itemid = "";
+//                    String goodsid = "";
+//                    for (int i = 0; i < lists.size(); i++) {
+//                        if (position == i) {
+//                            itemid = lists.get(i).getId();
+//                            goodsid = lists.get(i).getGoods_id();
+//                        }
+//                    }
+//                    msg1.obj = nums + " " + itemid + " " + goodsid;
+//                            + " " + newPrice + " " + oldPrice;
+//                    MainActivity.instance.handler.sendMessage(msg1);
+
+//                    dismiss();
+//
+//                }
 
 
                 break;
@@ -182,9 +178,9 @@ public class NowBuyPopUpWindow extends PopupWindow implements View.OnClickListen
                 num_tv.setText(nums + "");
                 break;
             case R.id.plus_btn: //加号
-//                if (nums < Integer.parseInt(purchasenum)) {
+                if (nums < Integer.parseInt(store_count)) {
                     nums = nums + 1;
-//                }
+                }
                 num_tv.setText(nums + "");
                 break;
             default:

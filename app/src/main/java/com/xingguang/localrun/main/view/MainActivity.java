@@ -74,6 +74,7 @@ public class MainActivity extends BaseActivity {
 
     public static MainActivity instance;
     private String type;
+    private int typeid;
 
     @Override
     protected int getLayoutId() {
@@ -88,6 +89,17 @@ public class MainActivity extends BaseActivity {
         setToNewsFragment();
         setThemeColor(tabOneImg,R.drawable.home_icon);
         tabOneTxt.setTextColor(getResources().getColor(R.color.text_color_red));
+
+        typeid = getIntent().getIntExtra("typeid",0);
+        if (typeid == 1){
+            MainActivity.instance.setBg(1);
+            MainActivity.instance.setToNewsFragment();
+        }else if (typeid == 2){
+            MainActivity.instance.setBg(4);
+            MainActivity.instance.setToInvestmentFragment();
+        }
+
+
 
     }
 

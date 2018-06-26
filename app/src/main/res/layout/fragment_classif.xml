@@ -33,13 +33,36 @@
             android:divider="@null"
             android:scrollbars="none" />
 
-        <ListView
-            android:id="@+id/right_listView"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
+        <RelativeLayout
             android:layout_weight="6"
-            android:background="@android:color/white"
-            android:divider="@null" />
+            android:layout_width="0dp"
+            android:layout_height="match_parent">
+
+            <com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout
+                android:id="@+id/tw_refresh"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <ListView
+                    android:id="@+id/right_listView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:visibility="visible"
+                    android:background="@android:color/white"
+                    android:divider="@null" />
+            </com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout>
+
+            <ImageView
+                android:id="@+id/empty"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:layout_centerInParent="true"
+                android:src="@mipmap/nomessage"
+                android:visibility="gone" />
+
+        </RelativeLayout>
+
+
     </LinearLayout>
 
 

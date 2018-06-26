@@ -22,7 +22,6 @@ import com.xingguang.localrun.http.DialogCallback;
 import com.xingguang.localrun.http.HttpManager;
 import com.xingguang.localrun.maincode.shop.model.GoodInfo;
 import com.xingguang.localrun.maincode.shop.view.adapter.ShopCarAdapter;
-import com.xingguang.localrun.popwindow.NowBuyPopUpWindow;
 import com.xingguang.localrun.popwindow.TextPopUpWindow;
 import com.xingguang.localrun.utils.AppUtil;
 
@@ -125,7 +124,7 @@ public class ShopFragment extends ToolBarFragment implements ShopCarAdapter.Chec
                 tvGuige = tv_shop_guige;
 
                 nums = Integer.parseInt(shoplist.get(position).getGoods_num());
-                new NowBuyPopUpWindow(getActivity(), fragment_ll_shop, shoplist, nums, position, 2);
+//                new NowBuyPopUpWindow(getActivity(), fragment_ll_shop, shoplist, nums, position, 2);
             }
         });
 

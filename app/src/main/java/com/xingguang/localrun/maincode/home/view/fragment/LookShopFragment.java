@@ -293,7 +293,6 @@ public class LookShopFragment extends BaseFragment implements RefreshUtil.OnRefr
                 });
     }
 
-
     private void initListener() {
         adapter.setOnItemClickListener(new LookShopAdapter.OnItemClickListener() {
             @Override
@@ -302,16 +301,13 @@ public class LookShopFragment extends BaseFragment implements RefreshUtil.OnRefr
                 intent.setClass(getActivity(), ProductdetailsActivity.class);
                 intent.putExtra("goods_id", allgoodlist.get(position).getGoods_id());
                 startActivity(intent);
-                getActivity().finish();
             }
         });
 
     }
 
-
     @Override
     protected void lazyLoad() {}
-
 
     @Override
     public void onRefresh() {

@@ -12,7 +12,7 @@ public class GoodsDetailsBean {
     /**
      * status : 1
      * msg : SUCCESS
-     * data : {"goods_id":"18","cat_id1":"5","cat_id2":"7","shop_id":"1","goods_sn":"No00010000018","goods_name":"可口可乐","store_count":"50","click_count":"9","sale_num":"3","shop_price":"2.50","market_price":"2.50","goods_remark":"可口可乐","goods_content":"<img src=\"/Uploads/Editor/2018-05-07/5aefe652e9278.jpg\" alt=\"\" /><img src=\"/Uploads/Editor/2018-05-07/5aefe6530afc8.jpg\" alt=\"\" /><img src=\"/Uploads/Editor/2018-05-07/5aefe65326548.jpg\" alt=\"\" />","original_img":"/Uploads/Picture/2018-05-07/5aefe0d3543a8.jpg","is_on_sale":"1","on_time":"1525671525","sort":"50","is_selected":"0","is_lowprice":"0","is_recommend":"0","is_new":"0","is_hot":"0","last_update":"1525755892","goods_type":"0","spec_type":"0","goods_images":[]}
+     * data : {"goods_id":"4","cat_id1":"5","cat_id2":"7","shop_id":"1","goods_sn":"No00010000004","goods_name":"可口可乐","store_count":"50","click_count":"0","sale_num":"0","shop_price":"2.50","market_price":"2.50","goods_remark":"可口可乐","goods_content":"","original_img":"/Uploads/Picture/2018-05-07/5aefe0d3543a8.jpg","is_on_sale":"1","on_time":"1525671377","sort":"50","is_recommend":"0","is_new":"0","is_hot":"0","last_update":"0","goods_type":"0","spec_type":"0","goods_images":[{"img_id":"6","goods_id":"4","image_url":"/Uploads/Picture/2018-05-07/5aefe5cc9b460.jpg"},{"img_id":"5","goods_id":"4","image_url":"/Uploads/Picture/2018-05-07/5aefe5cc87028.jpg"},{"img_id":"4","goods_id":"4","image_url":"/Uploads/Picture/2018-05-07/5aefe5cc72bf0.jpg"}],"is_collected":0,"collect_id":0}
      */
 
     private int status;
@@ -45,32 +45,32 @@ public class GoodsDetailsBean {
 
     public static class DataBean {
         /**
-         * goods_id : 18
+         * goods_id : 4
          * cat_id1 : 5
          * cat_id2 : 7
          * shop_id : 1
-         * goods_sn : No00010000018
+         * goods_sn : No00010000004
          * goods_name : 可口可乐
          * store_count : 50
-         * click_count : 9
-         * sale_num : 3
+         * click_count : 0
+         * sale_num : 0
          * shop_price : 2.50
          * market_price : 2.50
          * goods_remark : 可口可乐
-         * goods_content : <img src="/Uploads/Editor/2018-05-07/5aefe652e9278.jpg" alt="" /><img src="/Uploads/Editor/2018-05-07/5aefe6530afc8.jpg" alt="" /><img src="/Uploads/Editor/2018-05-07/5aefe65326548.jpg" alt="" />
+         * goods_content :
          * original_img : /Uploads/Picture/2018-05-07/5aefe0d3543a8.jpg
          * is_on_sale : 1
-         * on_time : 1525671525
+         * on_time : 1525671377
          * sort : 50
-         * is_selected : 0
-         * is_lowprice : 0
          * is_recommend : 0
          * is_new : 0
          * is_hot : 0
-         * last_update : 1525755892
+         * last_update : 0
          * goods_type : 0
          * spec_type : 0
-         * goods_images : []
+         * goods_images : [{"img_id":"6","goods_id":"4","image_url":"/Uploads/Picture/2018-05-07/5aefe5cc9b460.jpg"},{"img_id":"5","goods_id":"4","image_url":"/Uploads/Picture/2018-05-07/5aefe5cc87028.jpg"},{"img_id":"4","goods_id":"4","image_url":"/Uploads/Picture/2018-05-07/5aefe5cc72bf0.jpg"}]
+         * is_collected : 0
+         * collect_id : 0
          */
 
         private String goods_id;
@@ -90,15 +90,15 @@ public class GoodsDetailsBean {
         private String is_on_sale;
         private String on_time;
         private String sort;
-        private String is_selected;
-        private String is_lowprice;
         private String is_recommend;
         private String is_new;
         private String is_hot;
         private String last_update;
         private String goods_type;
         private String spec_type;
-        private List<?> goods_images;
+        private int is_collected;
+        private int collect_id;
+        private List<GoodsImagesBean> goods_images;
 
         public String getGoods_id() {
             return goods_id;
@@ -236,22 +236,6 @@ public class GoodsDetailsBean {
             this.sort = sort;
         }
 
-        public String getIs_selected() {
-            return is_selected;
-        }
-
-        public void setIs_selected(String is_selected) {
-            this.is_selected = is_selected;
-        }
-
-        public String getIs_lowprice() {
-            return is_lowprice;
-        }
-
-        public void setIs_lowprice(String is_lowprice) {
-            this.is_lowprice = is_lowprice;
-        }
-
         public String getIs_recommend() {
             return is_recommend;
         }
@@ -300,12 +284,64 @@ public class GoodsDetailsBean {
             this.spec_type = spec_type;
         }
 
-        public List<?> getGoods_images() {
+        public int getIs_collected() {
+            return is_collected;
+        }
+
+        public void setIs_collected(int is_collected) {
+            this.is_collected = is_collected;
+        }
+
+        public int getCollect_id() {
+            return collect_id;
+        }
+
+        public void setCollect_id(int collect_id) {
+            this.collect_id = collect_id;
+        }
+
+        public List<GoodsImagesBean> getGoods_images() {
             return goods_images;
         }
 
-        public void setGoods_images(List<?> goods_images) {
+        public void setGoods_images(List<GoodsImagesBean> goods_images) {
             this.goods_images = goods_images;
+        }
+
+        public static class GoodsImagesBean {
+            /**
+             * img_id : 6
+             * goods_id : 4
+             * image_url : /Uploads/Picture/2018-05-07/5aefe5cc9b460.jpg
+             */
+
+            private String img_id;
+            private String goods_id;
+            private String image_url;
+
+            public String getImg_id() {
+                return img_id;
+            }
+
+            public void setImg_id(String img_id) {
+                this.img_id = img_id;
+            }
+
+            public String getGoods_id() {
+                return goods_id;
+            }
+
+            public void setGoods_id(String goods_id) {
+                this.goods_id = goods_id;
+            }
+
+            public String getImage_url() {
+                return image_url;
+            }
+
+            public void setImage_url(String image_url) {
+                this.image_url = image_url;
+            }
         }
     }
 }

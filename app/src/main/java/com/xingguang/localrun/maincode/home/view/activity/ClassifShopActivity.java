@@ -25,7 +25,7 @@ public class ClassifShopActivity extends ToolBarActivity {
     ViewPager mPagerClassifshop;
 
     List<Fragment> mFragments;
-    String[] mTitles = new String[]{"综和","销量","信用"};
+    String[] mTitles = new String[]{"综和","销量","热度"};
     LookClassifShopFragment listFragment;
 
     @Override
@@ -57,6 +57,7 @@ public class ClassifShopActivity extends ToolBarActivity {
         mPagerClassifshop.setAdapter(adapter);
         xtabClassifshop.setupWithViewPager(mPagerClassifshop);
         mPagerClassifshop.setOffscreenPageLimit(0);
+
     }
 
 

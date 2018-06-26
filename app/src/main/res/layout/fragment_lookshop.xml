@@ -12,6 +12,7 @@
         android:visibility="visible"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
         <com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout
             android:id="@+id/tw_mylook"
             android:layout_width="match_parent"
@@ -25,7 +26,6 @@
         </com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout>
 
     </RelativeLayout>
-
 
     <ImageView
         android:id="@+id/empty"

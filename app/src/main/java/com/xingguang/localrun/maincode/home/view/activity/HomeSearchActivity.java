@@ -18,7 +18,6 @@ import com.xingguang.localrun.maincode.home.model.DaiBanMoreBean;
 import com.xingguang.localrun.maincode.home.view.adapter.DaiBanMoreAdapter;
 import com.xingguang.localrun.maincode.home.view.adapter.HistoryListAdapter;
 import com.xingguang.localrun.maincode.home.view.adapter.SearchResultAdapter;
-import com.xingguang.localrun.maincode.home.view.adapter.ShopDianAdapter;
 import com.xingguang.localrun.utils.AppUtil;
 import com.xingguang.localrun.view.ClearEditText;
 import com.xingguang.localrun.view.TagCloudLayout;
@@ -157,20 +156,20 @@ public class HomeSearchActivity extends BaseActivity {
 
                 }else if (text.equals("店铺")){
                     ll_sea_biaoqian.setVisibility(View.GONE);
-                    ShopDianAdapter adapter = new ShopDianAdapter(HomeSearchActivity.this,shopList,1);
-                    LinearLayoutManager mgr = new LinearLayoutManager(HomeSearchActivity.this);
-                    rv_list.setLayoutManager(mgr);
-                    rv_list.setAdapter(adapter);
-                    adapter.setmOnItemClickListener(new ShopDianAdapter.OnItemClickListener() {
-                        @Override
-                        public void OnItemClick(TextView view, int position) {
-                            Intent intent = new Intent();
-                            intent.setClass(HomeSearchActivity.this, LookShopActivity.class);
-//                            intent.putExtra("proid", "3");
-                            startActivity(intent);
-                            finish();
-                        }
-                    });
+//                    ShopDianAdapter adapter = new ShopDianAdapter(HomeSearchActivity.this,shopList,1);
+//                    LinearLayoutManager mgr = new LinearLayoutManager(HomeSearchActivity.this);
+//                    rv_list.setLayoutManager(mgr);
+//                    rv_list.setAdapter(adapter);
+//                    adapter.setmOnItemClickListener(new ShopDianAdapter.OnItemClickListener() {
+//                        @Override
+//                        public void OnItemClick(TextView view, int position) {
+//                            Intent intent = new Intent();
+//                            intent.setClass(HomeSearchActivity.this, LookShopActivity.class);
+////                            intent.putExtra("proid", "3");
+//                            startActivity(intent);
+//                            finish();
+//                        }
+//                    });
                 }else {
                     ll_sea_biaoqian.setVisibility(View.GONE);
                     DaiBanMoreAdapter adapter = new DaiBanMoreAdapter(HomeSearchActivity.this,daibanList);
