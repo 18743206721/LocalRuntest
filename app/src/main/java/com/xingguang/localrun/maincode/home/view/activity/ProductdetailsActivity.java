@@ -326,7 +326,7 @@ public class ProductdetailsActivity extends BaseActivity implements SharePopUpWi
                 new SharePopUpWindow(ProductdetailsActivity.this, llParent, ProductdetailsActivity.this);
                 break;
             case R.id.commit://立即购买
-
+                startActivity(new Intent(ProductdetailsActivity.this,BuyActivity.class));
                 request.appId = "";
                 iwapi.sendReq(request);
 
