@@ -5,6 +5,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
+    android:id="@+id/ll_parent"
     tools:context="com.xingguang.localrun.maincode.home.view.activity.HomeSearchActivity">
 
 
@@ -74,6 +75,7 @@
             app:xTabIndicatorColor="@color/home_read"
             app:xTabIndicatorHeight="1dp"
             app:xTabMode="scrollable"
+            android:focusable="false"
             app:xTabPaddingEnd="10dp"
             app:xTabPaddingStart="10dp"
             app:xTabSelectedTextColor="@color/home_read"
@@ -91,7 +93,7 @@
     <!--历史搜索-->
     <LinearLayout
         android:id="@+id/ll_history_search"
-        android:visibility="visible"
+        android:visibility="gone"
         android:orientation="vertical"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
@@ -146,7 +148,7 @@
     <!--商品下的标签-->
     <LinearLayout
         android:id="@+id/ll_sea_biaoqian"
-        android:visibility="visible"
+        android:visibility="gone"
         android:layout_marginTop="15dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -161,9 +163,10 @@
             app:xTabDisplayNum="3"
             app:xTabIndicatorColor="@color/home_read"
             app:xTabIndicatorHeight="1dp"
-            app:xTabMode="scrollable"
+            app:xTabMode="fixed"
             app:xTabPaddingEnd="10dp"
             app:xTabPaddingStart="10dp"
+
             app:xTabSelectedTextColor="@color/home_read"
             app:xTabSelectedTextSize="12sp"
             app:xTabTextColor="@color/textBlack"
@@ -177,14 +180,37 @@
     <!--搜索的数据-->
     <LinearLayout
         android:id="@+id/ll_rv"
+        android:gravity="center"
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/rv_list"
+        android:layout_height="match_parent">
+        <RelativeLayout
+            android:id="@+id/relativelayout"
+            android:visibility="visible"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="match_parent">
+
+            <com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout
+                android:id="@+id/tw_refresh"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/rv_list"
+                    android:overScrollMode="never"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+            </com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout>
+
+        </RelativeLayout>
+
+        <ImageView
+            android:id="@+id/empty"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_centerInParent="true"
+            android:src="@mipmap/nomessage"
+            android:visibility="gone" />
 
     </LinearLayout>
 

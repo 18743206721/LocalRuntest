@@ -286,7 +286,9 @@ public class HomeFragment extends HttpFragment {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.ll_sousuo_serch://搜索
-                startActivity(new Intent(getActivity(), HomeSearchActivity.class));
+                if (AppUtil.isExamined(getActivity())) {
+                    startActivity(new Intent(getActivity(), HomeSearchActivity.class));
+                }
                 break;
             case R.id.ll_main_fenlei://分类
                 MainActivity.instance.setBg(2);

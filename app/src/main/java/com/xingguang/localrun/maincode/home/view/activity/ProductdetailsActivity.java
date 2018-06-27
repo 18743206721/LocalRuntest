@@ -163,7 +163,6 @@ public class ProductdetailsActivity extends BaseActivity implements SharePopUpWi
     @Override
     protected void initView() {
         goods_id = getIntent().getStringExtra("goods_id");
-        ToastUtils.showToast(ProductdetailsActivity.this, "goods_id   " + goods_id);
         instance = this;
         iwapi = WXAPIFactory.createWXAPI(ProductdetailsActivity.this, null);
         iwapi.registerApp("xxx");
@@ -333,14 +332,18 @@ public class ProductdetailsActivity extends BaseActivity implements SharePopUpWi
 
                 break;
             case R.id.ll_guige://选择规格
-                for (int i = 0, j = specBeanList.size(); i < j; i++) {
-                    if (itemid.equals(specBeanList.get(i).getItem_id())) {
-                        specBeanList.get(i).setIsClick("1");
-                    } else {
-                        specBeanList.get(i).setIsClick("0");
+                if (specBeanList.size() != 0){
+                    for (int i = 0, j = specBeanList.size(); i < j; i++) {
+                        if (itemid.equals(specBeanList.get(i).getItem_id())) {
+                            specBeanList.get(i).setIsClick("1");
+                        } else {
+                            specBeanList.get(i).setIsClick("0");
+                        }
                     }
+                    new NowBuyPopUpWindow(ProductdetailsActivity.this, llParent, specBeanList, original_img, nums,1);
+                }else {
+                    ToastUtils.showToast(ProductdetailsActivity.this,"此商品暂无规格!");
                 }
-                new NowBuyPopUpWindow(ProductdetailsActivity.this, llParent, specBeanList, original_img, nums);
                 break;
             case R.id.back:
                 finish();
@@ -413,7 +416,9 @@ public class ProductdetailsActivity extends BaseActivity implements SharePopUpWi
                         Gson gson = new Gson();
                         SpecBean bean = gson.fromJson(response.body().toString(), SpecBean.class);
                         if (bean.getData() != null) {
-                            specBeanList.addAll(bean.getData());
+                            if (bean.getData().size() != 0){
+                                specBeanList.addAll(bean.getData());
+                            }
                         } else {
                             ToastUtils.showToast(ProductdetailsActivity.this, bean.getMsg());
                         }

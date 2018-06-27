@@ -157,7 +157,8 @@ public class HttpManager {
     //分类右侧列表
     public static final String classifshop = BASE_URL+"Goods/shop";
 
-
+    //搜索
+    public static final String search = BASE_URL+"Index/search";
 
 
 

@@ -73,7 +73,7 @@
                     android:layout_alignParentEnd="true"
                     android:layout_alignParentRight="true"
                     android:background="#6000"
-                    android:padding="5dp">
+                    android:padding="2dp">
 
                     <TextView
                         android:id="@+id/tv_shop_price1"

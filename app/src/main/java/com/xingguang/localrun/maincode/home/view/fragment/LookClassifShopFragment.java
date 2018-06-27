@@ -104,7 +104,6 @@ public class LookClassifShopFragment extends BaseFragment implements RefreshUtil
                 startActivity(intent);
             }
         });
-
     }
 
     private void load(final int page) {

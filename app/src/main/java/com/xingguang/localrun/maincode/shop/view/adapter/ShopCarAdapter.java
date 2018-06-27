@@ -5,10 +5,13 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.xingguang.localrun.R;
+import com.xingguang.localrun.http.HttpManager;
 import com.xingguang.localrun.maincode.shop.model.GoodInfo;
+import com.xingguang.localrun.utils.ImageLoader;
 import com.xingguang.localrun.view.CommonViewHolder;
 
 import java.util.List;
@@ -66,7 +69,7 @@ public class ShopCarAdapter extends RecyclerView.Adapter <CommonViewHolder> {
         final TextView tv_shop_deleted = holder.getItemView().findViewById(R.id.tv_shop_deleted);
         final CheckBox check_box = holder.getItemView().findViewById(R.id.check_box);
         final TextView tv_shop_guige = holder.getItemView().findViewById(R.id.tv_shop_guige);
-
+        ImageView iv_adapter_list_pic = holder.getItemView().findViewById(R.id.iv_adapter_list_pic);
         final GoodInfo.DataBean.CartListBean shoppingCartBean = list.get(position);
 
         boolean choosed = shoppingCartBean.isChoose();
@@ -117,14 +120,12 @@ public class ShopCarAdapter extends RecyclerView.Adapter <CommonViewHolder> {
         }
 
 
-        holder.setText(R.id.tv_intro, shoppingCartBean.getGoods_name());
+        holder.setText(R.id.tv_intro, shoppingCartBean.getGoods_name()); //名字
         holder.setText(R.id.tv_shop_count,shoppingCartBean.getGoods_num());
-        holder.setText(R.id.tv_shop_price, String.valueOf(shoppingCartBean.getGoods_price()) + "元");
-
-//        ImageLoader.getInstance().initGlide(mContext).loadImage(HttpManager.INDEX+shoppingCartBean.g);
-
-
-
+        holder.setText(R.id.tv_shop_price, "¥"+String.valueOf(shoppingCartBean.getGoods_price()) + "元");
+        holder.setText(R.id.tv_shop_guige,shoppingCartBean.getSpec_key_name());//规格
+        ImageLoader.getInstance().initGlide(mContext).loadImage(
+                HttpManager.INDEX+shoppingCartBean.getGoods().getOriginal_img(),iv_adapter_list_pic);
     }
 
 

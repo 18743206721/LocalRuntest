@@ -13,10 +13,20 @@ import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
+import com.lzy.okgo.OkGo;
+import com.lzy.okgo.cache.CacheMode;
+import com.lzy.okgo.model.Response;
+import com.xingguang.core.utils.ToastUtils;
 import com.xingguang.localrun.R;
+import com.xingguang.localrun.http.CommonBean;
+import com.xingguang.localrun.http.DialogCallback;
+import com.xingguang.localrun.http.HttpManager;
 import com.xingguang.localrun.maincode.home.model.SpecBean;
+import com.xingguang.localrun.maincode.home.view.activity.HomeSearchActivity;
 import com.xingguang.localrun.maincode.home.view.activity.ProductdetailsActivity;
 import com.xingguang.localrun.maincode.home.view.adapter.PurchaseTagAdapter;
+import com.xingguang.localrun.utils.AppUtil;
 import com.xingguang.localrun.utils.ImageLoader;
 import com.xingguang.localrun.view.TagCloudLayout;
 
@@ -37,7 +47,7 @@ public class NowBuyPopUpWindow extends PopupWindow implements View.OnClickListen
     //规格
     private TagCloudLayout id_flowlayout;
     //购买数量
-    private String purchasenum, newPrice, oldPrice;
+    private String purchasenum;
 
     private Context context;
     //规格id
@@ -46,17 +56,21 @@ public class NowBuyPopUpWindow extends PopupWindow implements View.OnClickListen
 
 
     private PurchaseTagAdapter mAdapter;
-    private ArrayList<SpecBean.DataBean> lists;
+    private ArrayList<SpecBean.DataBean> lists = new ArrayList<>();
     private int nums = 1;
     private String original_img; //图片
     private String keyname; //规格名字
+    int type; //1是商品详情，2是搜索
+    String goodsId = "";//店铺id
 
 
-    public NowBuyPopUpWindow(Context contexts, View parent, ArrayList<SpecBean.DataBean> listss, String original_img, int nums) {
+    public NowBuyPopUpWindow(Context contexts, View parent, ArrayList<SpecBean.DataBean> listss, String original_img, int nums,int type) {
+        lists.clear();
         this.context = contexts;
         this.lists = listss;
         this.original_img = original_img;
         this.nums = nums;
+        this.type = type;
 
         View view = View.inflate(context, R.layout.popup_now_buy, null);
 
@@ -131,7 +145,7 @@ public class NowBuyPopUpWindow extends PopupWindow implements View.OnClickListen
         switch (v.getId()) {
             case R.id.commit: //确认
 
-//                if (type == 1) { //产品
+                if (type == 1) { //产品
                 ProductdetailsActivity activity = (ProductdetailsActivity) context;
                 Message msg1 = activity.handler.obtainMessage();
                 msg1.what = 1;
@@ -145,26 +159,41 @@ public class NowBuyPopUpWindow extends PopupWindow implements View.OnClickListen
                 ProductdetailsActivity.instance.handler.sendMessage(msg1);
                 dismiss();
 
-//                } else if (type == 2) { //购物车
-//                    MainActivity activity = (MainActivity) context;
-//
-////                    Message msg1 = activity.handler.obtainMessage();
-////                    msg1.what = 1;
-//                    String itemid = "";
-//                    String goodsid = "";
-//                    for (int i = 0; i < lists.size(); i++) {
-//                        if (position == i) {
-//                            itemid = lists.get(i).getId();
-//                            goodsid = lists.get(i).getGoods_id();
-//                        }
-//                    }
-//                    msg1.obj = nums + " " + itemid + " " + goodsid;
-//                            + " " + newPrice + " " + oldPrice;
-//                    MainActivity.instance.handler.sendMessage(msg1);
+                } else if (type == 2) { //搜索
 
-//                    dismiss();
-//
-//                }
+                    HomeSearchActivity activity = (HomeSearchActivity) context;
+                    Message msg1 = activity.handler.obtainMessage();
+                    msg1.what = 1;
+                    for (int i = 0, j = lists.size(); i < j; i++) {
+                        if ("1".equals(lists.get(i).getIsClick())) {
+                            keyname = lists.get(i).getKey_name();
+                            itemid = lists.get(i).getItem_id();
+                            goodsId = lists.get(i).getGoods_id();
+                        }
+                    }
+                    msg1.obj = nums + " " + itemid + " " + keyname + " " ;
+                    HomeSearchActivity.instance.handler.sendMessage(msg1);
+
+                    OkGo.<String>post(HttpManager.addCart)
+                            .tag(this)
+                            .cacheKey("cachePostKey")
+                            .cacheMode(CacheMode.DEFAULT)
+                            .params("token", AppUtil.getUserId(context))
+                            .params("goods_id", goodsId)
+                            .params("goods_num", nums)
+                            .params("item_id", itemid)
+                            .execute(new DialogCallback<String>(HomeSearchActivity.instance) {
+                                @Override
+                                public void onSuccess(Response<String> response) {
+                                    Gson gson = new Gson();
+                                    CommonBean bean = gson.fromJson(response.body().toString(), CommonBean.class);
+                                    dismiss();
+                                    ToastUtils.showToast(context, bean.getMsg());
+                                }
+                            });
+
+
+                }
 
 
                 break;
@@ -194,4 +223,15 @@ public class NowBuyPopUpWindow extends PopupWindow implements View.OnClickListen
     private void changeData() {
         num_tv.setText(nums + "");
     }
+
+//    /**
+//     * 添加到购物车
+//     * @param nums
+//     * @param itemid
+//     */
+//    private void loadaddCar(int nums, String itemid) {
+//
+//    }
+
+
 }

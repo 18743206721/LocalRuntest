@@ -1,23 +1,43 @@
 package com.xingguang.localrun.maincode.home.view.activity;
 
 import android.content.Intent;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.androidkun.xtablayout.XTabLayout;
+import com.google.gson.Gson;
+import com.lcodecore.tkrefreshlayout.Footer.LoadingView;
+import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout;
+import com.lzy.okgo.OkGo;
+import com.lzy.okgo.cache.CacheMode;
+import com.lzy.okgo.model.Response;
 import com.xingguang.core.base.BaseActivity;
 import com.xingguang.core.utils.SharedPreferencesUtils;
 import com.xingguang.core.utils.ToastUtils;
 import com.xingguang.localrun.R;
-import com.xingguang.localrun.maincode.home.model.DaiBanMoreBean;
-import com.xingguang.localrun.maincode.home.view.adapter.DaiBanMoreAdapter;
+import com.xingguang.localrun.http.CommonBean;
+import com.xingguang.localrun.http.DialogCallback;
+import com.xingguang.localrun.http.HttpManager;
+import com.xingguang.localrun.maincode.home.model.GoodsDetailsBean;
+import com.xingguang.localrun.maincode.home.model.SearchOneBean;
+import com.xingguang.localrun.maincode.home.model.SearchTwoBean;
+import com.xingguang.localrun.maincode.home.model.Searchthreebean;
+import com.xingguang.localrun.maincode.home.model.SpecBean;
 import com.xingguang.localrun.maincode.home.view.adapter.HistoryListAdapter;
-import com.xingguang.localrun.maincode.home.view.adapter.SearchResultAdapter;
+import com.xingguang.localrun.maincode.home.view.adapter.SearchOneAdapter;
+import com.xingguang.localrun.maincode.home.view.adapter.SearchThreeAdapter;
+import com.xingguang.localrun.maincode.home.view.adapter.SearchTwoAdapter;
+import com.xingguang.localrun.popwindow.NowBuyPopUpWindow;
+import com.xingguang.localrun.refresh.RefreshUtil;
+import com.xingguang.localrun.refresh.SinaRefreshHeader;
 import com.xingguang.localrun.utils.AppUtil;
 import com.xingguang.localrun.view.ClearEditText;
 import com.xingguang.localrun.view.TagCloudLayout;
@@ -36,8 +56,10 @@ import butterknife.OnClick;
  * 描述: 首页搜索页面
  * 作者:LiuYu
  */
-public class HomeSearchActivity extends BaseActivity {
+public class HomeSearchActivity extends BaseActivity implements RefreshUtil.OnRefreshListener {
 
+    @BindView(R.id.ll_parent)
+    LinearLayout ll_parent;
     @BindView(R.id.et_search)
     ClearEditText etSearch;
     @BindView(R.id.tv_search)
@@ -64,6 +86,12 @@ public class HomeSearchActivity extends BaseActivity {
     LinearLayout ll_sea_biaoqian;
     @BindView(R.id.xtab_classifshop)
     XTabLayout xtab_classifshop;
+    @BindView(R.id.tw_refresh)
+    TwinklingRefreshLayout twRefresh;
+    @BindView(R.id.relativelayout)
+    RelativeLayout relativelayout;
+    @BindView(R.id.empty)
+    ImageView empty;
 
     Timer timer = new Timer();
     HistoryListAdapter listAdapter;
@@ -72,10 +100,37 @@ public class HomeSearchActivity extends BaseActivity {
     String search = "";
     public static HomeSearchActivity instance;
     int currentpos = 0;
+    private boolean isRefresh = false;
+    //商品规格列表
+    private ArrayList<SpecBean.DataBean> specBeanList = new ArrayList<>();
+    private List<SearchOneBean.DataBeanX.DataBean> oneList = new ArrayList<>(); //商品集合
+    private List<SearchTwoBean.DataBeanX.DataBean> twoList = new ArrayList<>(); //店铺集合
+    private List<Searchthreebean.DataBeanX.DataBean> threeList = new ArrayList<>(); //代办集合
+    private int type = 1; //1：商品；2：店铺；3：代办
+    private int page = 1; //页数
+    private int sort = 1; //1：综合；2：销量；3：价格
+    //购买件数
+    private int nums = 1;
+    //规格ID
+    private String itemid = "";
 
-    private List<String> proList = new ArrayList<>();
-    private List<String> shopList = new ArrayList<>();
-    private List<DaiBanMoreBean.DataBean> daibanList = new ArrayList<>();
+    public Handler handler = new Handler() {
+
+        @Override
+        public void handleMessage(Message msg) {
+            // TODO Auto-generated method stub
+            super.handleMessage(msg);
+            switch (msg.what) {
+                case 1:
+                    nums = Integer.parseInt(msg.obj.toString().split("\\ ")[0]);
+                    itemid = msg.obj.toString().split("\\ ")[1];
+                    String keyname = msg.obj.toString().split("\\ ")[2];
+                    break;
+            }
+        }
+
+    };
+    private String goodsId;//店铺id
 
     @Override
     protected int getLayoutId() {
@@ -84,11 +139,17 @@ public class HomeSearchActivity extends BaseActivity {
 
     @Override
     protected void initView() {
+        twRefresh.setHeaderView(new SinaRefreshHeader(HomeSearchActivity.this));
+        twRefresh.setBottomView(new LoadingView(HomeSearchActivity.this));
+        twRefresh.setOnRefreshListener(new RefreshUtil(this).refreshListenerAdapter());
         instance = this;
         ll_biaoqian.setVisibility(View.VISIBLE);
         ll_sea_biaoqian.setVisibility(View.GONE); //设置商品标签隐藏
         listAdapter = new HistoryListAdapter(HomeSearchActivity.this, historList);
         rv_tag.setAdapter(listAdapter);
+
+        llHistorySearch.setVisibility(View.VISIBLE);
+
         huixian();
         initTab();
     }
@@ -128,64 +189,19 @@ public class HomeSearchActivity extends BaseActivity {
         tabAll.setOnTabSelectedListener(new XTabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(XTabLayout.Tab tab) {
-                String text = (String) tab.getText();
-                ToastUtils.showToast(HomeSearchActivity.this, "dianji" + text);
-                if (text.equals("商品")){
-                    ll_sea_biaoqian.setVisibility(View.VISIBLE);
-                    SearchResultAdapter shopadapter = new SearchResultAdapter(HomeSearchActivity.this,proList,"1");
-                    LinearLayoutManager lmg = new LinearLayoutManager(HomeSearchActivity.this);
-                    rv_list.setLayoutManager(lmg);
-                    rv_list.setAdapter(shopadapter);
-                    shopadapter.setaList(proList);
-                    shopadapter.setmOnItemaddcarClickLitener(new SearchResultAdapter.OnItemaddcarClickListener() {
-                        @Override
-                        public void OnItemaddcarClick(TextView view, int position) {
-                            ToastUtils.showToast(HomeSearchActivity.this,"已加入到购物车!");
-                        }
-                    });
-                    shopadapter.setmOnItemClickListener(new SearchResultAdapter.OnItemClickListener() {
-                        @Override
-                        public void OnItemClick(View view, int position) {
-                            Intent intent = new Intent();
-                            intent.setClass(HomeSearchActivity.this, ProductdetailsActivity.class);
-                            intent.putExtra("proid", "3");
-                            startActivity(intent);
-                            finish();
-                        }
-                    });
-
-                }else if (text.equals("店铺")){
-                    ll_sea_biaoqian.setVisibility(View.GONE);
-//                    ShopDianAdapter adapter = new ShopDianAdapter(HomeSearchActivity.this,shopList,1);
-//                    LinearLayoutManager mgr = new LinearLayoutManager(HomeSearchActivity.this);
-//                    rv_list.setLayoutManager(mgr);
-//                    rv_list.setAdapter(adapter);
-//                    adapter.setmOnItemClickListener(new ShopDianAdapter.OnItemClickListener() {
-//                        @Override
-//                        public void OnItemClick(TextView view, int position) {
-//                            Intent intent = new Intent();
-//                            intent.setClass(HomeSearchActivity.this, LookShopActivity.class);
-////                            intent.putExtra("proid", "3");
-//                            startActivity(intent);
-//                            finish();
-//                        }
-//                    });
-                }else {
-                    ll_sea_biaoqian.setVisibility(View.GONE);
-                    DaiBanMoreAdapter adapter = new DaiBanMoreAdapter(HomeSearchActivity.this,daibanList);
-                    LinearLayoutManager lmg = new LinearLayoutManager(HomeSearchActivity.this);
-                    rv_list.setLayoutManager(lmg);
-                    rv_list.setAdapter(adapter);
-                    adapter.setOnItemClickLitener(new DaiBanMoreAdapter.OnItemClickLitener() {
-                        @Override
-                        public void onItemClick(TextView view, int position) {
-                            startActivity(new Intent(HomeSearchActivity.this,DaiBanDetailsActivity.class));
-                        }
-                    });
-
+                if (etSearch.getText().length() != 0) {
+                    String text = (String) tab.getText();
+                    if (text.equals("商品")) {
+                        type = 1;
+                    } else if (text.equals("店铺")) {
+                        type = 2;
+                    } else {
+                        type = 3;
+                    }
+                    load(type, page, sort);
+                } else {
+                    ToastUtils.showToast(HomeSearchActivity.this, "请先输入搜索内容!");
                 }
-
-
             }
 
             @Override
@@ -202,20 +218,151 @@ public class HomeSearchActivity extends BaseActivity {
             @Override
             public void onTabSelected(XTabLayout.Tab tab) {
                 String text = (String) tab.getText();
-
-
+                if (text.equals("综合")) {
+                    sort = 1;
+                } else if (text.equals("销量")) {
+                    sort = 2;
+                } else {
+                    sort = 3;
+                }
+                load(type, 1, sort);
             }
 
             @Override
             public void onTabUnselected(XTabLayout.Tab tab) {
-
             }
 
             @Override
             public void onTabReselected(XTabLayout.Tab tab) {
-
             }
         });
+
+    }
+
+    /**
+     * 店铺和代办的数据源
+     */
+    private void load(final int type, final int page, int sort) {
+        if (search.length() == 0) {
+            search = "";
+        }
+        OkGo.<String>post(HttpManager.search)
+                .tag(this)
+                .cacheKey("cachePostKey")
+                .cacheMode(CacheMode.DEFAULT)
+                .params("type", type)
+                .params("sort", sort)
+                .params("keyword", search)
+                .params("page", page)
+                .execute(new DialogCallback<String>(this) {
+                    @Override
+                    public void onSuccess(Response<String> response) {
+                        llHistorySearch.setVisibility(View.GONE);
+                        Gson gson = new Gson();
+                        if (type == 3) {//搜索代办
+                            ll_sea_biaoqian.setVisibility(View.GONE);
+                            Searchthreebean bean = gson.fromJson(response.body().toString(), Searchthreebean.class);
+                            if (bean.getData().getData() != null) {
+                                if (page == 1) {
+                                    threeList.clear();
+                                }
+                                threeList.addAll(bean.getData().getData());
+                                if (threeList.size() == 0) {
+                                    relativelayout.setVisibility(View.GONE);
+                                    empty.setVisibility(View.VISIBLE);
+                                } else {
+                                    empty.setVisibility(View.GONE);
+                                    relativelayout.setVisibility(View.VISIBLE);
+                                }
+                                SearchThreeAdapter adapter = new SearchThreeAdapter(HomeSearchActivity.this, threeList);
+                                LinearLayoutManager lmg = new LinearLayoutManager(HomeSearchActivity.this);
+                                rv_list.setLayoutManager(lmg);
+                                rv_list.setAdapter(adapter);
+                                adapter.notifyDataSetChanged();
+                                adapter.setOnItemClickLitener(new SearchThreeAdapter.OnItemClickLitener() {
+                                    @Override
+                                    public void onItemClick(TextView view, int position) {
+                                        startActivity(new Intent(HomeSearchActivity.this, DaiBanDetailsActivity.class)
+                                                .putExtra("danbanid", threeList.get(position).getId()));
+                                    }
+                                });
+                            }
+                        } else if (type == 2) { //搜索店铺
+                            ll_sea_biaoqian.setVisibility(View.GONE);
+                            SearchTwoBean twobean = gson.fromJson(response.body().toString(), SearchTwoBean.class);
+                            if (twobean.getData().getData() != null) {
+                                if (page == 1) {
+                                    twoList.clear();
+                                }
+                                twoList.addAll(twobean.getData().getData());
+                                if (twoList.size() == 0) {
+                                    relativelayout.setVisibility(View.GONE);
+                                    empty.setVisibility(View.VISIBLE);
+                                } else {
+                                    empty.setVisibility(View.GONE);
+                                    relativelayout.setVisibility(View.VISIBLE);
+                                }
+                                SearchTwoAdapter adapter = new SearchTwoAdapter(HomeSearchActivity.this, twoList);
+                                LinearLayoutManager mgr = new LinearLayoutManager(HomeSearchActivity.this);
+                                rv_list.setLayoutManager(mgr);
+                                rv_list.setAdapter(adapter);
+                                adapter.setmOnItemClickListener(new SearchTwoAdapter.OnItemClickListener() {
+                                    @Override
+                                    public void OnItemClick(TextView view, int position) {
+                                        Intent intent = new Intent();
+                                        intent.setClass(HomeSearchActivity.this, LookShopActivity.class);
+                                        intent.putExtra("shopid", twoList.get(position).getId());
+                                        startActivity(intent);
+                                    }
+                                });
+                            }
+                        } else if (type == 1) { //搜索商品
+                            ll_sea_biaoqian.setVisibility(View.VISIBLE);
+                            SearchOneBean onebean = gson.fromJson(response.body().toString(), SearchOneBean.class);
+                            if (onebean.getData().getData() != null) {
+                                if (page == 1) {
+                                    oneList.clear();
+                                }
+                                oneList.addAll(onebean.getData().getData());
+                                if (oneList.size() == 0) {
+                                    relativelayout.setVisibility(View.GONE);
+                                    empty.setVisibility(View.VISIBLE);
+                                } else {
+                                    empty.setVisibility(View.GONE);
+                                    relativelayout.setVisibility(View.VISIBLE);
+                                }
+
+                                SearchOneAdapter oneAdapter = new SearchOneAdapter(HomeSearchActivity.this, oneList);
+                                LinearLayoutManager lmg = new LinearLayoutManager(HomeSearchActivity.this);
+                                rv_list.setLayoutManager(lmg);
+                                rv_list.setAdapter(oneAdapter);
+                                oneAdapter.notifyDataSetChanged();
+                                oneAdapter.setmOnItemaddcarClickLitener(new SearchOneAdapter.OnItemaddcarClickListener() {
+                                    @Override
+                                    public void OnItemaddcarClick(TextView view, int position) {
+                                        //先弹出选择规格窗口，走规格接口，确定再走购物车接口
+                                        loadcaradd(position);
+                                    }
+                                });
+                                oneAdapter.setmOnItemClickListener(new SearchOneAdapter.OnItemClickListener() {
+                                    @Override
+                                    public void OnItemClick(View view, int position) {
+                                        Intent intent = new Intent();
+                                        intent.setClass(HomeSearchActivity.this, ProductdetailsActivity.class);
+                                        intent.putExtra("goods_id", oneList.get(position).getGoods_id());
+                                        startActivity(intent);
+                                    }
+                                });
+                            }
+                        }
+                        if (isRefresh) {
+                            twRefresh.finishRefreshing();
+                        } else {
+                            twRefresh.finishLoadmore();
+                        }
+                    }
+                });
+
 
     }
 
@@ -240,7 +387,7 @@ public class HomeSearchActivity extends BaseActivity {
     private void historyload() {
         if (!etSearch.getText().toString().equals("")) { //输入不为空
             initxianshi();
-            ll_biaoqian.setVisibility(View.VISIBLE);
+//            ll_biaoqian.setVisibility(View.VISIBLE);
             search = etSearch.getText().toString();
             if (historList.size() != 0) {
                 if (etSearch.getText().toString().equals(historList.get(currentpos))) {
@@ -256,6 +403,7 @@ public class HomeSearchActivity extends BaseActivity {
                 listAdapter.setList(historList);
                 saveHistory(historList);
             }
+            load(type, 1, sort);
         } else {//输入为空
             ToastUtils.showToast(HomeSearchActivity.this, "请输入搜索内容!");
         }
@@ -292,5 +440,98 @@ public class HomeSearchActivity extends BaseActivity {
         }, 500);
     }
 
+    @Override
+    public void onRefresh() {
+        isRefresh = true;
+        load(type, 1, sort);
+    }
+
+    @Override
+    public void onLoad() {
+        isRefresh = false;
+        page++;
+        load(type, page, sort);
+    }
+
+
+    /**
+     * 商品规格
+     */
+    private void loadcaradd(final int position) {
+        goodsId = oneList.get(position).getGoods_id();
+        OkGo.<String>post(HttpManager.spec)
+                .tag(this)
+                .cacheKey("cachePostKey")
+                .cacheMode(CacheMode.DEFAULT)
+                .params("goods_id", goodsId)
+                .execute(new DialogCallback<String>(this) {
+                    @Override
+                    public void onSuccess(Response<String> response) {
+                        Gson gson = new Gson();
+                        SpecBean bean = gson.fromJson(response.body().toString(), SpecBean.class);
+                        if (bean.getData() != null) {
+                            if (bean.getData().size() != 0){
+                                specBeanList.addAll(bean.getData());
+                                loadDetails(goodsId);
+                            }else {
+                                ToastUtils.showToast(HomeSearchActivity.this,"此商品暂无规格!");
+                            }
+                        }
+                    }
+                });
+    }
+
+    //商品详情
+    private void loadDetails(String goodsId) {
+        OkGo.<String>post(HttpManager.GoodsDetail)
+                .tag(this)
+                .cacheKey("cachePostKey")
+                .cacheMode(CacheMode.DEFAULT)
+                .params("token", AppUtil.getUserId(this))
+                .params("goods_id", goodsId)
+                .execute(new DialogCallback<String>(this) {
+                    @Override
+                    public void onSuccess(Response<String> response) {
+                        Gson gson = new Gson();
+                        GoodsDetailsBean bean = gson.fromJson(response.body().toString(), GoodsDetailsBean.class);
+                        if (bean.getData() != null) {
+                            GoodsDetailsBean.DataBean dataBean = bean.getData();
+                            String original_img = HttpManager.INDEX + dataBean.getOriginal_img();
+                            for (int i = 0, j = specBeanList.size(); i < j; i++) {
+                                if (itemid.equals(specBeanList.get(i).getItem_id())) {
+                                    specBeanList.get(i).setIsClick("1");
+                                } else {
+                                    specBeanList.get(i).setIsClick("0");
+                                }
+                            }
+                            new NowBuyPopUpWindow(HomeSearchActivity.this, ll_parent, specBeanList, original_img, nums,2);
+                        }
+                    }
+                });
+    }
+
+    /**
+     * 添加到购物车
+     * @param nums
+     * @param itemid
+     */
+    private void loadaddCar(int nums, String itemid) {
+        OkGo.<String>post(HttpManager.addCart)
+                .tag(this)
+                .cacheKey("cachePostKey")
+                .cacheMode(CacheMode.DEFAULT)
+                .params("token", AppUtil.getUserId(HomeSearchActivity.this))
+                .params("goods_id", goodsId)
+                .params("goods_num", nums)
+                .params("item_id", itemid)
+                .execute(new DialogCallback<String>(this) {
+                    @Override
+                    public void onSuccess(Response<String> response) {
+                        Gson gson = new Gson();
+                        CommonBean bean = gson.fromJson(response.body().toString(), CommonBean.class);
+                        ToastUtils.showToast(HomeSearchActivity.this, bean.getMsg());
+                    }
+                });
+    }
 
 }

@@ -34,8 +34,7 @@
             android:layout_height="85dp"
             android:layout_marginBottom="15dp"
             android:layout_marginTop="13dp"
-            android:scaleType="centerCrop"
-            android:src="@mipmap/shop_img" />
+            android:scaleType="fitXY" />
 
         <RelativeLayout
             android:id="@+id/rl_no_edtor"
@@ -52,7 +51,7 @@
                 android:ellipsize="end"
                 android:maxLines="2"
                 android:singleLine="true"
-                android:text="桂花鸭南京盐水鸭"
+                android:text=""
                 android:textColor="@color/textBlack"
                 android:textSize="16sp" />
 
@@ -67,7 +66,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="规格:"
+                    android:text="规格: "
                     android:textColor="@color/textGray"
                     android:textSize="14sp" />
 
@@ -75,7 +74,7 @@
                     android:id="@+id/tv_shop_guige"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="清香口味盐水鸭"
+                    android:text=""
                     android:textColor="@color/textGray"
                     android:textSize="14sp" />
             </LinearLayout>
@@ -101,7 +100,7 @@
                     android:id="@+id/tv_shop_count"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="2"
+                    android:text=""
                     android:textColor="@color/textGray"
                     android:textSize="14sp" />
 
@@ -111,7 +110,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginRight="10dp"
                     android:gravity="right"
-                    android:text="¥66.00"
+                    android:text="¥"
                     android:textColor="@color/home_read" />
 
             </LinearLayout>
