@@ -160,6 +160,8 @@ public class HttpManager {
     //搜索
     public static final String search = BASE_URL+"Index/search";
 
+    //购物车结算
+    public static final String Cart = BASE_URL+"Cart/cart3";
 
 
 

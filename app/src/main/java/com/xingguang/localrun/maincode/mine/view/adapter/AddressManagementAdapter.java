@@ -53,7 +53,15 @@ public class AddressManagementAdapter extends RecyclerView.Adapter<RecyclerView.
     }
 
     //行点击
-    private OnItemClickListener mOnItemClickListener = null;
+    private OnItemClickLitener mOnItemClickLitener;
+
+    public void setOnItemClickLitener(OnItemClickLitener mOnItemClickLitener) {
+        this.mOnItemClickLitener = mOnItemClickLitener;
+    }
+    //行点击
+    public interface OnItemClickLitener {
+        void onItemClick(View view, int position);
+    }
 
 
     //设置修改
@@ -187,9 +195,9 @@ public class AddressManagementAdapter extends RecyclerView.Adapter<RecyclerView.
 
     @Override
     public void onClick(View view) {
-        if (mOnItemClickListener != null) {
+        if (mOnItemClickLitener != null) {
             //注意这里使用getTag方法获取position
-            mOnItemClickListener.onItemClick(view, Integer.parseInt(view.getTag().toString()));
+            mOnItemClickLitener.onItemClick(view, Integer.parseInt(view.getTag().toString()));
         }
     }
 

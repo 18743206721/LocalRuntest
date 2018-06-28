@@ -63,15 +63,19 @@ public class LookShopActivity extends BaseActivity {
     @Override
     protected void initView() {
         instance = this;
-        shopid = getIntent().getStringExtra("shopid");
         toolbarSubtitle.setText("商店");
+        shopid = getIntent().getStringExtra("shopid");
+        ToastUtils.showToast(LookShopActivity.this,"shopid"+shopid);
+        if (shopid!=null) {
+            loadjianjie();
+        }
         initViewPage();
-        initListener();
-        loadjianjie();
     }
 
 
-    private void initListener() {
+    @Override
+    protected void onResume() {
+        super.onResume();
     }
 
     /**
@@ -88,10 +92,12 @@ public class LookShopActivity extends BaseActivity {
                     public void onSuccess(Response<String> response) {
                         Gson gson = new Gson();
                         ShopJianjieBean jianjieBean = gson.fromJson(response.body().toString(), ShopJianjieBean.class);
-                        if (jianjieBean.getData().getIs_collected() == 0){ //未关注
-                            toolbarSubimg.setImageResource(R.mipmap.attention_bg);
-                        }else{ //已关注
-                            toolbarSubimg.setImageResource(R.mipmap.attention_cancel);
+                        if (jianjieBean.getData()!=null) {
+                            if (jianjieBean.getData().getIs_collected() == 0) { //未关注
+                                toolbarSubimg.setImageResource(R.mipmap.attention_bg);
+                            } else { //已关注
+                                toolbarSubimg.setImageResource(R.mipmap.attention_cancel);
+                            }
                         }
                     }
                 });

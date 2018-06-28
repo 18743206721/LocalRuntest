@@ -115,7 +115,7 @@ public class MyCollectionActivity extends ToolBarActivity {
                 .cacheKey("cachePostKey")
                 .cacheMode(CacheMode.DEFAULT)
                 .params("token", AppUtil.getUserId(this))
-                .params("collect_id",list.get(position).getCollect_id())
+                .params("goods_id",list.get(position).getGoods_id())
                 .execute(new DialogCallback<String>(this) {
                     @Override
                     public void onSuccess(Response<String> response) {

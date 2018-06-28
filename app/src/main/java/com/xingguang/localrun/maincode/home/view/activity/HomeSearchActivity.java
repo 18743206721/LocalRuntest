@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.androidkun.xtablayout.XTabLayout;
 import com.google.gson.Gson;
@@ -23,7 +24,6 @@ import com.xingguang.core.base.BaseActivity;
 import com.xingguang.core.utils.SharedPreferencesUtils;
 import com.xingguang.core.utils.ToastUtils;
 import com.xingguang.localrun.R;
-import com.xingguang.localrun.http.CommonBean;
 import com.xingguang.localrun.http.DialogCallback;
 import com.xingguang.localrun.http.HttpManager;
 import com.xingguang.localrun.maincode.home.model.GoodsDetailsBean;
@@ -36,6 +36,7 @@ import com.xingguang.localrun.maincode.home.view.adapter.SearchOneAdapter;
 import com.xingguang.localrun.maincode.home.view.adapter.SearchThreeAdapter;
 import com.xingguang.localrun.maincode.home.view.adapter.SearchTwoAdapter;
 import com.xingguang.localrun.popwindow.NowBuyPopUpWindow;
+import com.xingguang.localrun.popwindow.NowOrderPopUpWindow;
 import com.xingguang.localrun.refresh.RefreshUtil;
 import com.xingguang.localrun.refresh.SinaRefreshHeader;
 import com.xingguang.localrun.utils.AppUtil;
@@ -124,7 +125,6 @@ public class HomeSearchActivity extends BaseActivity implements RefreshUtil.OnRe
                 case 1:
                     nums = Integer.parseInt(msg.obj.toString().split("\\ ")[0]);
                     itemid = msg.obj.toString().split("\\ ")[1];
-                    String keyname = msg.obj.toString().split("\\ ")[2];
                     break;
             }
         }
@@ -263,6 +263,13 @@ public class HomeSearchActivity extends BaseActivity implements RefreshUtil.OnRe
                             ll_sea_biaoqian.setVisibility(View.GONE);
                             Searchthreebean bean = gson.fromJson(response.body().toString(), Searchthreebean.class);
                             if (bean.getData().getData() != null) {
+
+                                if (bean.getData().getData().size() == 0 && page != 1) {
+                                    Toast.makeText(HomeSearchActivity.this,
+                                            "只有这么多了~",
+                                            Toast.LENGTH_SHORT).show();
+                                }
+
                                 if (page == 1) {
                                     threeList.clear();
                                 }
@@ -470,11 +477,12 @@ public class HomeSearchActivity extends BaseActivity implements RefreshUtil.OnRe
                         Gson gson = new Gson();
                         SpecBean bean = gson.fromJson(response.body().toString(), SpecBean.class);
                         if (bean.getData() != null) {
-                            if (bean.getData().size() != 0){
+                            if (bean.getData().size() != 0) {
+                                specBeanList.clear();
                                 specBeanList.addAll(bean.getData());
-                                loadDetails(goodsId);
-                            }else {
-                                ToastUtils.showToast(HomeSearchActivity.this,"此商品暂无规格!");
+                                loadDetails(goodsId,bean.getData());
+                            } else {
+                                loadDetails(goodsId,bean.getData());
                             }
                         }
                     }
@@ -482,7 +490,7 @@ public class HomeSearchActivity extends BaseActivity implements RefreshUtil.OnRe
     }
 
     //商品详情
-    private void loadDetails(String goodsId) {
+    private void loadDetails(final String goodsId, final List<SpecBean.DataBean> list) {
         OkGo.<String>post(HttpManager.GoodsDetail)
                 .tag(this)
                 .cacheKey("cachePostKey")
@@ -497,39 +505,22 @@ public class HomeSearchActivity extends BaseActivity implements RefreshUtil.OnRe
                         if (bean.getData() != null) {
                             GoodsDetailsBean.DataBean dataBean = bean.getData();
                             String original_img = HttpManager.INDEX + dataBean.getOriginal_img();
-                            for (int i = 0, j = specBeanList.size(); i < j; i++) {
-                                if (itemid.equals(specBeanList.get(i).getItem_id())) {
-                                    specBeanList.get(i).setIsClick("1");
-                                } else {
-                                    specBeanList.get(i).setIsClick("0");
+                            String storgeNum = dataBean.getStore_count();//库存
+                            if (list.size() == 0) { //无规格时加入购物车
+                                new NowOrderPopUpWindow(HomeSearchActivity.this, ll_parent, original_img, goodsId, storgeNum, 3);
+                            } else {//有规格时加入购物车
+                                for (int i = 0, j = specBeanList.size(); i < j; i++) {
+                                    if (itemid.equals(specBeanList.get(i).getItem_id())) {
+                                        specBeanList.get(i).setIsClick("1");
+                                    } else {
+                                        specBeanList.get(i).setIsClick("0");
+                                    }
                                 }
+                                new NowBuyPopUpWindow(HomeSearchActivity.this, ll_parent, specBeanList, original_img, nums, 2);
                             }
-                            new NowBuyPopUpWindow(HomeSearchActivity.this, ll_parent, specBeanList, original_img, nums,2);
-                        }
-                    }
-                });
-    }
 
-    /**
-     * 添加到购物车
-     * @param nums
-     * @param itemid
-     */
-    private void loadaddCar(int nums, String itemid) {
-        OkGo.<String>post(HttpManager.addCart)
-                .tag(this)
-                .cacheKey("cachePostKey")
-                .cacheMode(CacheMode.DEFAULT)
-                .params("token", AppUtil.getUserId(HomeSearchActivity.this))
-                .params("goods_id", goodsId)
-                .params("goods_num", nums)
-                .params("item_id", itemid)
-                .execute(new DialogCallback<String>(this) {
-                    @Override
-                    public void onSuccess(Response<String> response) {
-                        Gson gson = new Gson();
-                        CommonBean bean = gson.fromJson(response.body().toString(), CommonBean.class);
-                        ToastUtils.showToast(HomeSearchActivity.this, bean.getMsg());
+
+                        }
                     }
                 });
     }

@@ -64,7 +64,7 @@ public class NowBuyPopUpWindow extends PopupWindow implements View.OnClickListen
     String goodsId = "";//店铺id
 
 
-    public NowBuyPopUpWindow(Context contexts, View parent, ArrayList<SpecBean.DataBean> listss, String original_img, int nums,int type) {
+    public NowBuyPopUpWindow(Context contexts, View parent, final ArrayList<SpecBean.DataBean> listss, String original_img, int nums, int type) {
         lists.clear();
         this.context = contexts;
         this.lists = listss;
@@ -125,6 +125,7 @@ public class NowBuyPopUpWindow extends PopupWindow implements View.OnClickListen
                 lists.get(position).setIsClick("1");
                 money.setText(lists.get(position).getPrice());
                 store_count = lists.get(position).getStore_count();
+                itemid = lists.get(position).getItem_id();
                 inventory.setText("库存：" + lists.get(position).getStore_count());
                 mAdapter.notifyDataSetChanged();
             }
@@ -145,54 +146,76 @@ public class NowBuyPopUpWindow extends PopupWindow implements View.OnClickListen
         switch (v.getId()) {
             case R.id.commit: //确认
 
-                if (type == 1) { //产品
-                ProductdetailsActivity activity = (ProductdetailsActivity) context;
-                Message msg1 = activity.handler.obtainMessage();
-                msg1.what = 1;
-                for (int i = 0, j = lists.size(); i < j; i++) {
-                    if ("1".equals(lists.get(i).getIsClick())) {
-                        keyname = lists.get(i).getKey_name();
-                        itemid = lists.get(i).getItem_id();
-                    }
-                }
-                msg1.obj = nums + " " + itemid + " " + keyname + " " ;
-                ProductdetailsActivity.instance.handler.sendMessage(msg1);
-                dismiss();
-
-                } else if (type == 2) { //搜索
-
-                    HomeSearchActivity activity = (HomeSearchActivity) context;
-                    Message msg1 = activity.handler.obtainMessage();
-                    msg1.what = 1;
-                    for (int i = 0, j = lists.size(); i < j; i++) {
-                        if ("1".equals(lists.get(i).getIsClick())) {
-                            keyname = lists.get(i).getKey_name();
-                            itemid = lists.get(i).getItem_id();
-                            goodsId = lists.get(i).getGoods_id();
+                if (type == 1) { //产品详情页面回调数据
+                    ProductdetailsActivity activity = (ProductdetailsActivity) context;
+                    if ("".equals(itemid)){
+                        ToastUtils.showToast(activity,"请选择规格！");
+                    }else {
+                        Message msg1 = activity.handler.obtainMessage();
+                        msg1.what = 1;
+                        for (int i = 0, j = lists.size(); i < j; i++) {
+                            if ("1".equals(lists.get(i).getIsClick())) {
+                                keyname = lists.get(i).getKey_name();
+                                itemid = lists.get(i).getItem_id();
+                            }
                         }
+                        msg1.obj = nums + " " + itemid + " " + keyname + " ";
+                        ProductdetailsActivity.instance.handler.sendMessage(msg1);
+                        dismiss();
                     }
-                    msg1.obj = nums + " " + itemid + " " + keyname + " " ;
-                    HomeSearchActivity.instance.handler.sendMessage(msg1);
+                } else if (type == 2) { //搜索
+                    HomeSearchActivity activity = (HomeSearchActivity) context;
+                    if ("".equals(itemid)){
+                        ToastUtils.showToast(activity,"请选择规格！");
+                    }else {
+                        Message msg1 = activity.handler.obtainMessage();
+                        msg1.what = 1;
+                        for (int i = 0, j = lists.size(); i < j; i++) {
+                            if ("1".equals(lists.get(i).getIsClick())) {
+                                keyname = lists.get(i).getKey_name();
+                                itemid = lists.get(i).getItem_id();
+                                goodsId = lists.get(i).getGoods_id();
+                            }
+                        }
+                        msg1.obj = nums + " " + itemid + " ";
+                        HomeSearchActivity.instance.handler.sendMessage(msg1);
 
-                    OkGo.<String>post(HttpManager.addCart)
-                            .tag(this)
-                            .cacheKey("cachePostKey")
-                            .cacheMode(CacheMode.DEFAULT)
-                            .params("token", AppUtil.getUserId(context))
-                            .params("goods_id", goodsId)
-                            .params("goods_num", nums)
-                            .params("item_id", itemid)
-                            .execute(new DialogCallback<String>(HomeSearchActivity.instance) {
-                                @Override
-                                public void onSuccess(Response<String> response) {
-                                    Gson gson = new Gson();
-                                    CommonBean bean = gson.fromJson(response.body().toString(), CommonBean.class);
-                                    dismiss();
-                                    ToastUtils.showToast(context, bean.getMsg());
-                                }
-                            });
-
-
+                        OkGo.<String>post(HttpManager.addCart)
+                                .tag(this)
+                                .cacheKey("cachePostKey")
+                                .cacheMode(CacheMode.DEFAULT)
+                                .params("token", AppUtil.getUserId(context))
+                                .params("goods_id", goodsId)
+                                .params("goods_num", nums)
+                                .params("item_id", itemid)
+                                .execute(new DialogCallback<String>(HomeSearchActivity.instance) {
+                                    @Override
+                                    public void onSuccess(Response<String> response) {
+                                        Gson gson = new Gson();
+                                        CommonBean bean = gson.fromJson(response.body().toString(), CommonBean.class);
+                                        dismiss();
+                                        ToastUtils.showToast(context, bean.getMsg());
+                                        lists.clear();
+                                    }
+                                });
+                    }
+                } else if (type == 3) {  //立即购买
+                    ProductdetailsActivity activity = (ProductdetailsActivity) context;
+                    if ("".equals(itemid)) {
+                        ToastUtils.showToast(activity, "请选择规格！");
+                    } else {
+                        Message msg2 = activity.handler.obtainMessage();
+                        msg2.what = 2;
+                        for (int i = 0, j = lists.size(); i < j; i++) {
+                            if ("1".equals(lists.get(i).getIsClick())) {
+                                keyname = lists.get(i).getKey_name();
+                                itemid = lists.get(i).getItem_id();
+                            }
+                        }
+                        msg2.obj = nums + " " + itemid + " " + keyname + " ";
+                        ProductdetailsActivity.instance.handler.sendMessage(msg2);
+                        dismiss();
+                    }
                 }
 
 

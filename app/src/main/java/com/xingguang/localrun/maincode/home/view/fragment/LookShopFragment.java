@@ -297,10 +297,17 @@ public class LookShopFragment extends BaseFragment implements RefreshUtil.OnRefr
         adapter.setOnItemClickListener(new LookShopAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
+
+//                Intent intent = new Intent(getActivity(),ProductdetailsActivity.class);
+//                intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+//                intent.putExtra("goods_id", allgoodlist.get(position).getGoods_id());
+//                startActivity(intent);
+
                 Intent intent = new Intent();
                 intent.setClass(getActivity(), ProductdetailsActivity.class);
                 intent.putExtra("goods_id", allgoodlist.get(position).getGoods_id());
                 startActivity(intent);
+
             }
         });
 

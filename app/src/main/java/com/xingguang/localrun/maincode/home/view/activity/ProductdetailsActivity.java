@@ -46,6 +46,7 @@ import com.xingguang.localrun.maincode.home.model.SpecBean;
 import com.xingguang.localrun.maincode.home.view.adapter.PinglunAdapter;
 import com.xingguang.localrun.popwindow.CrowdPopUpWindow;
 import com.xingguang.localrun.popwindow.NowBuyPopUpWindow;
+import com.xingguang.localrun.popwindow.NowOrderPopUpWindow;
 import com.xingguang.localrun.popwindow.SharePopUpWindow;
 import com.xingguang.localrun.utils.AppUtil;
 import com.youth.banner.Banner;
@@ -153,7 +154,8 @@ public class ProductdetailsActivity extends BaseActivity implements SharePopUpWi
     private int collect_id; //取消收藏id
     private List<String> networkImages = new ArrayList<>(); //轮播图集合
     String original_img = ""; //规格里的图片
-
+    private String storgeNum = "";//商品详情里的规格
+    GoodsDetailsBean.DataBean dataBean;
 
     @Override
     protected int getLayoutId() {
@@ -190,7 +192,7 @@ public class ProductdetailsActivity extends BaseActivity implements SharePopUpWi
                         Gson gson = new Gson();
                         GoodsDetailsBean bean = gson.fromJson(response.body().toString(), GoodsDetailsBean.class);
                         if (bean.getData() != null) {
-                            GoodsDetailsBean.DataBean dataBean = bean.getData();
+                             dataBean = bean.getData();
 
                             //加载头部轮播图
                             for (int i = 0; i < dataBean.getGoods_images().size(); i++) {
@@ -202,10 +204,10 @@ public class ProductdetailsActivity extends BaseActivity implements SharePopUpWi
 //                            if ("".equals(dataBean.getGoods_content())) {
 //                                webView1.setVisibility(View.GONE);
 //                            } else {
-                                webView1.setVisibility(View.VISIBLE);
-                                String html = dataBean.getGoods_content();
-                                String data = html.replace("%@", html);
-                                webView1.loadData(data, "text/html; charset=UTF-8", null);
+                            webView1.setVisibility(View.VISIBLE);
+                            String html = dataBean.getGoods_content();
+                            String data = html.replace("%@", html);
+                            webView1.loadData(data, "text/html; charset=UTF-8", null);
 //                            }
                             original_img = HttpManager.INDEX + dataBean.getOriginal_img();
                             tvProName.setText(dataBean.getGoods_name());//商品名称
@@ -220,7 +222,8 @@ public class ProductdetailsActivity extends BaseActivity implements SharePopUpWi
                                 tvPro.setTextColor(ContextCompat.getColor(ProductdetailsActivity.this, R.color.textDarkGray));
                                 AppUtil.setThemeColor2(ProductdetailsActivity.this, collectImg, R.mipmap.pro_collection);
                             }
-
+                            //立即购买，如果没规格，获取商品库存
+                            storgeNum = bean.getData().getStore_count();
                         } else {
                             ToastUtils.showToast(ProductdetailsActivity.this, bean.getMsg());
                         }
@@ -307,18 +310,28 @@ public class ProductdetailsActivity extends BaseActivity implements SharePopUpWi
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.ll_shop://店铺
+//                ivTiceHead.stopAutoPlay();
+//                Intent intent = new Intent(ProductdetailsActivity.this,LookShopActivity.class);
+//                intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+//                startActivity(intent);
+
+
                 intent = new Intent();
                 intent.setClass(ProductdetailsActivity.this, LookShopActivity.class);
+                intent.putExtra("shopid",dataBean.getShop_id());
                 startActivity(intent);
+                finish();
                 LookShopActivity.instance.finish();
+
                 break;
             case R.id.collect://收藏
                 collection();
                 break;
             case R.id.add_shopcar: //添加购物车
                 if (itemid.equals("")) {
-                    ToastUtils.showToast(ProductdetailsActivity.this,"请选择规格!");
-                }else {
+                    //添加购物车接口，无规格时，不传itemid
+                    new NowOrderPopUpWindow(ProductdetailsActivity.this, llParent, original_img, goods_id, storgeNum, 2);
+                } else {
                     loadaddCar();
                 }
                 break;
@@ -326,13 +339,7 @@ public class ProductdetailsActivity extends BaseActivity implements SharePopUpWi
                 new SharePopUpWindow(ProductdetailsActivity.this, llParent, ProductdetailsActivity.this);
                 break;
             case R.id.commit://立即购买
-                startActivity(new Intent(ProductdetailsActivity.this,BuyActivity.class));
-                request.appId = "";
-                iwapi.sendReq(request);
-
-                break;
-            case R.id.ll_guige://选择规格
-                if (specBeanList.size() != 0){
+                if (specBeanList.size() != 0) {  //有规格情况
                     for (int i = 0, j = specBeanList.size(); i < j; i++) {
                         if (itemid.equals(specBeanList.get(i).getItem_id())) {
                             specBeanList.get(i).setIsClick("1");
@@ -340,9 +347,29 @@ public class ProductdetailsActivity extends BaseActivity implements SharePopUpWi
                             specBeanList.get(i).setIsClick("0");
                         }
                     }
-                    new NowBuyPopUpWindow(ProductdetailsActivity.this, llParent, specBeanList, original_img, nums,1);
-                }else {
-                    ToastUtils.showToast(ProductdetailsActivity.this,"此商品暂无规格!");
+                    new NowBuyPopUpWindow(ProductdetailsActivity.this, llParent, specBeanList, original_img, nums, 3);
+                } else {//无规格情况
+                    //走商品详情接口
+                    new NowOrderPopUpWindow(ProductdetailsActivity.this, llParent, original_img, goods_id, storgeNum, 1);
+
+                }
+
+//                request.appId = "";
+//                iwapi.sendReq(request);
+
+                break;
+            case R.id.ll_guige://选择规格
+                if (specBeanList.size() != 0) {
+                    for (int i = 0, j = specBeanList.size(); i < j; i++) {
+                        if (itemid.equals(specBeanList.get(i).getItem_id())) {
+                            specBeanList.get(i).setIsClick("1");
+                        } else {
+                            specBeanList.get(i).setIsClick("0");
+                        }
+                    }
+                    new NowBuyPopUpWindow(ProductdetailsActivity.this, llParent, specBeanList, original_img, nums, 1);
+                } else {
+                    ToastUtils.showToast(ProductdetailsActivity.this, "此商品暂无规格!");
                 }
                 break;
             case R.id.back:
@@ -377,7 +404,6 @@ public class ProductdetailsActivity extends BaseActivity implements SharePopUpWi
                 break;
         }
     }
-
 
     /**
      * 添加到购物车
@@ -416,7 +442,7 @@ public class ProductdetailsActivity extends BaseActivity implements SharePopUpWi
                         Gson gson = new Gson();
                         SpecBean bean = gson.fromJson(response.body().toString(), SpecBean.class);
                         if (bean.getData() != null) {
-                            if (bean.getData().size() != 0){
+                            if (bean.getData().size() != 0) {
                                 specBeanList.addAll(bean.getData());
                             }
                         } else {
@@ -427,6 +453,8 @@ public class ProductdetailsActivity extends BaseActivity implements SharePopUpWi
     }
 
 
+    private String keyname = "";//规格名称
+
     public Handler handler = new Handler() {
 
         @Override
@@ -434,33 +462,25 @@ public class ProductdetailsActivity extends BaseActivity implements SharePopUpWi
             // TODO Auto-generated method stub
             super.handleMessage(msg);
             switch (msg.what) {
-                case 1:
+                case 1:  //产品
                     nums = Integer.parseInt(msg.obj.toString().split("\\ ")[0]);
                     itemid = msg.obj.toString().split("\\ ")[1];
-                    String keyname = msg.obj.toString().split("\\ ")[2];
+                    keyname = msg.obj.toString().split("\\ ")[2];
                     tvProGuige.setText(keyname + " x " + nums);
-//                    newPrice.setText(msg.obj.toString().split("\\ ")[3]);
-//                    oldPrice.setText("¥" + msg.obj.toString().split("\\ ")[4]);
-//                    oldPrice.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG | Paint.ANTI_ALIAS_FLAG); // 设置中划线并加清晰
                     break;
-                case 2:
-                    //列表数据
-//                    falshsaleCommoditySize(id);
-                    break;
-                default:
+                case 2: //立即购买
+                    nums = Integer.parseInt(msg.obj.toString().split("\\ ")[0]);
+                    itemid = msg.obj.toString().split("\\ ")[1];
+                    keyname = msg.obj.toString().split("\\ ")[2];
+
+//                    BuyActivity.instance.finish();
+                    startActivity(new Intent(ProductdetailsActivity.this,BuyActivity.class));
+                    ProductdetailsActivity.instance.finish();
                     break;
             }
         }
 
     };
-
-    /**
-     * 商品规格
-     */
-    private void falshsaleCommoditySize(String id) {
-//        lists.clear();
-//        lists.addAll(model.getList());
-    }
 
 
     //头部轮播图
@@ -469,7 +489,7 @@ public class ProductdetailsActivity extends BaseActivity implements SharePopUpWi
         ivTiceHead.setImageLoader(new GlideImageLoader());
         //设置图片集合
         ivTiceHead.setImages(networkImages);
-        ivTiceHead.setDelayTime(3000);
+        ivTiceHead.setDelayTime(4000);
         //banner设置方法全部调用完毕时最后调用
         ivTiceHead.start();
     }
@@ -503,7 +523,7 @@ public class ProductdetailsActivity extends BaseActivity implements SharePopUpWi
                     .cacheKey("cachePostKey")
                     .cacheMode(CacheMode.DEFAULT)
                     .params("token", AppUtil.getUserId(this))
-                    .params("collect_id", collect_id)
+                    .params("goods_id", goods_id)
                     .execute(new DialogCallback<String>(this) {
                         @Override
                         public void onSuccess(Response<String> response) {

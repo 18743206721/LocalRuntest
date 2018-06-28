@@ -21,6 +21,7 @@ import com.xingguang.localrun.base.ToolBarActivity;
 import com.xingguang.localrun.http.CommonBean;
 import com.xingguang.localrun.http.DialogCallback;
 import com.xingguang.localrun.http.HttpManager;
+import com.xingguang.localrun.maincode.home.view.activity.BuyActivity;
 import com.xingguang.localrun.maincode.mine.model.AddressModel;
 import com.xingguang.localrun.maincode.mine.view.adapter.AddressManagementAdapter;
 import com.xingguang.localrun.refresh.RefreshUtil;
@@ -55,6 +56,7 @@ public class AddressManagementActivity extends ToolBarActivity implements Refres
     private AddressManagementAdapter mAdapter;
     int total = 0;
     private boolean isRefresh = false;
+    int buytype = 0; //立即购买时候传过来的标识
 
     @Override
     protected int getLayoutId() {
@@ -73,6 +75,7 @@ public class AddressManagementActivity extends ToolBarActivity implements Refres
         tw_refresh.setHeaderView(new SinaRefreshView(this));
         tw_refresh.setBottomView(new LoadingView(this));
         tw_refresh.setOnRefreshListener(new RefreshUtil(this).refreshListenerAdapter());
+        buytype = getIntent().getIntExtra("buytype",0);
 
         initList();
         load(0);
@@ -116,6 +119,24 @@ public class AddressManagementActivity extends ToolBarActivity implements Refres
                 DeteleAddress(myContractList.get(position).getAddress_id(), position);
             }
         });
+
+        mAdapter.setOnItemClickLitener(new AddressManagementAdapter.OnItemClickLitener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                if (buytype == 1) {
+                    Intent intent = new Intent(AddressManagementActivity.this, BuyActivity.class);
+                    intent.putExtra("id", myContractList.get(position).getAddress_id());
+                    intent.putExtra("name", myContractList.get(position).getConsignee());
+                    intent.putExtra("phone", myContractList.get(position).getMobile());
+                    intent.putExtra("xiangxiads", myContractList.get(position).getAddress());
+                    intent.putExtra("address", myContractList.get(position).getProvince() + " " +
+                            myContractList.get(position).getCity() + " " + myContractList.get(position).getArea());
+                    setResult(50, intent);
+                    AddressManagementActivity.this.finish();
+                }
+            }
+        });
+
     }
 
     /**

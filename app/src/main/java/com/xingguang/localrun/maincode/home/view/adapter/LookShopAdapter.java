@@ -16,7 +16,6 @@ import com.xingguang.localrun.maincode.home.model.ShopAllGoodBean;
 import com.xingguang.localrun.maincode.home.model.ShopBannerBean;
 import com.xingguang.localrun.maincode.home.model.ShopIndex;
 import com.xingguang.localrun.maincode.home.model.ShopJianjieBean;
-import com.xingguang.localrun.maincode.home.view.activity.LookShopActivity;
 import com.xingguang.localrun.maincode.home.view.activity.ProductdetailsActivity;
 import com.xingguang.localrun.utils.ImageLoader;
 import com.xingguang.localrun.view.CommonViewHolder;
@@ -106,8 +105,8 @@ public class LookShopAdapter extends RecyclerView.Adapter<CommonViewHolder> {
                     intent.setClass(mContext, ProductdetailsActivity.class);
                     intent.putExtra("goods_id", indexlist.get(position).getGoods_id());
                     mContext.startActivity(intent);
-                    LookShopActivity activity = (LookShopActivity) mContext;
-                    activity.finish();
+//                    LookShopActivity activity = (LookShopActivity) mContext;
+//                    activity.finish();
                 }
             });
 

@@ -221,6 +221,27 @@ public class ShopFragment extends ToolBarFragment implements ShopCarAdapter.Chec
      * 删除该商品
      */
     private void loaddeleted(int pos) {
+        OkGo.<String>post(HttpManager.Cartcart2)
+                .tag(this)
+                .cacheKey("cachePostKey")
+                .cacheMode(CacheMode.DEFAULT)
+                .params("token", AppUtil.getUserId(getActivity()))
+                .execute(new DialogCallback<String>(getActivity()) {
+                    @Override
+                    public void onSuccess(Response<String> response) {
+                        Gson gson = new Gson();
+                        GoodInfo jianjieBean = gson.fromJson(response.body().toString(), GoodInfo.class);
+                        if (jianjieBean.getData() != null) {
+                            shoplist.addAll(jianjieBean.getData().getCartList());
+                            shopCarAdapter.setList(jianjieBean.getData().getCartList());
+                        } else {
+                            ToastUtils.showToast(getActivity(), jianjieBean.getMsg());
+                        }
+                    }
+                });
+
+
+
         shoplist.remove(pos);
         popde.dismiss();
         shopCarAdapter.notifyDataSetChanged();
