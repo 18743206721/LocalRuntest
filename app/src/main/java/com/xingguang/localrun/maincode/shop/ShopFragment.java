@@ -414,7 +414,7 @@ public class ShopFragment extends ToolBarFragment implements ShopCarAdapter.Chec
                         CommonBean bean = gson.fromJson(response.body().toString(), CommonBean.class);
                         shopCarAdapter.setRemove(pos);
                         ToastUtils.showToast(getActivity(), bean.getMsg());
-                        tvTotalPrice.setText("合计:" + "¥" + 0);
+                        tvTotalPrice.setText(0+"");
                         statistics();
                         load(1);
                     }
@@ -449,14 +449,6 @@ public class ShopFragment extends ToolBarFragment implements ShopCarAdapter.Chec
 
                             if (i == 2) {
 
-
-//                                shoplist.get(checkpos).setChoose(isFlag);
-//                                if (isAllCheck())
-//                                    allChekbox.setChecked(true);
-//                                else
-//                                    allChekbox.setChecked(false);
-//                                shopCarAdapter.notifyDataSetChanged();
-
                                 String str = a;
                                 List<String> resulist = Arrays.asList(str.split(","));
 
@@ -474,24 +466,7 @@ public class ShopFragment extends ToolBarFragment implements ShopCarAdapter.Chec
 
                                 }
 
-
-//                                for (int j = 0; j < shoplist.size(); j++) {
-//                                    for (int t = 0; t < checkid.size(); t++) {
-//                                        if (shoplist.get(j).getId().equals(checkid.get(t))) {
-//                                            shoplist.get(j).setChoose(isFlag);
-//                                        /
-//                                            if (shoplist.get(j).isChoose()) {
-//
-//                                            } else {
-//                                                checkid.remove(t);
-//                                            }
-//
-//                                        }
-//                                    }
-//                                }
-
-
-                                tvTotalPrice.setText("合计:" + "¥" + jianjieBean.getData().getCartPriceInfo().getTotal_fee());
+                                tvTotalPrice.setText(jianjieBean.getData().getCartPriceInfo().getTotal_fee()+"");
 
                             } else if (i == 3) {
                                 if (shoplist.size() != 0) {
@@ -507,7 +482,7 @@ public class ShopFragment extends ToolBarFragment implements ShopCarAdapter.Chec
                                         shopCarAdapter.notifyDataSetChanged();
                                     }
                                 }
-                                tvTotalPrice.setText("合计:" + "¥" + jianjieBean.getData().getCartPriceInfo().getTotal_fee());
+                                tvTotalPrice.setText("" + jianjieBean.getData().getCartPriceInfo().getTotal_fee());
                             }
 
                             shopCarAdapter.setList(jianjieBean.getData().getCartList());
@@ -563,14 +538,6 @@ public class ShopFragment extends ToolBarFragment implements ShopCarAdapter.Chec
                             .execute(new DialogCallback<String>(getActivity()) {
                                 @Override
                                 public void onSuccess(Response<String> response) {
-
-//                                        shoplist.get(position).setChoose(isChecked);
-//                                        if (isAllCheck())
-//                                            allChekbox.setChecked(true);
-//                                        else
-//                                            allChekbox.setChecked(false);
-//                                        shopCarAdapter.notifyDataSetChanged();
-//                                        statistics();
                                     load(3);
                                 }
                             });
@@ -682,7 +649,7 @@ public class ShopFragment extends ToolBarFragment implements ShopCarAdapter.Chec
                 totalPrice += Double.parseDouble(shoppingCartBean.getGoods_price()) * Double.parseDouble(shoppingCartBean.getGoods_num());
             }
         }
-        tvTotalPrice.setText("合计:" + totalPrice);
+        tvTotalPrice.setText(totalPrice+"");
     }
 
 
@@ -701,10 +668,9 @@ public class ShopFragment extends ToolBarFragment implements ShopCarAdapter.Chec
                 Log.d("shopfragment", id + "----id---" + shoppingName + "---" + count + "---" + price);
             }
         }
-//        ToastUtils.showToast(getActivity(), "总价：" + totalPrice);
         //跳转到订单结算界面
         startActivity(new Intent(getActivity(), BuyActivity.class)
-                .putExtra("totalPrice", totalPrice)
+                .putExtra("totalPrice", tvTotalPrice.getText().toString())
         );
 
     }

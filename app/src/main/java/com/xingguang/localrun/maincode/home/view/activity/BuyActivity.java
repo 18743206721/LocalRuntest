@@ -208,51 +208,23 @@ public class BuyActivity extends ToolBarActivity {
         String JsonData = new GetJsonDataUtil().getJson(BuyActivity.this, "region.json");//获取assets目录下的json文件数据
         Log.e("jsonbeanqqqq", "initJsonData: " + JsonData);
         ArrayList<JsonBean> jsonBean = AppUtil.parseData(JsonData);//用Gson 转成实体
-        /**
-         * 添加省份数据
-         */
-//        options1Items = jsonBean;
-//        Log.e("jsonbean", "initJsonData: " + jsonBean);
         for (int i = 0; i < jsonBean.size(); i++) { //遍历省份
             if (proviceid.equals(jsonBean.get(i).getId())){
                 provicename = jsonBean.get(i).getName();
             }
-//            ArrayList<String> CityList = new ArrayList<>();//该省的城市列表（第二级）
-//            ArrayList<ArrayList<String>> Province_AreaList = new ArrayList<>();//该省的所有地区列表（第三极）
             for (int c = 0; c < jsonBean.get(i).getChild().size(); c++) {  //遍历该省份的所有城市
                 if (cityid.equals(jsonBean.get(i).getChild().get(c).getId())){
                     cityname = jsonBean.get(i).getChild().get(c).getName();
                 }
-//                String cityname = jsonBean.get(i).getChild().get(c).getName();
-//                CityList.add(cityname);//添加城市
-//                ArrayList<String> City_AreaList = new ArrayList<>();//该城市的所有地区列表
-                //如果无地区数据，建议添加空数据，防止数据为null 导致三个选项长度不匹配造成崩溃
-//                if (jsonBean.get(i).getChild().get(c).getChild().size() == 0) {
-//                    City_AreaList.add("");
-//                }
                 for (int d = 0; d < jsonBean.get(i).getChild().get(c).getChild().size(); d++) {
                     if (areaid.equals(jsonBean.get(i).getChild().get(c).getChild().get(d).getId())){
                         areaname = jsonBean.get(i).getChild().get(c).getChild().get(d).getName();
                     }
-//                    City_AreaList.add(area);  //添加该城市所有的地区数据
                 }
-//                Province_AreaList.add(City_AreaList);
             }
-//            /**
-//             * 添加城市地区
-//             * */
-//            options2Items.add(CityList);
-
-//            /**
-//             *添加地区数据
-//             * */
-//            options3Items.add(Province_AreaList);
-
             address.setText(provicename+cityname+areaname+" "+xiangxiads);
-
         }
     }
-
 
 
 }

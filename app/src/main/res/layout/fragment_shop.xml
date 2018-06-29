@@ -87,10 +87,18 @@
                                 android:textStyle="bold" />
 
                             <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="¥"
+                                android:textColor="@color/textMoney"
+                                android:textSize="14sp"
+                                android:textStyle="bold" />
+
+                            <TextView
                                 android:id="@+id/tv_total_price"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="¥0.00"
+                                android:text="0.00"
                                 android:textColor="@color/textMoney"
                                 android:textSize="14sp"
                                 android:textStyle="bold" />
