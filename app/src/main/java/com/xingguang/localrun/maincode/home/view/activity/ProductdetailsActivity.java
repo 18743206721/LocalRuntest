@@ -192,7 +192,7 @@ public class ProductdetailsActivity extends BaseActivity implements SharePopUpWi
                         Gson gson = new Gson();
                         GoodsDetailsBean bean = gson.fromJson(response.body().toString(), GoodsDetailsBean.class);
                         if (bean.getData() != null) {
-                             dataBean = bean.getData();
+                            dataBean = bean.getData();
 
                             //加载头部轮播图
                             for (int i = 0; i < dataBean.getGoods_images().size(); i++) {
@@ -318,7 +318,7 @@ public class ProductdetailsActivity extends BaseActivity implements SharePopUpWi
 
                 intent = new Intent();
                 intent.setClass(ProductdetailsActivity.this, LookShopActivity.class);
-                intent.putExtra("shopid",dataBean.getShop_id());
+                intent.putExtra("shopid", dataBean.getShop_id());
                 startActivity(intent);
                 finish();
                 LookShopActivity.instance.finish();
@@ -328,11 +328,18 @@ public class ProductdetailsActivity extends BaseActivity implements SharePopUpWi
                 collection();
                 break;
             case R.id.add_shopcar: //添加购物车
-                if (itemid.equals("")) {
+                if (specBeanList.size() == 0) {
                     //添加购物车接口，无规格时，不传itemid
                     new NowOrderPopUpWindow(ProductdetailsActivity.this, llParent, original_img, goods_id, storgeNum, 2);
-                } else {
-                    loadaddCar();
+                } else { //有规格时
+                    for (int i = 0, j = specBeanList.size(); i < j; i++) {
+                        if (itemid.equals(specBeanList.get(i).getItem_id())) {
+                            specBeanList.get(i).setIsClick("1");
+                        } else {
+                            specBeanList.get(i).setIsClick("0");
+                        }
+                    }
+                    new NowBuyPopUpWindow(ProductdetailsActivity.this, llParent, specBeanList, original_img, nums, 4);
                 }
                 break;
             case R.id.ll_profenxinag: //友盟分享
@@ -405,27 +412,6 @@ public class ProductdetailsActivity extends BaseActivity implements SharePopUpWi
         }
     }
 
-    /**
-     * 添加到购物车
-     */
-    private void loadaddCar() {
-        OkGo.<String>post(HttpManager.addCart)
-                .tag(this)
-                .cacheKey("cachePostKey")
-                .cacheMode(CacheMode.DEFAULT)
-                .params("token", AppUtil.getUserId(ProductdetailsActivity.this))
-                .params("goods_id", goods_id)
-                .params("goods_num", nums)
-                .params("item_id", itemid)
-                .execute(new DialogCallback<String>(this) {
-                    @Override
-                    public void onSuccess(Response<String> response) {
-                        Gson gson = new Gson();
-                        CommonBean bean = gson.fromJson(response.body().toString(), CommonBean.class);
-                        ToastUtils.showToast(ProductdetailsActivity.this, bean.getMsg());
-                    }
-                });
-    }
 
     /**
      * 商品规格
@@ -474,7 +460,7 @@ public class ProductdetailsActivity extends BaseActivity implements SharePopUpWi
                     keyname = msg.obj.toString().split("\\ ")[2];
 
 //                    BuyActivity.instance.finish();
-                    startActivity(new Intent(ProductdetailsActivity.this,BuyActivity.class));
+                    startActivity(new Intent(ProductdetailsActivity.this, BuyActivity.class));
                     ProductdetailsActivity.instance.finish();
                     break;
             }

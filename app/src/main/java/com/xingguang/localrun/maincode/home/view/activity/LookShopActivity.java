@@ -65,7 +65,7 @@ public class LookShopActivity extends BaseActivity {
         instance = this;
         toolbarSubtitle.setText("商店");
         shopid = getIntent().getStringExtra("shopid");
-        ToastUtils.showToast(LookShopActivity.this,"shopid"+shopid);
+//        ToastUtils.showToast(LookShopActivity.this,"shopid"+shopid);
         if (shopid!=null) {
             loadjianjie();
         }

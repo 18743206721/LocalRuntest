@@ -148,9 +148,9 @@ public class NowBuyPopUpWindow extends PopupWindow implements View.OnClickListen
 
                 if (type == 1) { //产品详情页面回调数据
                     ProductdetailsActivity activity = (ProductdetailsActivity) context;
-                    if ("".equals(itemid)){
-                        ToastUtils.showToast(activity,"请选择规格！");
-                    }else {
+                    if ("".equals(itemid)) {
+                        ToastUtils.showToast(activity, "请选择规格！");
+                    } else {
                         Message msg1 = activity.handler.obtainMessage();
                         msg1.what = 1;
                         for (int i = 0, j = lists.size(); i < j; i++) {
@@ -165,9 +165,9 @@ public class NowBuyPopUpWindow extends PopupWindow implements View.OnClickListen
                     }
                 } else if (type == 2) { //搜索
                     HomeSearchActivity activity = (HomeSearchActivity) context;
-                    if ("".equals(itemid)){
-                        ToastUtils.showToast(activity,"请选择规格！");
-                    }else {
+                    if ("".equals(itemid)) {
+                        ToastUtils.showToast(activity, "请选择规格！");
+                    } else {
                         Message msg1 = activity.handler.obtainMessage();
                         msg1.what = 1;
                         for (int i = 0, j = lists.size(); i < j; i++) {
@@ -216,9 +216,43 @@ public class NowBuyPopUpWindow extends PopupWindow implements View.OnClickListen
                         ProductdetailsActivity.instance.handler.sendMessage(msg2);
                         dismiss();
                     }
+                } else if (type == 4) { //添加购物车有规格时
+                    final ProductdetailsActivity activity = (ProductdetailsActivity) context;
+                    if ("".equals(itemid)) {
+                        ToastUtils.showToast(activity, "请选择规格！");
+                    } else {
+                        Message msg = activity.handler.obtainMessage();
+                        msg.what = 1;
+                        for (int i = 0, j = lists.size(); i < j; i++) {
+                            if ("1".equals(lists.get(i).getIsClick())) {
+                                keyname = lists.get(i).getKey_name();
+                                itemid = lists.get(i).getItem_id();
+                                goodsId = lists.get(i).getGoods_id();
+                            }
+                        }
+                        msg.obj = nums + " " + itemid + " " + keyname + " ";
+                        ProductdetailsActivity.instance.handler.sendMessage(msg);
+
+                        OkGo.<String>post(HttpManager.addCart)
+                                .tag(this)
+                                .cacheKey("cachePostKey")
+                                .cacheMode(CacheMode.DEFAULT)
+                                .params("token", AppUtil.getUserId(activity))
+                                .params("goods_id", goodsId)
+                                .params("goods_num", nums)
+                                .params("item_id", itemid)
+                                .execute(new DialogCallback<String>(activity) {
+                                    @Override
+                                    public void onSuccess(Response<String> response) {
+                                        Gson gson = new Gson();
+                                        CommonBean bean = gson.fromJson(response.body().toString(), CommonBean.class);
+                                        dismiss();
+                                        ToastUtils.showToast(activity, bean.getMsg());
+                                    }
+                                });
+
+                    }
                 }
-
-
                 break;
             case R.id.cancel: //取消
                 dismiss();

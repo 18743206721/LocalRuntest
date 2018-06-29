@@ -25,6 +25,7 @@
 
         <LinearLayout
             android:id="@+id/ll_cart"
+            android:visibility="visible"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
@@ -111,11 +112,10 @@
         </LinearLayout>
 
         <include
-            android:id="@+id/layout_cart_empty"
+            android:id="@+id/empty"
             layout="@layout/cart_empty"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:visibility="gone" />
+            android:layout_height="match_parent" />
     </FrameLayout>
 
 

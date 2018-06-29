@@ -22,7 +22,7 @@ import java.util.List;
  * Created by Administrator on 2017/6/3.
  */
 
-public class AddressManagementAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements View.OnClickListener {
+public class AddressManagementAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
     private List<AddressModel.DataBean> myContractList;
     Context mContext;
     private OnItem onItem;
@@ -60,7 +60,7 @@ public class AddressManagementAdapter extends RecyclerView.Adapter<RecyclerView.
     }
     //行点击
     public interface OnItemClickLitener {
-        void onItemClick(View view, int position);
+        void onItemClick(int position);
     }
 
 
@@ -96,7 +96,7 @@ public class AddressManagementAdapter extends RecyclerView.Adapter<RecyclerView.
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(mContext).inflate(R.layout.item_address_management, parent, false);
-        view.setOnClickListener(this);
+//        view.setOnClickListener(this);
         return new ListviewHolder(view);
     }
 
@@ -175,9 +175,15 @@ public class AddressManagementAdapter extends RecyclerView.Adapter<RecyclerView.
                     }
                 }
             });
+            mHolder.ll_parent.setTag(position);
             mHolder.ll_parent.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    if (mOnItemClickLitener != null) {
+                        //注意这里使用getTag方法获取position
+                        mOnItemClickLitener.onItemClick(Integer.parseInt(view.getTag().toString()));
+                    }
+
                 }
             });
         }
@@ -193,13 +199,13 @@ public class AddressManagementAdapter extends RecyclerView.Adapter<RecyclerView.
         return myContractList.size();
     }
 
-    @Override
-    public void onClick(View view) {
-        if (mOnItemClickLitener != null) {
-            //注意这里使用getTag方法获取position
-            mOnItemClickLitener.onItemClick(view, Integer.parseInt(view.getTag().toString()));
-        }
-    }
+//    @Override
+//    public void onClick(View view) {
+//        if (mOnItemClickLitener != null) {
+//            //注意这里使用getTag方法获取position
+//            mOnItemClickLitener.onItemClick(view, Integer.parseInt(view.getTag().toString()));
+//        }
+//    }
 
     /**
      * HomeList布局
@@ -223,10 +229,6 @@ public class AddressManagementAdapter extends RecyclerView.Adapter<RecyclerView.
         }
     }
 
-    //define interface
-    public static interface OnItemClickListener {
-        void onItemClick(View view, int position);
-    }
     //别的页面添加回显地址信息
     public interface OnItem{
         void onItem(int position, String user, String address);

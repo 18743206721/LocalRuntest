@@ -26,6 +26,8 @@ public class ShopCarAdapter extends RecyclerView.Adapter <CommonViewHolder> {
 
     //修改
     private OnItemEditListener mOnItemEditLitener;
+    private int pos;
+
     public void setmOnItemEditListener(OnItemEditListener mOnItemEditListener) {
         this.mOnItemEditLitener = mOnItemEditListener;
     }
@@ -100,6 +102,7 @@ public class ShopCarAdapter extends RecyclerView.Adapter <CommonViewHolder> {
             @Override
             public void onClick(View view) {
                 mOnItemDeletedLitener.OnItemDeleted(tv_shop_deleted,position);
+                pos = position;
             }
         });
         check_box.setOnClickListener(new View.OnClickListener() {
@@ -126,6 +129,7 @@ public class ShopCarAdapter extends RecyclerView.Adapter <CommonViewHolder> {
         holder.setText(R.id.tv_shop_guige,shoppingCartBean.getSpec_key_name());//规格
         ImageLoader.getInstance().initGlide(mContext).loadImage(
                 HttpManager.INDEX+shoppingCartBean.getGoods().getOriginal_img(),iv_adapter_list_pic);
+
     }
 
 
@@ -139,6 +143,11 @@ public class ShopCarAdapter extends RecyclerView.Adapter <CommonViewHolder> {
      */
     public void isShow(boolean flag) {
         isShow = flag;
+        notifyDataSetChanged();
+    }
+
+    public void setRemove(int pos) {
+        this.pos = pos;
         notifyDataSetChanged();
     }
 

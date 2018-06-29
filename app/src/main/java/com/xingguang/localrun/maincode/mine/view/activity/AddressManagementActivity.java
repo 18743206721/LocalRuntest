@@ -122,15 +122,16 @@ public class AddressManagementActivity extends ToolBarActivity implements Refres
 
         mAdapter.setOnItemClickLitener(new AddressManagementAdapter.OnItemClickLitener() {
             @Override
-            public void onItemClick(View view, int position) {
+            public void onItemClick(int position) {
                 if (buytype == 1) {
                     Intent intent = new Intent(AddressManagementActivity.this, BuyActivity.class);
                     intent.putExtra("id", myContractList.get(position).getAddress_id());
                     intent.putExtra("name", myContractList.get(position).getConsignee());
                     intent.putExtra("phone", myContractList.get(position).getMobile());
                     intent.putExtra("xiangxiads", myContractList.get(position).getAddress());
-                    intent.putExtra("address", myContractList.get(position).getProvince() + " " +
-                            myContractList.get(position).getCity() + " " + myContractList.get(position).getArea());
+                    intent.putExtra("provice", myContractList.get(position).getProvince());
+                    intent.putExtra("city",myContractList.get(position).getCity());
+                    intent.putExtra("area",myContractList.get(position).getArea());
                     setResult(50, intent);
                     AddressManagementActivity.this.finish();
                 }

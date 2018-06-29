@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -20,8 +21,10 @@ import com.xingguang.localrun.http.DialogCallback;
 import com.xingguang.localrun.http.HttpManager;
 import com.xingguang.localrun.maincode.home.model.CartBean;
 import com.xingguang.localrun.maincode.home.view.adapter.BuyCartAdapter;
+import com.xingguang.localrun.maincode.mine.model.JsonBean;
 import com.xingguang.localrun.maincode.mine.view.activity.AddressManagementActivity;
 import com.xingguang.localrun.utils.AppUtil;
+import com.xingguang.localrun.utils.GetJsonDataUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -65,7 +68,12 @@ public class BuyActivity extends ToolBarActivity {
     public static BuyActivity instance;
     //id,姓名，电话，详细地址
     private String addressId,nameStr,phoneStr,xiangxiads;
+    //省市区id
+    private String proviceid ,cityid,areaid;
+    //省市区name
+    private String provicename,cityname,areaname;
 
+    double totalPrice;
 
     @Override
     protected int getLayoutId() {
@@ -82,6 +90,8 @@ public class BuyActivity extends ToolBarActivity {
                 finish();
             }
         });
+
+        totalPrice = getIntent().getDoubleExtra("totalPrice",0.00);
 
         adapter = new BuyCartAdapter(BuyActivity.this, mDatas);
         LinearLayoutManager manager = new LinearLayoutManager(BuyActivity.this);
@@ -106,11 +116,15 @@ public class BuyActivity extends ToolBarActivity {
                     public void onSuccess(Response<String> response) {
                         Gson gson = new Gson();
                         CartBean bean = gson.fromJson(response.body().toString(), CartBean.class);
-                        ToastUtils.showToast(BuyActivity.this, bean.getMsg());
-                        mDatas.addAll(bean.getData().getCartlist());
-                        adapter.setList(mDatas);
-                        tvPeisong.setText("¥"+bean.getData().getShipping_price());//配送金额
-                        tvAllprice.setText("¥"+bean.getData().getTotal_amount());//总金额
+                        if (bean.getData()!=null){
+                            mDatas.addAll(bean.getData().getCartlist());
+                            adapter.setList(mDatas);
+                            tvPeisong.setText("¥"+bean.getData().getShipping_price());//配送金额
+                            tvAllprice.setText("¥"+bean.getData().getTotal_amount());//总金额
+                        }else {
+                            ToastUtils.showToast(BuyActivity.this, bean.getMsg());
+                        }
+
                     }
                 });
 
@@ -176,15 +190,69 @@ public class BuyActivity extends ToolBarActivity {
                 nameStr = data.getStringExtra("name");
                 phoneStr = data.getStringExtra("phone");
                 xiangxiads = data.getStringExtra("xiangxiads");
-
+                proviceid = data.getStringExtra("provice");
+                cityid = data.getStringExtra("city");
+                areaid = data.getStringExtra("area");
                 name.setText(nameStr);
                 phone.setText(phoneStr);
-                address.setText(""+xiangxiads);
-
-//                namePhone.setText("收货人：" + nameStr + "    " + phoneStr);
+                initJsonData(proviceid,cityid,areaid,xiangxiads);
             }
         }
     }
+
+    private void initJsonData(String proviceid, String cityid, String areaid,String xiangxiads) {//解析数据
+        /**
+         * 注意：assets 目录下的Json文件仅供参考，实际使用可自行替换文件
+         * 关键逻辑在于循环体
+         * */
+        String JsonData = new GetJsonDataUtil().getJson(BuyActivity.this, "region.json");//获取assets目录下的json文件数据
+        Log.e("jsonbeanqqqq", "initJsonData: " + JsonData);
+        ArrayList<JsonBean> jsonBean = AppUtil.parseData(JsonData);//用Gson 转成实体
+        /**
+         * 添加省份数据
+         */
+//        options1Items = jsonBean;
+//        Log.e("jsonbean", "initJsonData: " + jsonBean);
+        for (int i = 0; i < jsonBean.size(); i++) { //遍历省份
+            if (proviceid.equals(jsonBean.get(i).getId())){
+                provicename = jsonBean.get(i).getName();
+            }
+//            ArrayList<String> CityList = new ArrayList<>();//该省的城市列表（第二级）
+//            ArrayList<ArrayList<String>> Province_AreaList = new ArrayList<>();//该省的所有地区列表（第三极）
+            for (int c = 0; c < jsonBean.get(i).getChild().size(); c++) {  //遍历该省份的所有城市
+                if (cityid.equals(jsonBean.get(i).getChild().get(c).getId())){
+                    cityname = jsonBean.get(i).getChild().get(c).getName();
+                }
+//                String cityname = jsonBean.get(i).getChild().get(c).getName();
+//                CityList.add(cityname);//添加城市
+//                ArrayList<String> City_AreaList = new ArrayList<>();//该城市的所有地区列表
+                //如果无地区数据，建议添加空数据，防止数据为null 导致三个选项长度不匹配造成崩溃
+//                if (jsonBean.get(i).getChild().get(c).getChild().size() == 0) {
+//                    City_AreaList.add("");
+//                }
+                for (int d = 0; d < jsonBean.get(i).getChild().get(c).getChild().size(); d++) {
+                    if (areaid.equals(jsonBean.get(i).getChild().get(c).getChild().get(d).getId())){
+                        areaname = jsonBean.get(i).getChild().get(c).getChild().get(d).getName();
+                    }
+//                    City_AreaList.add(area);  //添加该城市所有的地区数据
+                }
+//                Province_AreaList.add(City_AreaList);
+            }
+//            /**
+//             * 添加城市地区
+//             * */
+//            options2Items.add(CityList);
+
+//            /**
+//             *添加地区数据
+//             * */
+//            options3Items.add(Province_AreaList);
+
+            address.setText(provicename+cityname+areaname+" "+xiangxiads);
+
+        }
+    }
+
 
 
 }

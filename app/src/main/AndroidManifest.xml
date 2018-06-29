@@ -173,7 +173,10 @@
         <activity
             android:name=".maincode.home.view.activity.DaiBanDetailsActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".maincode.home.view.activity.BuyActivity"></activity>
+        <activity
+            android:name=".maincode.home.view.activity.BuyActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden" />
     </application>
 
 </manifest>
