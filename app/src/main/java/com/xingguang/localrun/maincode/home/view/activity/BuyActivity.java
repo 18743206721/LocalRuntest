@@ -1,14 +1,19 @@
 package com.xingguang.localrun.maincode.home.view.activity;
 
 import android.content.Intent;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.lzy.okgo.OkGo;
@@ -23,8 +28,10 @@ import com.xingguang.localrun.maincode.home.model.CartBean;
 import com.xingguang.localrun.maincode.home.view.adapter.BuyCartAdapter;
 import com.xingguang.localrun.maincode.mine.model.JsonBean;
 import com.xingguang.localrun.maincode.mine.view.activity.AddressManagementActivity;
+import com.xingguang.localrun.maincode.shop.model.PayResult;
 import com.xingguang.localrun.utils.AppUtil;
 import com.xingguang.localrun.utils.GetJsonDataUtil;
+import com.xingguang.localrun.view.PayPopWindow;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,6 +44,8 @@ import butterknife.OnClick;
  */
 public class BuyActivity extends ToolBarActivity {
 
+    @BindView(R.id.llbuy)
+    RelativeLayout llbuy;
     @BindView(R.id.name)
     TextView name;
     @BindView(R.id.phone)
@@ -53,10 +62,6 @@ public class BuyActivity extends ToolBarActivity {
     TextView tvOnline;
     @BindView(R.id.ed_content)
     EditText edContent;
-    @BindView(R.id.tv1)
-    TextView tv1;
-    @BindView(R.id.tv_allprice)
-    TextView tvAllprice;
     @BindView(R.id.tv_hejiprice)
     TextView tvHejiprice;
     @BindView(R.id.tv_order)
@@ -73,7 +78,32 @@ public class BuyActivity extends ToolBarActivity {
     //省市区name
     private String provicename,cityname,areaname;
 
-    double totalPrice;
+    private String adsId; //支付时用到的地址id
+    private double allprice; //总金额
+
+
+    public Handler handler = new Handler() {
+
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            switch (msg.what) {
+                case 1:
+                    PayResult payResult = new PayResult((String) msg.obj);
+                    String resultInfo = payResult.getResult();// 同步返回需要验证的信息
+                    String resultStatus = payResult.getResultStatus();
+                    Log.i("Pay", "Pay:" + resultInfo);
+                    // 判断resultStatus 为9000则代表支付成功
+                    if (TextUtils.equals(resultStatus, "9000")) {
+                        Toast.makeText(BuyActivity.this, "支付成功", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(BuyActivity.this, "支付成功", Toast.LENGTH_SHORT).show();
+                    }
+                    break;
+            }
+
+        }
+    };
 
     @Override
     protected int getLayoutId() {
@@ -90,8 +120,6 @@ public class BuyActivity extends ToolBarActivity {
                 finish();
             }
         });
-
-        totalPrice = getIntent().getDoubleExtra("totalPrice",0.00);
 
         adapter = new BuyCartAdapter(BuyActivity.this, mDatas);
         LinearLayoutManager manager = new LinearLayoutManager(BuyActivity.this);
@@ -117,10 +145,19 @@ public class BuyActivity extends ToolBarActivity {
                         Gson gson = new Gson();
                         CartBean bean = gson.fromJson(response.body().toString(), CartBean.class);
                         if (bean.getData()!=null){
+                            mDatas.clear();
                             mDatas.addAll(bean.getData().getCartlist());
                             adapter.setList(mDatas);
                             tvPeisong.setText("¥"+bean.getData().getShipping_price());//配送金额
-                            tvAllprice.setText("¥"+bean.getData().getTotal_amount());//总金额
+                            allprice = bean.getData().getTotal_amount();
+                            tvHejiprice.setText("¥"+allprice);//总金额
+
+                            //地址选择
+                            adsId = bean.getData().getAddress().getAddress_id();
+                            name.setText(bean.getData().getAddress().getConsignee());
+                            phone.setText(bean.getData().getAddress().getMobile());
+                            address.setText(bean.getData().getAddress().getAddress2());
+
                         }else {
                             ToastUtils.showToast(BuyActivity.this, bean.getMsg());
                         }
@@ -145,57 +182,27 @@ public class BuyActivity extends ToolBarActivity {
                 startActivityForResult(intent, 50);
                 break;
             case R.id.tv_order://立即购买
-
+                if (adsId.equals("")){
+                    ToastUtils.showToast(BuyActivity.this,"请选择收货地址!");
+                }else {
+                    new PayPopWindow(BuyActivity.this, llbuy,allprice,adsId,edContent.getText().toString());
+                }
                 break;
         }
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        //支付页面返回处理
-//        if (requestCode == REQUEST_CODE_PAYMENT) {
-//            if (resultCode == NowPayActivity.RESULT_OK) {
-//                String result = data.getExtras().getString("pay_result");
-//                if (result.equals("success")) {
-//                    Toast.makeText(PurchaseDetailPayActivity.this, "交易成功",
-//                            Toast.LENGTH_SHORT).show();
-//                    Intent intent = new Intent(PurchaseDetailPayActivity.this, PurchasePaySuccessActivity.class);
-//                    intent.putExtra("jifenNum", jifenNum);
-//                    startActivity(intent);
-//                    finish();
-//                } else if (result.equals("fail")) {
-//                    Toast.makeText(PurchaseDetailPayActivity.this, "交易失败", Toast.LENGTH_SHORT)
-//                            .show();
-//                } else if (result.equals("cancel")) {
-//                    Toast.makeText(PurchaseDetailPayActivity.this, "用户取消交易",
-//                            Toast.LENGTH_SHORT).show();
-//                } else {
-//                    Toast.makeText(PurchaseDetailPayActivity.this, "支付插件没有安装",
-//                            Toast.LENGTH_SHORT).show();
-//                }
-//                // 处理返回值
-//                // "success" - 支付成功
-//                // "fail"    - 支付失败
-//                // "cancel"  - 取消支付
-//                // "invalid" - 支付插件未安装（一般是微信客户端未安装的情况）
-//                String errorMsg = data.getExtras().getString("error_msg"); // 错误信息
-//                String extraMsg = data.getExtras().getString("extra_msg"); // 错误信息
-////                showMsg(result, errorMsg, extraMsg);
-//            }
-//        }
         if (requestCode == 50) {
             if (resultCode == 50) {
                 addressId = data.getStringExtra("id");
-//                address.setText("收货地址：" + data.getStringExtra("address"));
                 nameStr = data.getStringExtra("name");
                 phoneStr = data.getStringExtra("phone");
                 xiangxiads = data.getStringExtra("xiangxiads");
                 proviceid = data.getStringExtra("provice");
                 cityid = data.getStringExtra("city");
                 areaid = data.getStringExtra("area");
-                name.setText(nameStr);
-                phone.setText(phoneStr);
-                initJsonData(proviceid,cityid,areaid,xiangxiads);
+                load();
             }
         }
     }
@@ -224,6 +231,9 @@ public class BuyActivity extends ToolBarActivity {
             }
             address.setText(provicename+cityname+areaname+" "+xiangxiads);
         }
+
+
+
     }
 
 

@@ -24,9 +24,6 @@ import com.google.gson.Gson;
 import com.lzy.okgo.OkGo;
 import com.lzy.okgo.cache.CacheMode;
 import com.lzy.okgo.model.Response;
-import com.tencent.mm.opensdk.modelpay.PayReq;
-import com.tencent.mm.opensdk.openapi.IWXAPI;
-import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 import com.umeng.socialize.ShareAction;
 import com.umeng.socialize.UMShareListener;
 import com.umeng.socialize.bean.SHARE_MEDIA;
@@ -148,9 +145,7 @@ public class ProductdetailsActivity extends BaseActivity implements SharePopUpWi
     private UMImage image;
     private UMWeb web;
 
-    //微信支付
-    private IWXAPI iwapi;
-    PayReq request = new PayReq();
+
     private int collect_id; //取消收藏id
     private List<String> networkImages = new ArrayList<>(); //轮播图集合
     String original_img = ""; //规格里的图片
@@ -166,8 +161,7 @@ public class ProductdetailsActivity extends BaseActivity implements SharePopUpWi
     protected void initView() {
         goods_id = getIntent().getStringExtra("goods_id");
         instance = this;
-        iwapi = WXAPIFactory.createWXAPI(ProductdetailsActivity.this, null);
-        iwapi.registerApp("xxx");
+
 
         initAdapter();
         loadDetails();
@@ -360,9 +354,6 @@ public class ProductdetailsActivity extends BaseActivity implements SharePopUpWi
                     new NowOrderPopUpWindow(ProductdetailsActivity.this, llParent, original_img, goods_id, storgeNum, 1);
 
                 }
-
-//                request.appId = "";
-//                iwapi.sendReq(request);
 
                 break;
             case R.id.ll_guige://选择规格

@@ -60,7 +60,7 @@ public class AddressManagementAdapter extends RecyclerView.Adapter<RecyclerView.
     }
     //行点击
     public interface OnItemClickLitener {
-        void onItemClick(int position);
+        void onItemClick(ImageView imageView, String isdefult,int position);
     }
 
 
@@ -181,7 +181,7 @@ public class AddressManagementAdapter extends RecyclerView.Adapter<RecyclerView.
                 public void onClick(View view) {
                     if (mOnItemClickLitener != null) {
                         //注意这里使用getTag方法获取position
-                        mOnItemClickLitener.onItemClick(Integer.parseInt(view.getTag().toString()));
+                        mOnItemClickLitener.onItemClick(mHolder.default_address_img,myContractList.get(position).getIs_default(),position);
                     }
 
                 }

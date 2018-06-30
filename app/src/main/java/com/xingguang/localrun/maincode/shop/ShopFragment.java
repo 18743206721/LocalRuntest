@@ -483,8 +483,27 @@ public class ShopFragment extends ToolBarFragment implements ShopCarAdapter.Chec
                                     }
                                 }
                                 tvTotalPrice.setText("" + jianjieBean.getData().getCartPriceInfo().getTotal_fee());
-                            }
+                            } else if (i==1){
 
+                                for (int j = 0; j < shoplist.size(); j++) {
+                                    if (shoplist.get(j).getSelected().equals("1")){
+                                        shoplist.get(j).setChoose(true);
+                                        if (isAllCheck())
+                                            allChekbox.setChecked(true);
+                                        else
+                                            allChekbox.setChecked(false);
+
+
+                                        if (shoplist.get(j).isChoose()) {
+                                            checkid.add(shoplist.get(j).getId());
+                                        }
+
+                                        shopCarAdapter.notifyDataSetChanged();
+                                    }
+                                }
+
+                                tvTotalPrice.setText("" + jianjieBean.getData().getCartPriceInfo().getTotal_fee());
+                            }
                             shopCarAdapter.setList(jianjieBean.getData().getCartList());
                         } else {
                             ToastUtils.showToast(getActivity(), jianjieBean.getMsg());
@@ -567,8 +586,6 @@ public class ShopFragment extends ToolBarFragment implements ShopCarAdapter.Chec
 //        shopCarAdapter.notifyDataSetChanged();
 //        statistics();
 
-        checkpos = position;
-        isFlag = isChecked;
         shoplist.get(position).setChoose(isChecked);
         if (isAllCheck())
             allChekbox.setChecked(true);
@@ -580,9 +597,11 @@ public class ShopFragment extends ToolBarFragment implements ShopCarAdapter.Chec
             if (shoplist.get(position).isChoose()) {
                 checkid.add(shoplist.get(position).getId());
             } else {
-                checkid.remove(shoplist.get(checkpos).getId());
+                checkid.remove(shoplist.get(position).getId());
             }
-        } else {
+        }
+
+        else {
             checkid.add(shoplist.get(position).getId());
         }
 
@@ -657,21 +676,24 @@ public class ShopFragment extends ToolBarFragment implements ShopCarAdapter.Chec
      * 结算订单、支付
      */
     private void lementOnder() {
+        double price = 0.00;
         //选中的需要提交的商品清单
         for (GoodInfo.DataBean.CartListBean bean : shoplist) {
             boolean choosed = bean.isChoose();
             if (choosed) {
                 String shoppingName = bean.getGoods_name();
                 String count = bean.getGoods_num();
-                double price = Double.parseDouble(bean.getGoods_price());
+                 price = bean.getTotal_fee();
                 String id = bean.getId();
                 Log.d("shopfragment", id + "----id---" + shoppingName + "---" + count + "---" + price);
             }
         }
-        //跳转到订单结算界面
-        startActivity(new Intent(getActivity(), BuyActivity.class)
-                .putExtra("totalPrice", tvTotalPrice.getText().toString())
-        );
+        if (price == 0.00) {
+            ToastUtils.showToast(getActivity(),"请选择要购买的商品!");
+        }else {
+            //跳转到订单结算界面
+            startActivity(new Intent(getActivity(), BuyActivity.class));
+        }
 
     }
 

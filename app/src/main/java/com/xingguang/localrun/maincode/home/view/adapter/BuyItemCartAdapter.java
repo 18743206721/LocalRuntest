@@ -63,9 +63,13 @@ public class BuyItemCartAdapter extends RecyclerView.Adapter <CommonViewHolder> 
         ImageLoader.getInstance().initGlide(mContext).loadImage(
                 HttpManager.INDEX+list.get(position).getOriginal_img(),imageView);
         holder.setText(R.id.tv_name,list.get(position).getGoods_name());//商品名字
-        holder.setText(R.id.tv_shop_guige,list.get(position).getGoods_name());//商品规格
-        holder.setText(R.id.tv_price,list.get(position).getGoods_price());//商品价格
-        holder.setText(R.id.tv_count,list.get(position).getGoods_num());//商品数量
+        if (list.get(position).getSpec_key_name().equals("")){
+            holder.setText(R.id.tv_shop_guige,"");//商品规格
+        }else {
+            holder.setText(R.id.tv_shop_guige,list.get(position).getSpec_key_name());//商品规格
+        }
+        holder.setText(R.id.tv_price,"¥"+list.get(position).getGoods_price());//商品价格
+        holder.setText(R.id.tv_count,"x "+list.get(position).getGoods_num());//商品数量
     }
 
     @Override

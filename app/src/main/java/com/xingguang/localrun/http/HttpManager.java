@@ -36,6 +36,9 @@ public class HttpManager {
     //本地测试
 //    public static final String BASE_URL = "http://192.168.0.230/index.php/";
 
+    public static final String WX_APP_ID = "wxbe852bea37d724f9"; //微信支付的appid
+
+
 
     //登录接口
     public static final String Login= BASE_URL+"Public/login";
@@ -171,6 +174,9 @@ public class HttpManager {
 
     //修改购物车商品规格
     public static final String CartupdateCart = BASE_URL+"Cart/updateCart";
+
+    //购物车结算
+    public static final String cart4 = BASE_URL+"Cart/cart4";
 
 
 
@@ -332,6 +338,7 @@ public class HttpManager {
 
         return body;
     }
+
 
     //请求验证码
 //    public Observable getsendsms(String mobile, String type) {
