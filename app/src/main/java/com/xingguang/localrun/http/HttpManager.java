@@ -175,8 +175,16 @@ public class HttpManager {
     //修改购物车商品规格
     public static final String CartupdateCart = BASE_URL+"Cart/updateCart";
 
-    //购物车结算
+    //提交订单
     public static final String cart4 = BASE_URL+"Cart/cart4";
+
+    //订单列表
+    public static final String Userorder = BASE_URL+"User/order";
+
+    //删除订单
+    public static final String delOrder = BASE_URL+"Order/delOrder";
+    //取消订单
+    public static final String cancelOrder = BASE_URL+"Order/cancelOrder";
 
 
 

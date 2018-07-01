@@ -11,16 +11,16 @@
         android:layout_height="match_parent"
         android:visibility="visible">
 
-        <!--<com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout-->
-            <!--android:id="@+id/tw_myplay_apply"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="match_parent">-->
+        <com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout
+            android:id="@+id/tw_refresh"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/rv_myplay_apply"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
-        <!--</com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout>-->
+        </com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout>
     </RelativeLayout>
 
     <ImageView

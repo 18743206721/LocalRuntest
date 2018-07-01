@@ -1,6 +1,7 @@
 package com.xingguang.localrun.maincode.mine.view.adapter;
 
 import android.content.Context;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,6 +9,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.xingguang.localrun.R;
+import com.xingguang.localrun.maincode.mine.model.OrderBean;
 import com.xingguang.localrun.view.CommonViewHolder;
 
 import java.util.List;
@@ -21,7 +23,7 @@ import java.util.List;
 public class MyAllOrderAdapter extends RecyclerView.Adapter<CommonViewHolder> {
 
     private Context mContext;
-    private List<String> list;
+    private List<OrderBean.DataBean.ListBean> list;
     private String type;
     private OnOrderCancel mOnOrdercancel;
     private OnOrderDeleted mOnOrderdeleted;
@@ -65,13 +67,13 @@ public class MyAllOrderAdapter extends RecyclerView.Adapter<CommonViewHolder> {
         this.mOnOrdercomment = mOnOrdercomment;
     }
 
-    public MyAllOrderAdapter(Context mContext, List<String> list, String type) {
+    public MyAllOrderAdapter(Context mContext, List<OrderBean.DataBean.ListBean> list, String type) {
         this.mContext = mContext;
         this.list = list;
         this.type = type;
     }
 
-    public void setList(List<String> list) {
+    public void setList(List<OrderBean.DataBean.ListBean> list) {
         this.list = list;
         notifyDataSetChanged();
     }
@@ -92,6 +94,9 @@ public class MyAllOrderAdapter extends RecyclerView.Adapter<CommonViewHolder> {
         final TextView itemtv_order_twopay = holder.getItemView().findViewById(R.id.itemtv_order_twopay);
         final TextView itemtv_pay_awaypay = holder.getItemView().findViewById(R.id.itemtv_pay_awaypay);
         final TextView itemtv_comment = holder.getItemView().findViewById(R.id.itemtv_comment);
+        RecyclerView item_recyc = holder.getItemView().findViewById(R.id.item_recyc);
+
+
 
         //设置分割线
         View vline = holder.getItemView().findViewById(R.id.item_myorder_view);
@@ -133,6 +138,7 @@ public class MyAllOrderAdapter extends RecyclerView.Adapter<CommonViewHolder> {
                 }
             });
         }
+
         if (mOnOrdercomment != null){//评论的点击
             itemtv_comment.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -141,6 +147,11 @@ public class MyAllOrderAdapter extends RecyclerView.Adapter<CommonViewHolder> {
                 }
             });
         }
+
+        MyAllOrderItemAdapter  itemAdapter = new MyAllOrderItemAdapter(mContext,list.get(position).getGoods());
+        LinearLayoutManager manager = new LinearLayoutManager(mContext);
+        item_recyc.setLayoutManager(manager);
+        item_recyc.setAdapter(itemAdapter);
 
         if (type.equals("0")) {//全部
 //            if (list.get(position).getType().equals("1")){
@@ -180,6 +191,10 @@ public class MyAllOrderAdapter extends RecyclerView.Adapter<CommonViewHolder> {
 
         }
 
+        holder.setText(R.id.item_tv_shop,list.get(position).getShop_name());//店名
+        holder.setText(R.id.item_tv_daigoupr,"¥"+list.get(position).getShipping_price());//代购费
+        holder.setText(R.id.item_tvsum_money,"¥"+list.get(position).getOrder_amount());//总计
+
 //        RoundImageView myplay_iv_header = holder.getItemView().findViewById(R.id.myplay_iv_header);
 //        ImageLoader.loadCircleImage(mContext,list.get(position).getAliianceImg(),myplay_iv_header);// 头像
 //        holder.setText(R.id.itme_myplay_title,list.get(position).getAllianceName());//联盟名称
@@ -204,7 +219,7 @@ public class MyAllOrderAdapter extends RecyclerView.Adapter<CommonViewHolder> {
 
     @Override
     public int getItemCount() {
-        return 5;
+        return list.size();
     }
     
 }

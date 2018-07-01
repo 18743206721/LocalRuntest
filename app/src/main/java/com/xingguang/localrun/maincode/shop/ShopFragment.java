@@ -65,10 +65,8 @@ public class ShopFragment extends ToolBarFragment implements ShopCarAdapter.Chec
     ShopCarAdapter shopCarAdapter;
     private double totalPrice = 0.00;// 购买的商品总价
     private int totalCount = 0;// 购买的商品总数量
-
     ArrayList<GoodInfo.DataBean.CartListBean> shoplist = new ArrayList<>();
     private boolean flag = false;
-
     private int currentPositon = 0;
     private TextPopUpWindow popde;
     private View.OnClickListener node;
@@ -76,22 +74,15 @@ public class ShopFragment extends ToolBarFragment implements ShopCarAdapter.Chec
     private ArrayList<GoodInfo.DataBean.CartListBean> lists = new ArrayList<>();
     //购买件数
     private int nums = 1;
-    //规格ID   类型  提醒
-    private String id, specificationId, type;
     TextView tvGuige;//规格
-
     String itemid = "";
     String goodsid = "";
-
     List<String> checkid = new ArrayList<>(); //checkid
     //商品规格列表
     private ArrayList<SpecBean.DataBean> specBeanList = new ArrayList<>();
     String original_img = ""; //规格里的图片
     private String storgeNum = "";//商品详情里的规格库存
     private String keyname = "";//商品规格
-
-    private boolean isFlag;
-    private int checkpos = 0; //checkbox点击的position
     private String a = ""; //选中的cartlistid
 
     @Override
@@ -103,7 +94,6 @@ public class ShopFragment extends ToolBarFragment implements ShopCarAdapter.Chec
     protected void initView() {
         setToolBarTitle("购物车");
         setSubTitle("编辑");
-
         getSubTitle().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -115,7 +105,6 @@ public class ShopFragment extends ToolBarFragment implements ShopCarAdapter.Chec
                     setSubTitle("编辑");
                     shopCarAdapter.isShow(true);
                 }
-
             }
         });
 
@@ -128,30 +117,12 @@ public class ShopFragment extends ToolBarFragment implements ShopCarAdapter.Chec
         initListener();
     }
 
-//        OkGo.<String>post(HttpManager.GoodsDetail)
-//                .tag(this)
-//                .cacheKey("cachePostKey")
-//                .cacheMode(CacheMode.DEFAULT)
-//                .params("token", AppUtil.getUserId(getActivity()))
-//                .params("goods_id", shoplist.get(position).getGoods_id())
-//                .execute(new DialogCallback<String>(getActivity()) {
-//                    @Override
-//                    public void onSuccess(Response<String> response) {
-//                        Gson gson = new Gson();
-//                        GoodsDetailsBean bean = gson.fromJson(response.body().toString(), GoodsDetailsBean.class);
-//                        if (bean.getData() != null) {
-//
-//                        }
-//                    }
-//                });
-
     private void initListener() {
         shopCarAdapter.setmOnItemClickListener(new ShopCarAdapter.OnItemClickListener() {
             @Override
             public void OnItemClick(View view, int position) {
                 //跳转到商品详情页面
                 ToastUtils.showToast(getActivity(), "跳转到商品详情" + position);
-
             }
         });
 
@@ -342,6 +313,10 @@ public class ShopFragment extends ToolBarFragment implements ShopCarAdapter.Chec
                                             }
                                         }
                                         shopCarAdapter.setList(shoplist);
+
+                                        //修改购物车规格后，刷新总价格
+                                        load(1);
+
                                     }
                                 });
                     }
@@ -368,8 +343,10 @@ public class ShopFragment extends ToolBarFragment implements ShopCarAdapter.Chec
                                             shoplist.get(i).setGoods_num(nums + "");
                                         }
                                     }
-
                                     shopCarAdapter.setList(shoplist);
+                                    //修改购物车规格后，刷新总价格
+                                    load(1);
+
                                 }
                             });
                 }
@@ -384,17 +361,6 @@ public class ShopFragment extends ToolBarFragment implements ShopCarAdapter.Chec
     public void onResume() {
         super.onResume();
         load(1);
-
-//        for (int i = 0; i < checkid.size(); i++) {
-//            shoplist.get(i).setChoose(true);
-//            if (isAllCheck())
-//                allChekbox.setChecked(true);
-//            else
-//                allChekbox.setChecked(false);
-//        }
-//        shopCarAdapter.notifyDataSetChanged();
-//        statistics();
-
     }
 
     /**
@@ -485,6 +451,10 @@ public class ShopFragment extends ToolBarFragment implements ShopCarAdapter.Chec
                                 tvTotalPrice.setText("" + jianjieBean.getData().getCartPriceInfo().getTotal_fee());
                             } else if (i==1){
 
+                                if (checkid.size()!=0) {
+                                    checkid.clear();
+                                }
+
                                 for (int j = 0; j < shoplist.size(); j++) {
                                     if (shoplist.get(j).getSelected().equals("1")){
                                         shoplist.get(j).setChoose(true);
@@ -492,7 +462,6 @@ public class ShopFragment extends ToolBarFragment implements ShopCarAdapter.Chec
                                             allChekbox.setChecked(true);
                                         else
                                             allChekbox.setChecked(false);
-
 
                                         if (shoplist.get(j).isChoose()) {
                                             checkid.add(shoplist.get(j).getId());
@@ -513,8 +482,7 @@ public class ShopFragment extends ToolBarFragment implements ShopCarAdapter.Chec
     }
 
     @Override
-    protected void lazyLoad() {
-    }
+    protected void lazyLoad() {}
 
     @OnClick({R.id.tv_go_to_pay, R.id.all_chekbox})
     public void onViewClicked(View view) {
@@ -522,13 +490,15 @@ public class ShopFragment extends ToolBarFragment implements ShopCarAdapter.Chec
             case R.id.all_chekbox://全选
                 if (shoplist.size() != 0) {
                     if (allChekbox.isChecked()) {
+                        if (checkid.size()!=0) {
+                            checkid.clear();
+                        }
                         for (int i = 0; i < shoplist.size(); i++) {
                             shoplist.get(i).setChoose(true);
                             checkid.add(shoplist.get(i).getId());
                         }
                         shopCarAdapter.notifyDataSetChanged();
                     } else {
-//                        loadcheck(position, isChecked,checkid);
                         for (int i = 0; i < shoplist.size(); i++) {
                             shoplist.get(i).setChoose(false);
                             checkid.remove(shoplist.get(i).getId());
@@ -561,7 +531,6 @@ public class ShopFragment extends ToolBarFragment implements ShopCarAdapter.Chec
                                 }
                             });
                 }
-//                statistics();
                 break;
             case R.id.tv_go_to_pay: //结算
                 lementOnder();
