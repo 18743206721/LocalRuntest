@@ -183,9 +183,12 @@ public class HttpManager {
 
     //删除订单
     public static final String delOrder = BASE_URL+"Order/delOrder";
+
     //取消订单
     public static final String cancelOrder = BASE_URL+"Order/cancelOrder";
 
+    //确认收货
+    public static final String trueOrder = BASE_URL+"User/confirmOrder";
 
 
 

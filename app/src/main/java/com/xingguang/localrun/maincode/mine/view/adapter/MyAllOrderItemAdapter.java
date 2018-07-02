@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.xingguang.localrun.R;
 import com.xingguang.localrun.http.HttpManager;
@@ -24,6 +25,8 @@ public class MyAllOrderItemAdapter extends RecyclerView.Adapter <CommonViewHolde
     private Context mContext;
     private List<OrderBean.DataBean.ListBean.GoodsBean> list;
     private OnItemClickLitener mOnItemClickLitener;
+    private OnOrderComment mOnOrdercomment;
+    private String type;
 
     public void setList(List<OrderBean.DataBean.ListBean.GoodsBean> list) {
         this.list = list;
@@ -37,10 +40,15 @@ public class MyAllOrderItemAdapter extends RecyclerView.Adapter <CommonViewHolde
     public void setOnItemClickLitener(OnItemClickLitener mOnItemClickLitener) {
         this.mOnItemClickLitener = mOnItemClickLitener;
     }
+    public void setmOnOrdercomment(OnOrderComment mOnOrdercomment) {
+        this.mOnOrdercomment = mOnOrdercomment;
+    }
 
-    public MyAllOrderItemAdapter(Context mContext, List<OrderBean.DataBean.ListBean.GoodsBean> list) {
+
+    public MyAllOrderItemAdapter(Context mContext, List<OrderBean.DataBean.ListBean.GoodsBean> list, String type) {
         this.mContext = mContext;
         this.list = list;
+        this.type = type;
     }
 
     @Override
@@ -51,6 +59,9 @@ public class MyAllOrderItemAdapter extends RecyclerView.Adapter <CommonViewHolde
     }
     @Override
     public void onBindViewHolder(final CommonViewHolder holder, final int position) {
+        //评价
+        final TextView itemtv_comment = holder.getItemView().findViewById(R.id.itemtv_comment);
+
         if (mOnItemClickLitener != null) {
             holder.getItemView().setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -59,6 +70,22 @@ public class MyAllOrderItemAdapter extends RecyclerView.Adapter <CommonViewHolde
                 }
             });
         }
+
+        if (mOnOrdercomment != null){//评论的点击
+            itemtv_comment.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    mOnOrdercomment.OnOrderComment(itemtv_comment,position);
+                }
+            });
+        }
+
+        if (type.equals("3")){
+            itemtv_comment.setVisibility(View.VISIBLE);//评价
+        }else {
+            itemtv_comment.setVisibility(View.GONE);//评价
+        }
+
         ImageView imageView = holder.getItemView().findViewById(R.id.item_ivmr_orderimg);
         ImageLoader.getInstance().initGlide(mContext).loadImage(
                 HttpManager.INDEX+list.get(position).getOriginal_img(),imageView);
@@ -76,5 +103,9 @@ public class MyAllOrderItemAdapter extends RecyclerView.Adapter <CommonViewHolde
         return list.size();
     }
 
+
+    public interface OnOrderComment {
+        void OnOrderComment(TextView item_comment, int position);
+    }
 
 }

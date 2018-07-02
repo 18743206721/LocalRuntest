@@ -24,7 +24,6 @@ import com.xingguang.localrun.http.CommonBean;
 import com.xingguang.localrun.http.DialogCallback;
 import com.xingguang.localrun.http.HttpManager;
 import com.xingguang.localrun.maincode.mine.model.OrderBean;
-import com.xingguang.localrun.maincode.mine.view.activity.PingLunActivity;
 import com.xingguang.localrun.maincode.mine.view.adapter.MyAllOrderAdapter;
 import com.xingguang.localrun.popwindow.TextPopUpWindow;
 import com.xingguang.localrun.refresh.RefreshUtil;
@@ -136,26 +135,47 @@ public class MyAllOrderFragment extends BaseFragment implements RefreshUtil.OnRe
         //支付
         adapter.setmOnOrderpay(new MyAllOrderAdapter.OnOrderPay() {
             @Override
-            public void OnOrderPay(TextView item_orderpay, int position) {
+            public void OnOrderpay(TextView item_orderpay, int position) {
                 ToastUtils.showToast(getActivity(), "支付");
             }
         });
-        //二次支付
-        adapter.setmOnOrdertwopay(new MyAllOrderAdapter.OnOrderTwoPay() {
+
+        //确认收货
+        adapter.setmOnOrdertrue(new MyAllOrderAdapter.OnOrderTrue() {
             @Override
-            public void OnOrderTwoPay(TextView item_ordertwopay, int position) {
-                ToastUtils.showToast(getActivity(), "二次支付");
+            public void OnOrdertrue(TextView item_ordertrue, int position) {
+                loadtrue(position);
             }
         });
-        //评论
-        adapter.setmOnOrdercomment(new MyAllOrderAdapter.OnOrderComment() {
-            @Override
-            public void OnOrderComment(TextView item_comment, int position) {
-                startActivity(new Intent(getActivity(), PingLunActivity.class));
-            }
-        });
+    }
 
-
+    /**
+     * 确认收货
+     */
+    private void loadtrue(final int position) {
+        OkGo.<String>post(HttpManager.trueOrder)
+                .tag(this)
+                .cacheKey("cachePostKey")
+                .cacheMode(CacheMode.DEFAULT)
+                .params("token", AppUtil.getUserId(getActivity()))
+                .params("order_id", mDatas.get(position).getOrder_id())
+                .execute(new DialogCallback<String>(getActivity()) {
+                    @Override
+                    public void onSuccess(Response<String> response) {
+                        Gson gson = new Gson();
+                        CommonBean bean = gson.fromJson(response.body().toString(), CommonBean.class);
+                        mDatas.remove(position);
+                        adapter.notifyDataSetChanged();
+                        ToastUtils.showToast(getActivity(), bean.getMsg());
+                        if (mDatas.size() == 0) {
+                            myDecoFgApply.setVisibility(View.GONE);
+                            empty.setVisibility(View.VISIBLE);
+                        } else {
+                            empty.setVisibility(View.GONE);
+                            myDecoFgApply.setVisibility(View.VISIBLE);
+                        }
+                    }
+                });
     }
 
     //删除订单的接口
@@ -273,7 +293,7 @@ public class MyAllOrderFragment extends BaseFragment implements RefreshUtil.OnRe
     @Override
     public void onRefresh() {
         isRefresh = true;
-        load(1);
+        load(page);
     }
 
     @Override

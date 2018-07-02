@@ -95,7 +95,21 @@
                     android:textColor="@color/textBlack"
                     android:textSize="14sp" />
             </LinearLayout>
+
         </LinearLayout>
+
+        <TextView
+            android:id="@+id/itemtv_comment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:background="@drawable/btn_order_red"
+            android:layout_gravity="center_vertical"
+            android:text=" 评价 "
+            android:textColor="@color/white"
+            android:textSize="13sp"
+            android:visibility="gone" />
+
     </LinearLayout>
 
 

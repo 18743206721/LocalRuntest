@@ -131,18 +131,6 @@
         android:visibility="gone">
 
         <TextView
-            android:id="@+id/itemtv_order_twopay"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="15dp"
-            android:background="@drawable/btn_gray_bg"
-            android:gravity="center_vertical"
-            android:text="再次购买"
-            android:textColor="@color/textBlack"
-            android:textSize="14sp"
-            android:visibility="gone" />
-
-        <TextView
             android:id="@+id/itemtv_order_cancel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -178,16 +166,17 @@
             android:visibility="gone" />
 
         <TextView
-            android:id="@+id/itemtv_comment"
+            android:id="@+id/itemtv_order_true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="15dp"
-            android:background="@drawable/btn_order_red"
+            android:background="@drawable/btn_gray_bg"
             android:gravity="center_vertical"
-            android:text="评价"
-            android:textColor="@color/white"
+            android:text="确认订单"
+            android:textColor="@color/textBlack"
             android:textSize="14sp"
             android:visibility="gone" />
+
     </LinearLayout>
 
     <View
