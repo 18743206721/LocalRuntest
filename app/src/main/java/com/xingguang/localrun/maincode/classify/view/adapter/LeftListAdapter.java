@@ -70,6 +70,11 @@ public class LeftListAdapter extends BaseAdapter {
         notifyDataSetChanged();
     }
 
+    public void setFLagArray(boolean[] FLagArray) {
+        this.flagArray = FLagArray;
+        notifyDataSetChanged();
+    }
+
     private class Holder {
         private TextView left_list_item;
 

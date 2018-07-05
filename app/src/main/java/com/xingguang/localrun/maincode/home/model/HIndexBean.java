@@ -13,7 +13,7 @@ public class HIndexBean {
     /**
      * status : 1
      * msg : SUCCESS
-     * data : {"banner1":[{"id":"3","type":"1","title":"轮播3","image":"/Uploads/Picture/2018-05-30/5b0e5de3a4cb8.png","data_type":"1","data_id":"1","sort":"50","create_time":"2018-05-11"},{"id":"2","type":"1","title":"轮播2","image":"/Uploads/Picture/2018-05-30/5b0e5de3a4cb8.png","data_type":"2","data_id":"1","sort":"50","create_time":"2018-05-11"},{"id":"1","type":"1","title":"轮播1","image":"/Uploads/Picture/2018-05-30/5b0e5de3a4cb8.png","data_type":"2","data_id":"2","sort":"50","create_time":"2018-05-11"}],"banner2":[{"id":"4","type":"2","title":"背景1","image":"/Uploads/Picture/2018-05-30/5b0e671381e20.png","data_type":"0","data_id":"1","sort":"50","create_time":"2018-05-15"},{"id":"5","type":"2","title":"背景2","image":"/Uploads/Picture/2018-05-30/5b0e67206c278.png","data_type":"0","data_id":"2","sort":"50","create_time":"2018-05-15"}]}
+     * data : {"banner1":[{"id":"3","type":"1","title":"轮播3","image":"/Uploads/Picture/2018-05-30/5b0e5de3a4cb8.png","data_type":"1","data_id":"1","sort":"50","create_time":"2018-05-11"},{"id":"2","type":"1","title":"轮播2","image":"/Uploads/Picture/2018-05-30/5b0e5de3a4cb8.png","data_type":"2","data_id":"1","sort":"50","create_time":"2018-05-11"},{"id":"1","type":"1","title":"轮播1","image":"/Uploads/Picture/2018-05-30/5b0e5de3a4cb8.png","data_type":"2","data_id":"2","sort":"50","create_time":"2018-05-11"}],"banner2":[{"id":"4","type":"2","title":"背景1","image":"/Uploads/Picture/2018-05-30/5b0e671381e20.png","data_type":"0","data_id":"1","sort":"50","create_time":"2018-05-15"},{"id":"5","type":"2","title":"背景2","image":"/Uploads/Picture/2018-05-30/5b0e67206c278.png","data_type":"0","data_id":"2","sort":"50","create_time":"2018-05-15"},{"id":"6","type":"2","title":"背景3","image":"/Uploads/Picture/2018-05-30/5b0e671381e20.png","data_type":"0","data_id":"3","sort":"50","create_time":"2018-07-03"},{"id":"7","type":"2","title":"背景4","image":"/Uploads/Picture/2018-05-30/5b0e67206c278.png","data_type":"0","data_id":"4","sort":"50","create_time":"2018-07-03"}],"android":{"title":"同城快跑","logo":"/Public/logo.png","download":"http://www.0431cn.com"}}
      */
 
     private int status;
@@ -45,8 +45,23 @@ public class HIndexBean {
     }
 
     public static class DataBean {
+        /**
+         * banner1 : [{"id":"3","type":"1","title":"轮播3","image":"/Uploads/Picture/2018-05-30/5b0e5de3a4cb8.png","data_type":"1","data_id":"1","sort":"50","create_time":"2018-05-11"},{"id":"2","type":"1","title":"轮播2","image":"/Uploads/Picture/2018-05-30/5b0e5de3a4cb8.png","data_type":"2","data_id":"1","sort":"50","create_time":"2018-05-11"},{"id":"1","type":"1","title":"轮播1","image":"/Uploads/Picture/2018-05-30/5b0e5de3a4cb8.png","data_type":"2","data_id":"2","sort":"50","create_time":"2018-05-11"}]
+         * banner2 : [{"id":"4","type":"2","title":"背景1","image":"/Uploads/Picture/2018-05-30/5b0e671381e20.png","data_type":"0","data_id":"1","sort":"50","create_time":"2018-05-15"},{"id":"5","type":"2","title":"背景2","image":"/Uploads/Picture/2018-05-30/5b0e67206c278.png","data_type":"0","data_id":"2","sort":"50","create_time":"2018-05-15"},{"id":"6","type":"2","title":"背景3","image":"/Uploads/Picture/2018-05-30/5b0e671381e20.png","data_type":"0","data_id":"3","sort":"50","create_time":"2018-07-03"},{"id":"7","type":"2","title":"背景4","image":"/Uploads/Picture/2018-05-30/5b0e67206c278.png","data_type":"0","data_id":"4","sort":"50","create_time":"2018-07-03"}]
+         * android : {"title":"同城快跑","logo":"/Public/logo.png","download":"http://www.0431cn.com"}
+         */
+
+        private AndroidBean android;
         private List<Banner1Bean> banner1;
         private List<Banner2Bean> banner2;
+
+        public AndroidBean getAndroid() {
+            return android;
+        }
+
+        public void setAndroid(AndroidBean android) {
+            this.android = android;
+        }
 
         public List<Banner1Bean> getBanner1() {
             return banner1;
@@ -62,6 +77,42 @@ public class HIndexBean {
 
         public void setBanner2(List<Banner2Bean> banner2) {
             this.banner2 = banner2;
+        }
+
+        public static class AndroidBean {
+            /**
+             * title : 同城快跑
+             * logo : /Public/logo.png
+             * download : http://www.0431cn.com
+             */
+
+            private String title;
+            private String logo;
+            private String download;
+
+            public String getTitle() {
+                return title;
+            }
+
+            public void setTitle(String title) {
+                this.title = title;
+            }
+
+            public String getLogo() {
+                return logo;
+            }
+
+            public void setLogo(String logo) {
+                this.logo = logo;
+            }
+
+            public String getDownload() {
+                return download;
+            }
+
+            public void setDownload(String download) {
+                this.download = download;
+            }
         }
 
         public static class Banner1Bean {

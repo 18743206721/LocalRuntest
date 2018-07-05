@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:Star="http://schemas.android.com/apk/res-auto"
     android:background="@color/board"
     android:orientation="vertical"
     tools:context="com.xingguang.localrun.maincode.mine.view.activity.PingLunActivity">
@@ -60,6 +61,35 @@
                     android:textColorHint="@color/textLightGray"
                     android:textSize="14sp" />
             </LinearLayout>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:layout_marginLeft="13dp"
+                    android:textColor="@color/textBlack"
+                    android:textSize="14sp"
+                    android:text="选择星级评价: "
+                    android:layout_width="wrap_content"
+                    android:layout_height="20dp" />
+
+                <com.xingguang.localrun.view.Startwo
+                    android:id="@+id/iv_tice_star"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="13dp"
+                    Star:starBackground="@drawable/star_empty"
+                    Star:starDistance="3dp"
+                    Star:starDrawBackground="@drawable/star_full"
+                    Star:starHeight="15dp"
+                    Star:starWidth="15dp"
+                    Star:starsNum="5" />
+
+
+            </LinearLayout>
+
 
             <!--添加图片-->
             <LinearLayout

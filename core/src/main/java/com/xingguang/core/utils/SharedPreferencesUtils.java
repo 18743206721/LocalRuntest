@@ -45,6 +45,9 @@ public class SharedPreferencesUtils {
     //home的搜索
     public static final String TOGETHERPLAY = "history";
 
+    public static final String CID = "cid";
+
+
 
     /**
      * @param context

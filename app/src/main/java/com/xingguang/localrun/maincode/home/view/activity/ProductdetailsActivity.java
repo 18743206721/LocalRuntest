@@ -21,6 +21,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.lcodecore.tkrefreshlayout.Footer.LoadingView;
+import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout;
 import com.lzy.okgo.OkGo;
 import com.lzy.okgo.cache.CacheMode;
 import com.lzy.okgo.model.Response;
@@ -35,9 +37,11 @@ import com.xingguang.localrun.R;
 import com.xingguang.localrun.http.CommonBean;
 import com.xingguang.localrun.http.DialogCallback;
 import com.xingguang.localrun.http.HttpManager;
+import com.xingguang.localrun.http.MyShare;
 import com.xingguang.localrun.main.view.MainActivity;
 import com.xingguang.localrun.maincode.home.model.GlideImageLoader;
 import com.xingguang.localrun.maincode.home.model.GoodsDetailsBean;
+import com.xingguang.localrun.maincode.home.model.PingJiaBean;
 import com.xingguang.localrun.maincode.home.model.ProductDetailsBean;
 import com.xingguang.localrun.maincode.home.model.SpecBean;
 import com.xingguang.localrun.maincode.home.view.adapter.PinglunAdapter;
@@ -45,6 +49,8 @@ import com.xingguang.localrun.popwindow.CrowdPopUpWindow;
 import com.xingguang.localrun.popwindow.NowBuyPopUpWindow;
 import com.xingguang.localrun.popwindow.NowOrderPopUpWindow;
 import com.xingguang.localrun.popwindow.SharePopUpWindow;
+import com.xingguang.localrun.refresh.RefreshUtil;
+import com.xingguang.localrun.refresh.SinaRefreshHeader;
 import com.xingguang.localrun.utils.AppUtil;
 import com.youth.banner.Banner;
 
@@ -60,7 +66,8 @@ import butterknife.OnClick;
  * 描述:商品详情
  * 作者:LiuYu
  */
-public class ProductdetailsActivity extends BaseActivity implements SharePopUpWindow.OnShareListener {
+public class ProductdetailsActivity extends BaseActivity implements SharePopUpWindow.OnShareListener,
+        RefreshUtil.OnRefreshListener {
 
     @BindView(R.id.iv_tice_head)
     Banner ivTiceHead;
@@ -116,6 +123,10 @@ public class ProductdetailsActivity extends BaseActivity implements SharePopUpWi
     RelativeLayout llParent;
     @BindView(R.id.tv_title)
     TextView tv_title;
+    @BindView(R.id.tw_refresh)
+    TwinklingRefreshLayout twRefresh;
+
+    private boolean isRefresh = false;
 
 
     private boolean isshow;
@@ -127,7 +138,8 @@ public class ProductdetailsActivity extends BaseActivity implements SharePopUpWi
     //商品规格列表
     private ArrayList<SpecBean.DataBean> specBeanList = new ArrayList<>();
 
-    private List<String> mdatas = new ArrayList<>();
+    //商品详情
+    private List<PingJiaBean.DataBean> mdatas = new ArrayList<>();
     //购买件数
     private int nums = 1;
 
@@ -141,7 +153,7 @@ public class ProductdetailsActivity extends BaseActivity implements SharePopUpWi
 
     //分享
     private List<String> headlist = new ArrayList<>();
-    private String shareUrl, shareTitle, shareImg, shareContent;
+    private String shareUrl, shareTitle, shareImg;
     private UMImage image;
     private UMWeb web;
 
@@ -151,6 +163,8 @@ public class ProductdetailsActivity extends BaseActivity implements SharePopUpWi
     String original_img = ""; //规格里的图片
     private String storgeNum = "";//商品详情里的规格
     GoodsDetailsBean.DataBean dataBean;
+    private int page = 1;
+    private PinglunAdapter pinglunadapter;
 
     @Override
     protected int getLayoutId() {
@@ -159,15 +173,21 @@ public class ProductdetailsActivity extends BaseActivity implements SharePopUpWi
 
     @Override
     protected void initView() {
+        twRefresh.setHeaderView(new SinaRefreshHeader(ProductdetailsActivity.this));
+        twRefresh.setBottomView(new LoadingView(ProductdetailsActivity.this));
+        twRefresh.setOnRefreshListener(new RefreshUtil(this).refreshListenerAdapter());
+
         goods_id = getIntent().getStringExtra("goods_id");
         instance = this;
 
 
         initAdapter();
         loadDetails();
-        initListener();
         loadshare();
         loadGuiGe();
+        loadpingLun(1);
+        initListener();
+
     }
 
     /**
@@ -227,10 +247,9 @@ public class ProductdetailsActivity extends BaseActivity implements SharePopUpWi
     }
 
     private void loadshare() {
-//        shareUrl = headlist.get(0);
-//        shareTitle = nowApplyMainModel.getOutsourcing().getTitle();
-//        shareImg = nowApplyMainModel.getOutsourcing().getUrl();
-//        shareContent = nowApplyMainModel.getOutsourcing().getContent();
+        shareUrl = MyShare.getDownload();
+        shareTitle = MyShare.getTitle();
+        shareImg = MyShare.getLogo();
     }
 
     @Override
@@ -239,7 +258,6 @@ public class ProductdetailsActivity extends BaseActivity implements SharePopUpWi
         web = new UMWeb(shareUrl);
         web.setTitle(shareTitle);//标题
         web.setThumb(image);  //缩略图
-        web.setDescription("点击查看更多详情");//描述
         new ShareAction(ProductdetailsActivity.this)
                 .setPlatform(share_media)
                 .withMedia(web)
@@ -270,10 +288,10 @@ public class ProductdetailsActivity extends BaseActivity implements SharePopUpWi
     };
 
     private void initAdapter() {
-        PinglunAdapter adapter = new PinglunAdapter(ProductdetailsActivity.this, mdatas);
+        pinglunadapter = new PinglunAdapter(ProductdetailsActivity.this, mdatas);
         LinearLayoutManager manager = new LinearLayoutManager(ProductdetailsActivity.this);
         rvComment.setLayoutManager(manager);
-        rvComment.setAdapter(adapter);
+        rvComment.setAdapter(pinglunadapter);
         rvComment.setNestedScrollingEnabled(false);
     }
 
@@ -515,6 +533,7 @@ public class ProductdetailsActivity extends BaseActivity implements SharePopUpWi
         }
     }
 
+
     class OnClickLintener implements View.OnClickListener {
         @Override
         public void onClick(View v) {
@@ -547,6 +566,73 @@ public class ProductdetailsActivity extends BaseActivity implements SharePopUpWi
                     break;
             }
         }
+    }
+
+
+    /**
+     * 评论数据接口
+     */
+    private void loadpingLun(final int page) {
+        OkGo.<String>post(HttpManager.Goodscomment)
+                .tag(this)
+                .cacheKey("cachePostKey")
+                .cacheMode(CacheMode.DEFAULT)
+                .params("goods_id", goods_id)
+                .params("page", page)
+                .execute(new DialogCallback<String>(this) {
+                    @Override
+                    public void onSuccess(Response<String> response) {
+                        Gson gson = new Gson();
+                        PingJiaBean bean = gson.fromJson(response.body().toString(), PingJiaBean.class);
+                        if (bean.getData() != null) {
+
+                            if (bean.getData().size() == 0 && page != 1) {
+                                Toast.makeText(ProductdetailsActivity.this,
+                                        "只有这么多了~",
+                                        Toast.LENGTH_SHORT).show();
+                            }
+
+                            if (page == 1) {
+                                mdatas.clear();
+                            }
+
+                            mdatas.addAll(bean.getData());
+
+                            if (mdatas.size() == 0) {
+                                llLiebiao.setVisibility(View.GONE);
+                                llWpl.setVisibility(View.VISIBLE);
+                            } else {
+                                llLiebiao.setVisibility(View.VISIBLE);
+                                llWpl.setVisibility(View.GONE);
+                            }
+
+                            pinglunadapter.setList(mdatas);
+                        } else {
+                            ToastUtils.showToast(ProductdetailsActivity.this, bean.getMsg());
+                        }
+
+                        if (isRefresh) {
+                            twRefresh.finishRefreshing();
+                        } else {
+                            twRefresh.finishLoadmore();
+                        }
+
+
+                    }
+                });
+    }
+
+    @Override
+    public void onRefresh() {
+        isRefresh = true;
+        loadpingLun(page);
+    }
+
+    @Override
+    public void onLoad() {
+        isRefresh = false;
+        page++;
+        loadpingLun(page);
     }
 
 

@@ -11,10 +11,16 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.lzy.okgo.OkGo;
+import com.lzy.okgo.cache.CacheMode;
+import com.lzy.okgo.model.Response;
 import com.xingguang.core.base.BaseActivity;
 import com.xingguang.core.utils.AppManager;
+import com.xingguang.core.utils.SharedPreferencesUtils;
 import com.xingguang.core.utils.ToastUtils;
 import com.xingguang.localrun.R;
+import com.xingguang.localrun.http.DialogCallback;
+import com.xingguang.localrun.http.HttpManager;
 import com.xingguang.localrun.maincode.classify.ClassifFragment;
 import com.xingguang.localrun.maincode.home.HomeFragment;
 import com.xingguang.localrun.maincode.mine.MineFragment;
@@ -99,8 +105,6 @@ public class MainActivity extends BaseActivity {
             MainActivity.instance.setToInvestmentFragment();
         }
 
-
-
     }
 
     @Override
@@ -112,7 +116,33 @@ public class MainActivity extends BaseActivity {
 //                setToInvestmentFragment();
 //            }
 
+            load();
+    }
 
+    //推送
+    String tuisong;
+    private void load() {
+        if (((String) SharedPreferencesUtils.get(MainActivity.this,
+                SharedPreferencesUtils.CID, "")).equals("")) {
+            tuisong = "";
+        } else {
+            tuisong = (String) SharedPreferencesUtils.get(MainActivity.this,
+                    SharedPreferencesUtils.CID, "");
+
+            OkGo.<String>post(HttpManager.TUISONG)
+                    .tag(this)
+                    .cacheKey("cachePostKey")
+                    .cacheMode(CacheMode.DEFAULT)
+                    .params("ClientID", (String) SharedPreferencesUtils.get(MainActivity.this,
+                            SharedPreferencesUtils.CID, ""))
+                    .execute(new DialogCallback<String>(this) {
+                        @Override
+                        public void onSuccess(Response<String> response) {
+//                            Gson gson = new Gson();
+//                            TuisongBean bean = gson.fromJson(response.body().toString(), TuisongBean.class);
+                        }
+                    });
+        }
     }
 
     @OnClick({R.id.tab_one, R.id.tab_two, R.id.tab_three, R.id.tab_four})

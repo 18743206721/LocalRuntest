@@ -1,7 +1,6 @@
 package com.xingguang.localrun.maincode.mine.view.fragment;
 
 import android.annotation.SuppressLint;
-import android.content.Intent;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -28,6 +27,7 @@ import com.xingguang.localrun.maincode.mine.view.adapter.MyAllOrderAdapter;
 import com.xingguang.localrun.popwindow.TextPopUpWindow;
 import com.xingguang.localrun.refresh.RefreshUtil;
 import com.xingguang.localrun.utils.AppUtil;
+import com.xingguang.localrun.view.PayPopWindow;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -65,7 +65,6 @@ public class MyAllOrderFragment extends BaseFragment implements RefreshUtil.OnRe
     private View.OnClickListener nodeleted;
     private View.OnClickListener yesdeleted;
     int currentPositon = 0; //当前的position
-    private Intent intent;
     private int page = 1;
 
     public MyAllOrderFragment(String type) {
@@ -136,7 +135,8 @@ public class MyAllOrderFragment extends BaseFragment implements RefreshUtil.OnRe
         adapter.setmOnOrderpay(new MyAllOrderAdapter.OnOrderPay() {
             @Override
             public void OnOrderpay(TextView item_orderpay, int position) {
-                ToastUtils.showToast(getActivity(), "支付");
+                new PayPopWindow(getActivity(), llMyplayFrg, Double.parseDouble(mDatas.get(position).getOrder_amount()),
+                         "", "",mDatas.get(position).getOrder_sn(),2);
             }
         });
 

@@ -190,6 +190,22 @@ public class HttpManager {
     //确认收货
     public static final String trueOrder = BASE_URL+"User/confirmOrder";
 
+    //订单支付
+    public static final String topay = BASE_URL+"User/topay";
+
+    //添加商品评价
+    public static final String addComment = BASE_URL+"Goods/addComment";
+
+    //商品评价
+    public static final String Goodscomment = BASE_URL+"Goods/comment";
+
+    public static final String TUISONG = BASE_URL+"/tuisong";
+
+    //精选/低价
+    public static final String Goodsspecial = BASE_URL+"Goods/special";
+
+
+
 
 
     private volatile static HttpManager INSTANCE;

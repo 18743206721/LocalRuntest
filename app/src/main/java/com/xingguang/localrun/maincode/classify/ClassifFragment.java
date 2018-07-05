@@ -15,6 +15,7 @@ import com.lzy.okgo.model.Response;
 import com.xingguang.core.utils.ToastUtils;
 import com.xingguang.localrun.R;
 import com.xingguang.localrun.base.ToolBarFragment;
+import com.xingguang.localrun.http.ClassType;
 import com.xingguang.localrun.http.DialogCallback;
 import com.xingguang.localrun.http.HttpManager;
 import com.xingguang.localrun.maincode.classify.model.ClassifBean;
@@ -22,6 +23,10 @@ import com.xingguang.localrun.maincode.classify.view.adapter.LeftListAdapter;
 import com.xingguang.localrun.maincode.classify.view.adapter.RightAdapter;
 import com.xingguang.localrun.maincode.mine.model.MineApplyBean;
 import com.xingguang.localrun.refresh.RefreshUtil;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,7 +44,8 @@ public class ClassifFragment extends ToolBarFragment implements RefreshUtil.OnRe
     @BindView(R.id.empty)
     ImageView empty;
 
-    private boolean[] flagArray = {true, false, false, false, false, false, false};
+    private boolean[] flagArray;
+//            = {true, false, false, false, false, false, false,false,false};
 
     private LeftListAdapter leftListAdapter;
     RightAdapter rightListAdapter;
@@ -70,6 +76,7 @@ public class ClassifFragment extends ToolBarFragment implements RefreshUtil.OnRe
 
         setToolBarTitle("分类");
 
+
         rightListAdapter = new RightAdapter(getActivity(), rightList);
         rightListView.setAdapter(rightListAdapter);
 
@@ -78,6 +85,43 @@ public class ClassifFragment extends ToolBarFragment implements RefreshUtil.OnRe
 
         initListener();
         loadleft();
+    }
+
+
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        if (!hidden){// 重新显示到最前端中,相当于onresume
+            if (ClassType.getLeixing()!=null) {
+                if (ClassType.getLeixing().equals("0")) {//精选
+                    int buffSize = leftList.size();
+                    flagArray = new boolean[buffSize];
+                    for (int i = 0; i < flagArray.length; i++) {
+                        if (i == 0) {
+                            flagArray[i] = true;
+                        } else {
+                            flagArray[i] = false;
+                        }
+                    }
+                    leftListAdapter.setList(leftList);
+                    leftListAdapter.setFLagArray(flagArray);
+                    loadspecial(leftList.get(0).getId(), page);
+                } else { //低价
+                    int buffSize = leftList.size();
+                    flagArray = new boolean[buffSize];
+                    for (int i = 0; i < flagArray.length; i++) {
+                        if (i == 1) {
+                            flagArray[i] = true;
+                        } else {
+                            flagArray[i] = false;
+                        }
+                    }
+                    leftListAdapter.setList(leftList);
+                    leftListAdapter.setFLagArray(flagArray);
+                    loadspecial(leftList.get(1).getId(), page);
+                }
+            }
+        }
+        super.onHiddenChanged(hidden);
     }
 
     private void initListener() {
@@ -99,8 +143,18 @@ public class ClassifFragment extends ToolBarFragment implements RefreshUtil.OnRe
                 int rightSection = 0;
                 rightListView.setSelection(rightSection);
 
-                classifId = leftList.get(position).getId();
-                loadRight(classifId,page);
+                if (position == 0) {
+                    classifId = leftList.get(position).getId();
+                    loadspecial(classifId, page);
+                } else if (position == 1) {
+                    classifId = leftList.get(position).getId();
+                    loadspecial(classifId, page);
+                } else {
+                    classifId = leftList.get(position).getId();
+                    loadRight(classifId, page);
+                }
+
+
             }
 
         });
@@ -118,8 +172,8 @@ public class ClassifFragment extends ToolBarFragment implements RefreshUtil.OnRe
 
             @Override
             public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-                if (isScroll){
-                    if (shouldSet){
+                if (isScroll) {
+                    if (shouldSet) {
                         String title = rightListAdapter.getItem(firstVisibleItem).toString();
                         int section = leftListAdapter.indexOf(title);
                         if (section == -1) return;
@@ -133,35 +187,35 @@ public class ClassifFragment extends ToolBarFragment implements RefreshUtil.OnRe
         });
 
 
-
     }
 
     /**
      * 右面的数据源
      *
-     * @param id*/
+     * @param id
+     */
     private void loadRight(String id, final int page) {
         OkGo.<String>post(HttpManager.classifshop)
                 .tag(this)
                 .cacheKey("cachePostKey")
                 .cacheMode(CacheMode.DEFAULT)
-                .params("id",id)
-                .params("page",page)
+                .params("id", id)
+                .params("page", page)
                 .execute(new DialogCallback<String>(getActivity()) {
                     @Override
                     public void onSuccess(Response<String> response) {
                         Gson gson = new Gson();
-                        ClassifBean bean  = gson.fromJson(response.body().toString(), ClassifBean.class);
-                        if (bean.getData()!=null) {
+                        ClassifBean bean = gson.fromJson(response.body().toString(), ClassifBean.class);
+                        if (bean.getData() != null) {
 
-                            if (page == 1 ){
+                            if (page == 1) {
                                 rightList.clear();
                             }
 
                             rightList.addAll(bean.getData());
-                            if (bean.getData().size() == 0){
-                                ToastUtils.showToast(getActivity(),"暂无更多!");
-                            }else {
+                            if (bean.getData().size() == 0) {
+                                ToastUtils.showToast(getActivity(), "暂无更多!");
+                            } else {
                                 rightListAdapter.setList(bean.getData());
                             }
 
@@ -180,15 +234,16 @@ public class ClassifFragment extends ToolBarFragment implements RefreshUtil.OnRe
                                 twRefresh.finishLoadmore();
                             }
 
-                        }else{
-                            ToastUtils.showToast(getActivity(),bean.getMsg());
+                        } else {
+                            ToastUtils.showToast(getActivity(), bean.getMsg());
                         }
                     }
                 });
     }
 
-
-    /**左面的数据*/
+    /**
+     * 左面的数据
+     */
     private void loadleft() {
         OkGo.<String>post(HttpManager.applyindex)
                 .tag(this)
@@ -197,12 +252,93 @@ public class ClassifFragment extends ToolBarFragment implements RefreshUtil.OnRe
                 .execute(new DialogCallback<String>(getActivity()) {
                     @Override
                     public void onSuccess(Response<String> response) {
-                        Gson gson = new Gson();
-                        MineApplyBean mineApplyBean  = gson.fromJson(response.body().toString(), MineApplyBean.class);
-                        leftList.addAll(mineApplyBean.getData());
-                        leftListAdapter.setList(mineApplyBean.getData());
+                        try {
+                            JSONObject jsonObject = new JSONObject(response.body().toString());
+                            JSONArray array = jsonObject.getJSONArray("data");
+                            for (int i = 0; i < 2; i++) {
+                                MineApplyBean.DataBean bean = new MineApplyBean.DataBean();
+                                if (i == 0) {
+                                    bean.setId("1");
+                                    bean.setName("精选");
+                                } else if (i == 1) {
+                                    bean.setId("2");
+                                    bean.setName("低价");
+                                }
+                                leftList.add(bean);
+                            }
+                            for (int i = 0; i < array.length(); i++) {
+                                MineApplyBean.DataBean bean = new MineApplyBean.DataBean();
+                                JSONObject obj1 = (JSONObject) array.get(i);
+                                bean.setId(obj1.getString("id"));
+                                bean.setName(obj1.getString("name"));
+                                leftList.add(bean);
+                            }
+                            int buffSize = leftList.size();
+                            flagArray = new boolean[buffSize];
+                            for (int i = 0; i < flagArray.length; i++) {
+                                if (i == 0) {
+                                    flagArray[i] = true;
+                                } else {
+                                    flagArray[i] = false;
+                                }
+                            }
+                            leftListAdapter.setList(leftList);
+                            leftListAdapter.setFLagArray(flagArray);
+                            loadspecial(leftList.get(0).getId(), page);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
 
-                        loadRight(leftList.get(0).getId(),page);
+                    }
+                });
+    }
+
+    /**
+     * 点击精选和低价走的接口
+     */
+    private void loadspecial(String id, final int page) {
+        OkGo.<String>post(HttpManager.Goodsspecial)
+                .tag(this)
+                .cacheKey("cachePostKey")
+                .cacheMode(CacheMode.DEFAULT)
+                .params("type", id)
+                .params("page", page)
+                .execute(new DialogCallback<String>(getActivity()) {
+                    @Override
+                    public void onSuccess(Response<String> response) {
+                        Gson gson = new Gson();
+                        ClassifBean bean = gson.fromJson(response.body().toString(), ClassifBean.class);
+                        if (bean.getData() != null) {
+
+                            if (page == 1) {
+                                rightList.clear();
+                            }
+
+                            rightList.addAll(bean.getData());
+                            if (bean.getData().size() == 0) {
+                                ToastUtils.showToast(getActivity(), "暂无更多!");
+                            } else {
+                                rightListAdapter.setList(bean.getData());
+                            }
+
+                            if (rightList.size() == 0) {
+                                rightListView.setVisibility(View.GONE);
+                                empty.setVisibility(View.VISIBLE);
+                            } else {
+                                empty.setVisibility(View.GONE);
+                                rightListView.setVisibility(View.VISIBLE);
+                            }
+
+
+                            if (isRefresh) {
+                                twRefresh.finishRefreshing();
+                            } else {
+                                twRefresh.finishLoadmore();
+                            }
+
+                        } else {
+                            ToastUtils.showToast(getActivity(), bean.getMsg());
+                        }
                     }
                 });
     }
@@ -212,12 +348,14 @@ public class ClassifFragment extends ToolBarFragment implements RefreshUtil.OnRe
     public void onLoad() {
         isRefresh = false;
         page++;
-        loadRight(classifId,page);
+        loadRight(classifId, page);
 
     }
 
     @Override
-    protected void lazyLoad() {}
+    protected void lazyLoad() {
+    }
+
     @Override
     public void onRefresh() {
         isRefresh = true;

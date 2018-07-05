@@ -975,5 +975,20 @@ public class AppUtil {
         mImage.setImageDrawable(drawable1);
     }
 
+    /* 调用此方法输入所要转换的时间戳输入例如（1402733340）输出（"2014年06月14日16时09分00秒"）
+     *
+     * @param time
+	 * @return
+             */
+    public static String times(String time) {  //yyyy年 ss秒
+        SimpleDateFormat sdr = new SimpleDateFormat("MM月dd日HH时mm分");
+        @SuppressWarnings("unused")
+        long lcc = Long.valueOf(time);
+        int i = Integer.parseInt(time);
+        String times = sdr.format(new Date(i * 1000L));
+        return times;
+    }
+
+
 
 }

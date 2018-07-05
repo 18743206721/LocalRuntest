@@ -22,8 +22,10 @@ import com.xingguang.core.base.HttpFragment;
 import com.xingguang.core.utils.LogUtils;
 import com.xingguang.core.utils.ToastUtils;
 import com.xingguang.localrun.R;
+import com.xingguang.localrun.http.ClassType;
 import com.xingguang.localrun.http.DialogCallback;
 import com.xingguang.localrun.http.HttpManager;
+import com.xingguang.localrun.http.MyShare;
 import com.xingguang.localrun.main.view.MainActivity;
 import com.xingguang.localrun.maincode.home.model.GlideImageLoader;
 import com.xingguang.localrun.maincode.home.model.HIndexBean;
@@ -201,6 +203,11 @@ public class HomeFragment extends HttpFragment {
 //                        ImageLoader.getInstance().initGlide(getActivity()).loadImage(HttpManager.INDEX+banner2BeanList.get(2).getImage(),iv_img3);
 //                        ImageLoader.getInstance().initGlide(getActivity()).loadImage(HttpManager.INDEX+banner2BeanList.get(3).getImage(),iv_img4);
 
+                        //获取分享里的头像和标题，下载地址；
+                        MyShare.setTitle(hIndexBean.getData().getAndroid().getTitle());
+                        MyShare.setLogo(HttpManager.INDEX+hIndexBean.getData().getAndroid().getLogo());
+                        MyShare.setDownload(hIndexBean.getData().getAndroid().getDownload());
+
                     }
                 });
     }
@@ -295,10 +302,14 @@ public class HomeFragment extends HttpFragment {
                 MainActivity.instance.setToProjectFragment();
                 break;
             case R.id.ll_main_selecte://精选
-                startfenlei("精选");
+                ClassType.setLeixing("0");
+                MainActivity.instance.setBg(2);
+                MainActivity.instance.setToProjectFragment();
                 break;
             case R.id.ll_home_dijia://低价
-                startfenlei("低价");
+                ClassType.setLeixing("1");
+                MainActivity.instance.setBg(2);
+                MainActivity.instance.setToProjectFragment();
                 break;
             case R.id.ll_home_food://美食
                 startfenlei("美食");

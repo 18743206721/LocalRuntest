@@ -185,7 +185,7 @@ public class BuyActivity extends ToolBarActivity {
                 if (adsId.equals("")){
                     ToastUtils.showToast(BuyActivity.this,"请选择收货地址!");
                 }else {
-                    new PayPopWindow(BuyActivity.this, llbuy,allprice,adsId,edContent.getText().toString());
+                    new PayPopWindow(BuyActivity.this, llbuy,allprice,adsId,edContent.getText().toString(),"",1);
                 }
                 break;
         }

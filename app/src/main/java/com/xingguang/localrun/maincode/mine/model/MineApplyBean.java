@@ -9,10 +9,11 @@ import java.util.List;
  */
 public class MineApplyBean {
 
+
     /**
      * status : 1
      * msg : SUCCESS
-     * data : [{"id":"5","pid":"0","name":"超市","describe":"超市","sort":"50"},{"id":"4","pid":"0","name":"果蔬","describe":"果蔬","sort":"50"},{"id":"3","pid":"0","name":"美装","describe":"美装","sort":"50"},{"id":"2","pid":"0","name":"五金","describe":"五金","sort":"50"},{"id":"1","pid":"0","name":"美食","describe":"美食","sort":"50"}]
+     * data : [{"id":"1","pid":"0","name":"精选","describe":"精选","sort":"0"},{"id":"2","pid":"0","name":"低价","describe":"低价","sort":"0"},{"id":"5","pid":"0","name":"超市","describe":"超市","sort":"50"},{"id":"4","pid":"0","name":"果蔬","describe":"果蔬","sort":"50"},{"id":"3","pid":"0","name":"美装","describe":"美装","sort":"50"},{"id":"2","pid":"0","name":"五金","describe":"五金","sort":"50"},{"id":"1","pid":"0","name":"美食","describe":"美食","sort":"50"}]
      */
 
     private int status;
@@ -45,11 +46,11 @@ public class MineApplyBean {
 
     public static class DataBean {
         /**
-         * id : 5
+         * id : 1
          * pid : 0
-         * name : 超市
-         * describe : 超市
-         * sort : 50
+         * name : 精选
+         * describe : 精选
+         * sort : 0
          */
 
         private String id;
@@ -57,15 +58,6 @@ public class MineApplyBean {
         private String name;
         private String describe;
         private String sort;
-        private  boolean isChoose;
-
-        public boolean isChoose() {
-            return isChoose;
-        }
-
-        public void setChoose(boolean choose) {
-            isChoose = choose;
-        }
 
         public String getId() {
             return id;

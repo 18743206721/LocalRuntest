@@ -1,7 +1,6 @@
 package com.xingguang.localrun.maincode.mine.view.adapter;
 
 import android.content.Context;
-import android.content.Intent;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -11,7 +10,6 @@ import android.widget.TextView;
 
 import com.xingguang.localrun.R;
 import com.xingguang.localrun.maincode.mine.model.OrderBean;
-import com.xingguang.localrun.maincode.mine.view.activity.PingLunActivity;
 import com.xingguang.localrun.view.CommonViewHolder;
 
 import java.util.List;
@@ -136,22 +134,23 @@ public class MyAllOrderAdapter extends RecyclerView.Adapter<CommonViewHolder> {
             });
         }
 
-
-        MyAllOrderItemAdapter  itemAdapter = new MyAllOrderItemAdapter(mContext,list.get(position).getGoods(),type);
+        final OrderBean.DataBean.ListBean bean = list.get(position);
+        MyAllOrderItemAdapter  itemAdapter = new MyAllOrderItemAdapter(mContext,list.get(position).getGoods(),type,list,position);
         LinearLayoutManager manager = new LinearLayoutManager(mContext);
         item_recyc.setLayoutManager(manager);
         item_recyc.setAdapter(itemAdapter);
 
 
         //评论
-        itemAdapter.setmOnOrdercomment(new MyAllOrderItemAdapter.OnOrderComment() {
-            @Override
-            public void OnOrderComment(TextView item_comment, int position) {
-
-
-                mContext.startActivity(new Intent(mContext, PingLunActivity.class));
-            }
-        });
+//        itemAdapter.setmOnOrdercomment(new MyAllOrderItemAdapter.OnOrderComment() {
+//            @Override
+//            public void OnOrderComment(TextView item_comment, int i) {
+//                String recid = list.get(position).getGoods().get(i).getRec_id();
+//                mContext.startActivity(new Intent(mContext, PingLunActivity.class)
+//                .putExtra(recid,"rec_id")
+//                );
+//            }
+//        });
 
         if (type.equals("0")) {//全部
             if (list.get(position).getOrder_type() == 1){ //待支付

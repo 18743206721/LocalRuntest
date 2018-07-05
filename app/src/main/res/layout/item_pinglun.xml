@@ -15,8 +15,8 @@
 
         <com.xingguang.localrun.view.RoundImageView
             android:id="@+id/iv_userimg"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:layout_margin="10dp"
             android:scaleType="centerCrop"
             app:border_thickness="1dp" />
@@ -37,7 +37,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="不会飞的鱼"
+                    android:text=""
                     android:textColor="@color/textBlack"
                     android:textSize="14sp" />
 
@@ -56,7 +56,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:text="不会飞的鱼不会飞的鱼不会飞的鱼不会飞的鱼不会飞的鱼不会飞的鱼不会飞的鱼不会飞的鱼不会飞的鱼"
+                android:text=""
                 android:textColor="@color/textGray"
                 android:textSize="12sp" />
         </LinearLayout>
@@ -64,13 +64,40 @@
 
     </LinearLayout>
 
-    <View
+
+    <LinearLayout
+        android:paddingRight="13dp"
+        android:paddingBottom="13dp"
+        android:paddingLeft="13dp"
+        android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/fengexian" />
+        android:layout_height="wrap_content">
+
+        <com.xingguang.localrun.view.RoundRectImageView
+            android:layout_weight="1"
+            android:layout_marginRight="15dp"
+            android:id="@+id/item_img1"
+            android:layout_width="match_parent"
+            android:scaleType="fitXY"
+            android:layout_height="95dp" />
+        <com.xingguang.localrun.view.RoundRectImageView
+            android:layout_weight="1"
+            android:id="@+id/item_img2"
+            android:layout_marginRight="15dp"
+            android:scaleType="fitXY"
+            android:layout_width="match_parent"
+            android:layout_height="95dp" />
+        <com.xingguang.localrun.view.RoundRectImageView
+            android:layout_weight="1"
+            android:scaleType="fitXY"
+            android:id="@+id/item_img3"
+            android:layout_width="match_parent"
+            android:layout_height="95dp" />
+
+    </LinearLayout>
 
     <TextView
-        android:visibility="gone"
+        android:visibility="visible"
         android:id="@+id/line"
         android:layout_width="match_parent"
         android:layout_height="10dp"

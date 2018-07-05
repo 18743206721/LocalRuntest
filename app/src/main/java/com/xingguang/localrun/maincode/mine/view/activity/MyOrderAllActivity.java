@@ -1,15 +1,21 @@
 package com.xingguang.localrun.maincode.mine.view.activity;
 
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.androidkun.xtablayout.XTabLayout;
 import com.xingguang.localrun.R;
 import com.xingguang.localrun.base.BaseFragmentAdapter;
 import com.xingguang.localrun.base.ToolBarActivity;
 import com.xingguang.localrun.maincode.mine.view.fragment.MyAllOrderFragment;
+import com.xingguang.localrun.maincode.shop.model.PayResult;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,6 +41,29 @@ public class MyOrderAllActivity extends ToolBarActivity {
     String[] mTitles = new String[]{"全部","待付款","待发货","已完成"};
     MyAllOrderFragment listFragment;
     String state = ""; //控制viewpager的状态
+
+    public Handler handler = new Handler() {
+
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            switch (msg.what) {
+                case 1:
+                    PayResult payResult = new PayResult((String) msg.obj);
+                    String resultInfo = payResult.getResult();// 同步返回需要验证的信息
+                    String resultStatus = payResult.getResultStatus();
+                    Log.i("Pay", "Pay:" + resultInfo);
+                    // 判断resultStatus 为9000则代表支付成功
+                    if (TextUtils.equals(resultStatus, "9000")) {
+                        Toast.makeText(MyOrderAllActivity.this, "支付成功", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(MyOrderAllActivity.this, "支付异常", Toast.LENGTH_SHORT).show();
+                    }
+                    break;
+            }
+
+        }
+    };
 
     @Override
     protected int getLayoutId() {
