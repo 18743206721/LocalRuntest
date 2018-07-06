@@ -7,12 +7,33 @@
 
     <!--设置沉浸式状态栏，填充布局-->
     <LinearLayout
+        android:fitsSystemWindows="true"
+        android:clipToPadding="true"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/home_bule"
-        android:paddingTop="@dimen/padding_top"></LinearLayout>
+        android:paddingTop="@dimen/padding_top">
+    </LinearLayout>
 
-    <include layout="@layout/toolbar_layout" />
+    <!--<include layout="@layout/toolbar_layout" />-->
+
+    <LinearLayout
+        android:padding="@dimen/dp10"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#fff"
+        android:gravity="center_vertical|center"
+        android:orientation="horizontal">
+
+        <TextView
+            android:textColor="@color/textBlack"
+            android:textSize="15sp"
+            android:text="分 类"
+            android:layout_gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
 
     <View
         android:layout_width="match_parent"

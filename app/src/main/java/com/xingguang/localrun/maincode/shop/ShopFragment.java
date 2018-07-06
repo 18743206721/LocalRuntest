@@ -19,9 +19,9 @@ import com.google.gson.Gson;
 import com.lzy.okgo.OkGo;
 import com.lzy.okgo.cache.CacheMode;
 import com.lzy.okgo.model.Response;
+import com.xingguang.core.base.HttpFragment;
 import com.xingguang.core.utils.ToastUtils;
 import com.xingguang.localrun.R;
-import com.xingguang.localrun.base.ToolBarFragment;
 import com.xingguang.localrun.http.CommonBean;
 import com.xingguang.localrun.http.DialogCallback;
 import com.xingguang.localrun.http.HttpManager;
@@ -45,7 +45,7 @@ import butterknife.OnClick;
 /**
  * 购物车
  */
-public class ShopFragment extends ToolBarFragment implements ShopCarAdapter.CheckInterface {
+public class ShopFragment extends HttpFragment implements ShopCarAdapter.CheckInterface {
 
     @BindView(R.id.rv_cart)
     RecyclerView rvCart;
@@ -61,6 +61,9 @@ public class ShopFragment extends ToolBarFragment implements ShopCarAdapter.Chec
     LinearLayout fragment_ll_shop;
     @BindView(R.id.ll_empty)
     LinearLayout ll_empty;
+    @BindView(R.id.tv_edit)
+    TextView tv_edit;
+
 
     ShopCarAdapter shopCarAdapter;
     private double totalPrice = 0.00;// 购买的商品总价
@@ -92,17 +95,17 @@ public class ShopFragment extends ToolBarFragment implements ShopCarAdapter.Chec
 
     @Override
     protected void initView() {
-        setToolBarTitle("购物车");
-        setSubTitle("编辑");
-        getSubTitle().setOnClickListener(new View.OnClickListener() {
+//        setToolBarTitle("购物车");
+        tv_edit.setText("编辑");
+        tv_edit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 flag = !flag;
                 if (flag) {
-                    setSubTitle("完成");
+                    tv_edit.setText("完成");
                     shopCarAdapter.isShow(false);
                 } else {
-                    setSubTitle("编辑");
+                    tv_edit.setText("编辑");
                     shopCarAdapter.isShow(true);
                 }
             }
@@ -316,7 +319,6 @@ public class ShopFragment extends ToolBarFragment implements ShopCarAdapter.Chec
 
                                         //修改购物车规格后，刷新总价格
                                         load(1);
-
                                     }
                                 });
                     }
@@ -663,7 +665,6 @@ public class ShopFragment extends ToolBarFragment implements ShopCarAdapter.Chec
             //跳转到订单结算界面
             startActivity(new Intent(getActivity(), BuyActivity.class));
         }
-
     }
 
 

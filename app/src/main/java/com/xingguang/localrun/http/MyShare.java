@@ -13,6 +13,16 @@ public class MyShare {
 
     private static String download;
 
+    private static String qr_code;
+
+    public static String getQr_code() {
+        return qr_code;
+    }
+
+    public static void setQr_code(String qr_code) {
+        MyShare.qr_code = qr_code;
+    }
+
     public static String getTitle() {
         return title;
     }

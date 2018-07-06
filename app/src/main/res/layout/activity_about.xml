@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:id="@+id/ll_parent"
     android:background="@color/board"
     tools:context="com.xingguang.localrun.maincode.mine.view.activity.AboutActivity">
 
@@ -29,7 +30,7 @@
             android:paddingRight="13dp"
             android:textColor="@color/textBlack"
             android:textSize="14sp"
-            android:text="同城快跑是一个提供帮买帮卖，同城快跑是一个提供帮买帮卖同城快跑是一个提供帮买帮卖同城快跑是一个提供帮买帮卖"
+            android:text=""
             android:lineSpacingExtra="5dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />

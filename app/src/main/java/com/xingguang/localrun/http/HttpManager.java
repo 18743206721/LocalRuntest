@@ -204,6 +204,15 @@ public class HttpManager {
     //精选/低价
     public static final String Goodsspecial = BASE_URL+"Goods/special";
 
+    //三方登录
+    public static final String Publicthird = BASE_URL+"Public/third";
+
+    //绑定手机号
+    public static final String bindMobile = BASE_URL+"Public/bindMobile";
+
+    //文章
+    public static final String Indexarticle = BASE_URL+"Index/article";
+
 
 
 

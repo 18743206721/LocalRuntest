@@ -207,7 +207,7 @@ public class HomeFragment extends HttpFragment {
                         MyShare.setTitle(hIndexBean.getData().getAndroid().getTitle());
                         MyShare.setLogo(HttpManager.INDEX+hIndexBean.getData().getAndroid().getLogo());
                         MyShare.setDownload(hIndexBean.getData().getAndroid().getDownload());
-
+                        MyShare.setQr_code(hIndexBean.getData().getAndroid().getQr_code());//设置二维码图片
                     }
                 });
     }

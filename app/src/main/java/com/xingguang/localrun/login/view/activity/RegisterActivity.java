@@ -119,7 +119,7 @@ public class RegisterActivity extends HttpToolBarActivity implements CountDownTi
                 break;
             case R.id.register_user_xieyi://注册协议
                 Intent intent = new Intent(RegisterActivity.this, WebViewActivity.class);
-                intent.putExtra("type","1");
+                intent.putExtra("type","3");
                 startActivity(intent);
                 break;
             case R.id.tv_register: //注册

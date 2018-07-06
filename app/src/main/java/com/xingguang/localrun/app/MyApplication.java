@@ -6,6 +6,7 @@ import android.support.multidex.MultiDex;
 import com.lzy.okgo.OkGo;
 import com.umeng.commonsdk.UMConfigure;
 import com.umeng.socialize.PlatformConfig;
+import com.umeng.socialize.UMShareAPI;
 import com.xingguang.core.base.BaseApplication;
 
 /**
@@ -21,9 +22,11 @@ public class MyApplication extends BaseApplication {
     public void onCreate() {
         super.onCreate();
 
+        UMConfigure.setLogEnabled(true);
+
         OkGo.getInstance().init(this);
         UMConfigure.init(this,"5b1a2da9f29d9848930000c4","umeng",UMConfigure.DEVICE_TYPE_PHONE,"");
-
+        UMShareAPI.get(this);
         PlatformConfig.setWeixin("wxbe852bea37d724f9", "10ad8f637fee06a4a284c895a4b2ad85");
         PlatformConfig.setQQZone("1106961730", "i1OW2a4H0Se1bmMg");
         PlatformConfig.setSinaWeibo("752990579", "8ce331043789ee955c2cdac4199f07df", "http://sns.whalecloud.com");

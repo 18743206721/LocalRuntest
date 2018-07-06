@@ -12,9 +12,9 @@ import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout;
 import com.lzy.okgo.OkGo;
 import com.lzy.okgo.cache.CacheMode;
 import com.lzy.okgo.model.Response;
+import com.xingguang.core.base.HttpFragment;
 import com.xingguang.core.utils.ToastUtils;
 import com.xingguang.localrun.R;
-import com.xingguang.localrun.base.ToolBarFragment;
 import com.xingguang.localrun.http.ClassType;
 import com.xingguang.localrun.http.DialogCallback;
 import com.xingguang.localrun.http.HttpManager;
@@ -33,7 +33,7 @@ import java.util.List;
 
 import butterknife.BindView;
 
-public class ClassifFragment extends ToolBarFragment implements RefreshUtil.OnRefreshListener {
+public class ClassifFragment extends HttpFragment implements RefreshUtil.OnRefreshListener {
 
     @BindView(R.id.left_listview)
     ListView leftListview;
@@ -45,7 +45,6 @@ public class ClassifFragment extends ToolBarFragment implements RefreshUtil.OnRe
     ImageView empty;
 
     private boolean[] flagArray;
-//            = {true, false, false, false, false, false, false,false,false};
 
     private LeftListAdapter leftListAdapter;
     RightAdapter rightListAdapter;
@@ -74,7 +73,7 @@ public class ClassifFragment extends ToolBarFragment implements RefreshUtil.OnRe
         twRefresh.setOnRefreshListener(new RefreshUtil(this).refreshListenerAdapter());
 
 
-        setToolBarTitle("分类");
+//        setToolBarTitle("分类");
 
 
         rightListAdapter = new RightAdapter(getActivity(), rightList);

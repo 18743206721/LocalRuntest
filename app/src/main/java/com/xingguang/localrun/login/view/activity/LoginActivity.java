@@ -23,6 +23,7 @@ import com.xingguang.localrun.base.HttpToolBarActivity;
 import com.xingguang.localrun.http.DialogCallback;
 import com.xingguang.localrun.http.HttpManager;
 import com.xingguang.localrun.login.model.LoginBean;
+import com.xingguang.localrun.login.model.OtherLogin;
 import com.xingguang.localrun.utils.AppUtil;
 import com.xingguang.localrun.view.ClearEditText;
 
@@ -110,7 +111,7 @@ public class LoginActivity extends HttpToolBarActivity {
                     return;
                 }
                 resetLoginButton(true);
-                type = "2";
+                type = "qq";
                 mShareAPI.getPlatformInfo(this, SHARE_MEDIA.QQ, umAuthListener);
                 break;
             case R.id.wecha_btn://weixin
@@ -118,7 +119,7 @@ public class LoginActivity extends HttpToolBarActivity {
                     return;
                 }
                 resetLoginButton(true);
-                type = "1";
+                type = "weixin";
                 mShareAPI.getPlatformInfo(this, SHARE_MEDIA.WEIXIN, umAuthListener);
                 break;
             case R.id.sinablog_btn://新浪
@@ -126,7 +127,7 @@ public class LoginActivity extends HttpToolBarActivity {
                     return;
                 }
                 resetLoginButton(true);
-                type = "3";
+                type = "sina";
                 mShareAPI.getPlatformInfo(this, SHARE_MEDIA.SINA, umAuthListener);
                 break;
         }
@@ -180,11 +181,11 @@ public class LoginActivity extends HttpToolBarActivity {
             }
             headerUrl = data.get("iconurl");
             name = data.get("name");
-            sex = "男".equals(data.get("gender")) ? "1" : "0";
+//            sex = "男".equals(data.get("gender")) ? "1" : "0";
 
             resetLoginButton(false);
             //第三方登陆 获取相关个人信息
-//            loadOtherLogin(openid, name, headerUrl, type);
+            loadOtherLogin(openid, name, headerUrl,type);
         }
 
         @Override
@@ -205,41 +206,40 @@ public class LoginActivity extends HttpToolBarActivity {
     /**
      * 三方登录
      */
-//    private void loadOtherLogin(final String openid, final String name, final String headerUrl, final String type) {
-//        HttpManager.getInstance().getotherLogin(openid, name, headerUrl, type).compose(bindRecycler())
-//                .subscribe(new BaseSubscriber<>(new HttpOnNextListener<OtherLogin>() {
-//                    @Override
-//                    public void onNext(OtherLogin state) {
-//                        LoginActivity.this.loadingFinished();
-//                        if (state.getResult().equals("1")){ //1登陆 2填手机号
-//                            //登陆成功
-//                            SharedPreferencesUtils.put(LoginActivity.this, SharedPreferencesUtils.USERID, state.getUser().getUserId());
-//                            SharedPreferencesUtils.put(LoginActivity.this, SharedPreferencesUtils.USERNAME,  state.getUser().getUserName());
-//                            SharedPreferencesUtils.put(LoginActivity.this, SharedPreferencesUtils.USERIMAGE, state.getUser().getUserImg());
-//                            SharedPreferencesUtils.put(LoginActivity.this, SharedPreferencesUtils.PHONE, state.getUser().getPhone());
-//
-//                            SharedPreferencesUtils.put(LoginActivity.this, SharedPreferencesUtils.AUTOGRAPH, state.getUser().getDescription());
-//                            SharedPreferencesUtils.put(LoginActivity.this, SharedPreferencesUtils.CODE, state.getUser().getCode());
-//                            SharedPreferencesUtils.put(LoginActivity.this, SharedPreferencesUtils.COMPANY, state.getUser().getCompany());
-//                            SharedPreferencesUtils.put(LoginActivity.this, SharedPreferencesUtils.GION, state.getUser().getGion());
-//                            bindAlias();
-//                            LoginActivity.this.finish();
-//                        }else {
-//                            Intent intent = new Intent(LoginActivity.this, OtherOneLoginActivity.class);
-//                            intent.putExtra("result", state.getResult());
-//                            intent.putExtra("otherLogin", (Serializable) state.getUser());
-//                            intent.putExtra("openid", openid);
-//                            intent.putExtra("name", name);
-//                            intent.putExtra("headerUrl", headerUrl);
-//                            intent.putExtra("type", type);
-//                            startActivity(intent);
-//                            LoginActivity.this.finish();
-//                        }
-//
-//
-//                    }
-//                }, this));
-//    }
+    private void loadOtherLogin(final String openid, final String name, final String headerUrl, final String type) {
+        OkGo.<String>post(HttpManager.Publicthird)
+                .tag(this)
+                .cacheKey("cachePostKey")
+                .cacheMode(CacheMode.DEFAULT)
+                .params("third_type",type)
+                .params("uniqid",openid)
+                .params("nickname",name)
+                .params("avatar",headerUrl)
+                .execute(new DialogCallback<String>(this) {
+                    @Override
+                    public void onSuccess(Response<String> response) {
+                        Gson gson = new Gson();
+                        OtherLogin otherLogin = gson.fromJson(response.body().toString(), OtherLogin.class);
+                            if (!otherLogin.getData().getToken().equals("")){
+                                LoginActivity.this.finish();
+                                ToastUtils.showToast(LoginActivity.this, "恭喜您,登录成功!");
+                                SharedPreferencesUtils.put(LoginActivity.this, SharedPreferencesUtils.USERID, otherLogin.getData().getToken());
+                                SharedPreferencesUtils.put(LoginActivity.this, SharedPreferencesUtils.USERNAME, otherLogin.getData().getNickname());
+                                SharedPreferencesUtils.put(LoginActivity.this, SharedPreferencesUtils.USERIMAGE, HttpManager.INDEX + otherLogin.getData().getAvatar());
+                                SharedPreferencesUtils.put(LoginActivity.this, SharedPreferencesUtils.PHONE, otherLogin.getData().getMobile());
+                            }else {
+                                Intent intent = new Intent(LoginActivity.this, OtherLoginActivity.class);
+                                intent.putExtra("type",otherLogin.getData().getThird_type());
+                                intent.putExtra("openid", otherLogin.getData().getUniqid());
+                                intent.putExtra("user_id", otherLogin.getData().getUser_id());
+                                intent.putExtra("name", name);
+                                intent.putExtra("headerUrl", headerUrl);
+                                startActivity(intent);
+                            }
+                    }
+                });
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
