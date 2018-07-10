@@ -115,7 +115,6 @@ public class MineApplyEnterActivity extends ToolBarActivity {
             }
             result.append(string);
         }
-        Log.e("setSelectedNum", "setSelectedNum: "+result.toString());
     }
 
     /**

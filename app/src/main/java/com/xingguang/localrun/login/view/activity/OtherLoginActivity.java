@@ -92,12 +92,15 @@ public class OtherLoginActivity extends ToolBarActivity {
                     public void onSuccess(Response<String> response) {
                         Gson gson = new Gson();
                         OtherLogin otherLogin = gson.fromJson(response.body().toString(), OtherLogin.class);
-                        SharedPreferencesUtils.put(OtherLoginActivity.this, SharedPreferencesUtils.USERID, otherLogin.getData().getToken());
-                        SharedPreferencesUtils.put(OtherLoginActivity.this, SharedPreferencesUtils.USERNAME, otherLogin.getData().getNickname());
-                        SharedPreferencesUtils.put(OtherLoginActivity.this, SharedPreferencesUtils.USERIMAGE, HttpManager.INDEX + otherLogin.getData().getAvatar());
-                        SharedPreferencesUtils.put(OtherLoginActivity.this, SharedPreferencesUtils.PHONE, otherLogin.getData().getMobile());
-                        ToastUtils.showToast(OtherLoginActivity.this, otherLogin.getMsg());
-                        finish();
+                        if (otherLogin.getStatus() == 1) {
+                            SharedPreferencesUtils.put(OtherLoginActivity.this, SharedPreferencesUtils.USERID, otherLogin.getData().getToken());
+                            SharedPreferencesUtils.put(OtherLoginActivity.this, SharedPreferencesUtils.USERNAME, otherLogin.getData().getNickname());
+                            SharedPreferencesUtils.put(OtherLoginActivity.this, SharedPreferencesUtils.USERIMAGE, HttpManager.INDEX + otherLogin.getData().getAvatar());
+                            SharedPreferencesUtils.put(OtherLoginActivity.this, SharedPreferencesUtils.PHONE, otherLogin.getData().getMobile());
+                            ToastUtils.showToast(OtherLoginActivity.this, otherLogin.getMsg());
+                            finish();
+                            LoginActivity.instance.finish();
+                        }
                     }
                 });
     }

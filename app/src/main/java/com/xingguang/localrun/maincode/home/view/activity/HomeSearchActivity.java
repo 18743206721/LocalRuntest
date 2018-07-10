@@ -15,8 +15,8 @@ import android.widget.Toast;
 
 import com.androidkun.xtablayout.XTabLayout;
 import com.google.gson.Gson;
-import com.lcodecore.tkrefreshlayout.Footer.LoadingView;
 import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout;
+import com.lcodecore.tkrefreshlayout.footer.LoadingView;
 import com.lzy.okgo.OkGo;
 import com.lzy.okgo.cache.CacheMode;
 import com.lzy.okgo.model.Response;
@@ -158,7 +158,6 @@ public class HomeSearchActivity extends BaseActivity implements RefreshUtil.OnRe
         currentpos = position;
         search = historList.get(position);
         etSearch.setText(search);
-//                loadfindbykey(search, 0);
         initxianshi();
     }
 
@@ -173,6 +172,8 @@ public class HomeSearchActivity extends BaseActivity implements RefreshUtil.OnRe
         for (int i = 0, j = historSearch.length; i < j; i++) {
             historList.add(historSearch[i]);
         }
+
+
         listAdapter.setList(historList);
     }
 
@@ -394,18 +395,25 @@ public class HomeSearchActivity extends BaseActivity implements RefreshUtil.OnRe
     private void historyload() {
         if (!etSearch.getText().toString().equals("")) { //输入不为空
             initxianshi();
-//            ll_biaoqian.setVisibility(View.VISIBLE);
             search = etSearch.getText().toString();
             if (historList.size() != 0) {
-                if (etSearch.getText().toString().equals(historList.get(currentpos))) {
-                    //直接显示列表，不添加到集合
-                } else {
-                    //添加到集合
+
+                if (!search.equals(historList.get(currentpos))) {
+                    for (int i = 0; i < historList.size(); i++) {
+                        if (!search.equals(historList.get(i))) {
+
+                        } else {
+                            historList.remove(i);
+                        }
+                    }
+
                     historList.add(search);
                     listAdapter.setList(historList);
                     saveHistory(historList);
                 }
+
             } else {
+
                 historList.add(search);
                 listAdapter.setList(historList);
                 saveHistory(historList);

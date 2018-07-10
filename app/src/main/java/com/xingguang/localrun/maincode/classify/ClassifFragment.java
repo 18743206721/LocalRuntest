@@ -7,8 +7,8 @@ import android.widget.ImageView;
 import android.widget.ListView;
 
 import com.google.gson.Gson;
-import com.lcodecore.tkrefreshlayout.Footer.LoadingView;
 import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout;
+import com.lcodecore.tkrefreshlayout.footer.LoadingView;
 import com.lzy.okgo.OkGo;
 import com.lzy.okgo.cache.CacheMode;
 import com.lzy.okgo.model.Response;
@@ -57,7 +57,6 @@ public class ClassifFragment extends HttpFragment implements RefreshUtil.OnRefre
     private boolean shouldSet;
     private int page = 1;
     private boolean isRefresh = false;
-    private int pos = 0;
     private String classifId = "";//左面列表的分类id
 
     @Override
@@ -67,14 +66,9 @@ public class ClassifFragment extends HttpFragment implements RefreshUtil.OnRefre
 
     @Override
     protected void initView() {
-//        twRefresh.setEnableOverScroll(false);
         twRefresh.setEnableRefresh(false);
         twRefresh.setBottomView(new LoadingView(getActivity()));
         twRefresh.setOnRefreshListener(new RefreshUtil(this).refreshListenerAdapter());
-
-
-//        setToolBarTitle("分类");
-
 
         rightListAdapter = new RightAdapter(getActivity(), rightList);
         rightListView.setAdapter(rightListAdapter);

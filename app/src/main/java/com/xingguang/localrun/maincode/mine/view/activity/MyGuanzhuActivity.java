@@ -8,8 +8,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
-import com.lcodecore.tkrefreshlayout.Footer.LoadingView;
 import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout;
+import com.lcodecore.tkrefreshlayout.footer.LoadingView;
 import com.lcodecore.tkrefreshlayout.header.SinaRefreshView;
 import com.lzy.okgo.OkGo;
 import com.lzy.okgo.cache.CacheMode;
@@ -25,10 +25,8 @@ import com.xingguang.localrun.maincode.mine.view.adapter.MyAttentionAdapter;
 import com.xingguang.localrun.popwindow.TextPopUpWindow;
 import com.xingguang.localrun.refresh.RefreshUtil;
 import com.xingguang.localrun.utils.AppUtil;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import butterknife.BindView;
 
 
@@ -178,7 +176,6 @@ public class MyGuanzhuActivity extends ToolBarActivity implements RefreshUtil.On
     @Override
     public void onRefresh() {
         isRefresh = true;
-        total++;
         load(total);
     }
 

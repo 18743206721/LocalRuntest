@@ -7,6 +7,7 @@ import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -21,8 +22,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
-import com.lcodecore.tkrefreshlayout.Footer.LoadingView;
 import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout;
+import com.lcodecore.tkrefreshlayout.footer.LoadingView;
 import com.lzy.okgo.OkGo;
 import com.lzy.okgo.cache.CacheMode;
 import com.lzy.okgo.model.Response;
@@ -42,7 +43,6 @@ import com.xingguang.localrun.main.view.MainActivity;
 import com.xingguang.localrun.maincode.home.model.GlideImageLoader;
 import com.xingguang.localrun.maincode.home.model.GoodsDetailsBean;
 import com.xingguang.localrun.maincode.home.model.PingJiaBean;
-import com.xingguang.localrun.maincode.home.model.ProductDetailsBean;
 import com.xingguang.localrun.maincode.home.model.SpecBean;
 import com.xingguang.localrun.maincode.home.view.adapter.PinglunAdapter;
 import com.xingguang.localrun.popwindow.CrowdPopUpWindow;
@@ -50,7 +50,6 @@ import com.xingguang.localrun.popwindow.NowBuyPopUpWindow;
 import com.xingguang.localrun.popwindow.NowOrderPopUpWindow;
 import com.xingguang.localrun.popwindow.SharePopUpWindow;
 import com.xingguang.localrun.refresh.RefreshUtil;
-import com.xingguang.localrun.refresh.SinaRefreshHeader;
 import com.xingguang.localrun.utils.AppUtil;
 import com.youth.banner.Banner;
 
@@ -125,40 +124,28 @@ public class ProductdetailsActivity extends BaseActivity implements SharePopUpWi
     TextView tv_title;
     @BindView(R.id.tw_refresh)
     TwinklingRefreshLayout twRefresh;
+    @BindView(R.id.nestscroll)
+    NestedScrollView nestedScrollView;
 
     private boolean isRefresh = false;
-
-
     private boolean isshow;
-    private int mHeight;
     public static ProductdetailsActivity instance;
-
-    private ArrayList<ProductDetailsBean> lists = new ArrayList<ProductDetailsBean>();
-
     //商品规格列表
     private ArrayList<SpecBean.DataBean> specBeanList = new ArrayList<>();
-
     //商品详情
     private List<PingJiaBean.DataBean> mdatas = new ArrayList<>();
     //购买件数
     private int nums = 1;
-
     //规格ID
     private String itemid = "";
     private Intent intent;
-
     private CrowdPopUpWindow mPopUpWindow;
-
     private String goods_id; //商品id
-
     //分享
-    private List<String> headlist = new ArrayList<>();
-    private String shareUrl, shareTitle, shareImg;
+    private String shareUrl, shareTitle;
     private UMImage image;
     private UMWeb web;
 
-
-    private int collect_id; //取消收藏id
     private List<String> networkImages = new ArrayList<>(); //轮播图集合
     String original_img = ""; //规格里的图片
     private String storgeNum = "";//商品详情里的规格
@@ -173,13 +160,14 @@ public class ProductdetailsActivity extends BaseActivity implements SharePopUpWi
 
     @Override
     protected void initView() {
-        twRefresh.setHeaderView(new SinaRefreshHeader(ProductdetailsActivity.this));
-        twRefresh.setBottomView(new LoadingView(ProductdetailsActivity.this));
+        twRefresh.setEnableRefresh(false);
+        twRefresh.setEnableOverScroll(false);
+        twRefresh.setBottomView(new LoadingView(this));
         twRefresh.setOnRefreshListener(new RefreshUtil(this).refreshListenerAdapter());
-
         goods_id = getIntent().getStringExtra("goods_id");
         instance = this;
 
+        twRefresh.setTargetView(nestedScrollView);
 
         initAdapter();
         loadDetails();
@@ -207,25 +195,18 @@ public class ProductdetailsActivity extends BaseActivity implements SharePopUpWi
                         GoodsDetailsBean bean = gson.fromJson(response.body().toString(), GoodsDetailsBean.class);
                         if (bean.getData() != null) {
                             dataBean = bean.getData();
-
                             //加载头部轮播图
                             for (int i = 0; i < dataBean.getGoods_images().size(); i++) {
                                 networkImages.add(HttpManager.INDEX + dataBean.getGoods_images().get(i).getImage_url());
                             }
                             initpage();
-
                             //webview，商品详情
-//                            if ("".equals(dataBean.getGoods_content())) {
-//                                webView1.setVisibility(View.GONE);
-//                            } else {
                             webView1.setVisibility(View.VISIBLE);
                             String html = dataBean.getGoods_content();
                             String data = html.replace("%@", html);
                             webView1.loadData(data, "text/html; charset=UTF-8", null);
-//                            }
                             original_img = HttpManager.INDEX + dataBean.getOriginal_img();
                             tvProName.setText(dataBean.getGoods_name());//商品名称
-                            collect_id = bean.getData().getCollect_id();//收藏id
                             tvProPrice.setText("¥" + dataBean.getShop_price());//优惠价
                             if (bean.getData().getIs_collected() == 1) { //收藏过该商品
                                 AppUtil.setThemeColor(ProductdetailsActivity.this, collectImg, R.mipmap.pro_collection);
@@ -249,7 +230,6 @@ public class ProductdetailsActivity extends BaseActivity implements SharePopUpWi
     private void loadshare() {
         shareUrl = MyShare.getDownload();
         shareTitle = MyShare.getTitle();
-        shareImg = MyShare.getLogo();
     }
 
     @Override
@@ -296,6 +276,31 @@ public class ProductdetailsActivity extends BaseActivity implements SharePopUpWi
     }
 
     private void initListener() {
+//        rvComment.addOnScrollListener(new SwipyAppBarScrollListener(mAppbarlayout, llParent, rvComment));
+
+//        nestedScrollView.getViewTreeObserver().addOnScrollChangedListener(new ViewTreeObserver.OnScrollChangedListener() {
+//            @Override
+//            public void onScrollChanged() {
+//                twRefresh.setEnabled(true);
+//            }
+//        });
+
+        mAppbarlayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
+            @Override
+            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+                Log.e("dff", "onOffsetChanged: " + verticalOffset);
+                if (verticalOffset >= 0) {
+                    twRefresh.setEnableRefresh(true);
+                    twRefresh.setEnableOverScroll(false);
+                } else {
+                    twRefresh.setEnableRefresh(false);
+                    twRefresh.setEnableOverScroll(false);
+                }
+
+            }
+        });
+
+
         //設置appbar的滑動颜色渐变效果
         mAppbarlayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
             @Override
@@ -533,7 +538,6 @@ public class ProductdetailsActivity extends BaseActivity implements SharePopUpWi
         }
     }
 
-
     class OnClickLintener implements View.OnClickListener {
         @Override
         public void onClick(View v) {
@@ -598,6 +602,9 @@ public class ProductdetailsActivity extends BaseActivity implements SharePopUpWi
 
                             mdatas.addAll(bean.getData());
 
+                            pinglunadapter.setList(mdatas);
+
+
                             if (mdatas.size() == 0) {
                                 llLiebiao.setVisibility(View.GONE);
                                 llWpl.setVisibility(View.VISIBLE);
@@ -606,17 +613,11 @@ public class ProductdetailsActivity extends BaseActivity implements SharePopUpWi
                                 llWpl.setVisibility(View.GONE);
                             }
 
-                            pinglunadapter.setList(mdatas);
+                            twRefresh.finishLoadmore();
+
                         } else {
                             ToastUtils.showToast(ProductdetailsActivity.this, bean.getMsg());
                         }
-
-                        if (isRefresh) {
-                            twRefresh.finishRefreshing();
-                        } else {
-                            twRefresh.finishLoadmore();
-                        }
-
 
                     }
                 });
@@ -624,15 +625,12 @@ public class ProductdetailsActivity extends BaseActivity implements SharePopUpWi
 
     @Override
     public void onRefresh() {
-        isRefresh = true;
-        loadpingLun(page);
+        twRefresh.finishRefreshing();
     }
 
     @Override
     public void onLoad() {
-        isRefresh = false;
-        page++;
-        loadpingLun(page);
+        loadpingLun(page++);
     }
 
 

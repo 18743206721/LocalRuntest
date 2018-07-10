@@ -2,14 +2,11 @@ package com.xingguang.localrun.maincode.home;
 
 import android.content.Intent;
 import android.net.Uri;
-import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -41,14 +38,13 @@ import com.xingguang.localrun.maincode.home.view.adapter.HomeDaiGouAdapter;
 import com.xingguang.localrun.utils.AppUtil;
 import com.xingguang.localrun.utils.ImageLoader;
 import com.youth.banner.Banner;
+import com.youth.banner.listener.OnBannerListener;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
-import butterknife.Unbinder;
 
 public class HomeFragment extends HttpFragment {
 
@@ -92,19 +88,16 @@ public class HomeFragment extends HttpFragment {
     LinearLayout ll_daigoupage;
     @BindView(R.id.ll_daibanpage)
     LinearLayout ll_daibanpage;
-
-    Unbinder unbinder;
-
     private HomeDaiGouAdapter daigouadapter;
     private HomeDaiBanAdapter daibanadapter;
-
-
     private List<String> networkImages = new ArrayList<>();
     private Intent intent;
     private FragmentManager fm;
     private int page = 0; //代购分页
     private int count = 0; //代办分页
 
+    //轮播图
+    private List<HIndexBean.DataBean.Banner1Bean> bannerList = new ArrayList<>();
     //banner2
     private List<HIndexBean.DataBean.Banner2Bean> banner2BeanList = new ArrayList<>();
     //代购数据
@@ -198,10 +191,19 @@ public class HomeFragment extends HttpFragment {
                         }
                         initpage();
 
-                        ImageLoader.getInstance().initGlide(getActivity()).loadImage(HttpManager.INDEX+banner2BeanList.get(0).getImage(),iv_img1);
-                        ImageLoader.getInstance().initGlide(getActivity()).loadImage(HttpManager.INDEX+banner2BeanList.get(1).getImage(),iv_img2);
-//                        ImageLoader.getInstance().initGlide(getActivity()).loadImage(HttpManager.INDEX+banner2BeanList.get(2).getImage(),iv_img3);
-//                        ImageLoader.getInstance().initGlide(getActivity()).loadImage(HttpManager.INDEX+banner2BeanList.get(3).getImage(),iv_img4);
+                        bannerList.addAll(hIndexBean.getData().getBanner1());
+
+                        for (int i = 0; i < banner2BeanList.size(); i++) {
+                            if (i == 0){
+                                ImageLoader.getInstance().initGlide(getActivity()).loadImage(HttpManager.INDEX+banner2BeanList.get(0).getImage(),iv_img1);
+                            }else if(i == 1){
+                                ImageLoader.getInstance().initGlide(getActivity()).loadImage(HttpManager.INDEX+banner2BeanList.get(1).getImage(),iv_img2);
+                            }else if (i == 2){
+                                ImageLoader.getInstance().initGlide(getActivity()).loadImage(HttpManager.INDEX+banner2BeanList.get(2).getImage(),iv_img3);
+                            }else {
+                                ImageLoader.getInstance().initGlide(getActivity()).loadImage(HttpManager.INDEX+banner2BeanList.get(3).getImage(),iv_img4);
+                            }
+                        }
 
                         //获取分享里的头像和标题，下载地址；
                         MyShare.setTitle(hIndexBean.getData().getAndroid().getTitle());
@@ -214,7 +216,6 @@ public class HomeFragment extends HttpFragment {
 
 
     private void initListener() {
-
         daigouadapter.setmOnItemClickListener(new HomeDaiGouAdapter.OnItemClickListener() {
             @Override
             public void OnItemClick(View view, int position) {
@@ -232,7 +233,7 @@ public class HomeFragment extends HttpFragment {
             @Override
             public void OnItemClick(TextView view, int position) {
                 if (AppUtil.isExamined(getActivity())) {
-                    Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + 1008655));
+                    Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + daibanlist.get(position).getPhone()));
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(intent);
                 }
@@ -264,6 +265,33 @@ public class HomeFragment extends HttpFragment {
         banner.setDelayTime(3000);
         //banner设置方法全部调用完毕时最后调用
         banner.start();
+
+        //轮播图点击事件
+        banner.setOnBannerListener(new OnBannerListener() {
+            @Override
+            public void OnBannerClick(int position) {
+                for (int i = 0; i < bannerList.size(); i++) {
+                    if (position == i){
+                        intentclassif(bannerList.get(i).getData_id(),bannerList.get(i).getData_type());
+                    }
+                }
+            }
+        });
+
+    }
+
+
+    private void intentclassif(String data_id, String data_type) {
+        if (!data_id.equals("0")){
+            if (data_type.equals("1")){ //代办详情
+                startActivity(new Intent(getActivity(),DaiBanDetailsActivity.class)
+                .putExtra("danbanid",data_id));
+            }else if (data_type.equals("2")){ //店铺详情
+                intent = new Intent(getActivity(), LookShopActivity.class);
+                intent.putExtra("shopid", data_id);
+                startActivity(intent);
+            }
+        }
 
     }
 
@@ -359,20 +387,6 @@ public class HomeFragment extends HttpFragment {
     private void startfenlei(String text) {
         startActivity(new Intent(getActivity(), ClassifShopActivity.class)
                 .putExtra("name", text));
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        // TODO: inflate a fragment view
-        View rootView = super.onCreateView(inflater, container, savedInstanceState);
-        unbinder = ButterKnife.bind(this, rootView);
-        return rootView;
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        unbinder.unbind();
     }
 
 

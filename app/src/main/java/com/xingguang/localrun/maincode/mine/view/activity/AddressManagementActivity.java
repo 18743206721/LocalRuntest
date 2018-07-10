@@ -9,8 +9,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
-import com.lcodecore.tkrefreshlayout.Footer.LoadingView;
 import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout;
+import com.lcodecore.tkrefreshlayout.footer.LoadingView;
 import com.lcodecore.tkrefreshlayout.header.SinaRefreshView;
 import com.lzy.okgo.OkGo;
 import com.lzy.okgo.cache.CacheMode;
@@ -152,20 +152,11 @@ public class AddressManagementActivity extends ToolBarActivity implements Refres
                         mAdapter.notifyDataSetChanged();
                         ToastUtils.showToast(AddressManagementActivity.this,madbean.getMsg());
 
-
                         if (buytype == 1) {//支付时，选择地址页面，从支付页面跳过来，buytype == 1；
                             Intent intent = new Intent(AddressManagementActivity.this, BuyActivity.class);
-                            intent.putExtra("id", myContractList.get(position).getAddress_id());
-                            intent.putExtra("name", myContractList.get(position).getConsignee());
-                            intent.putExtra("phone", myContractList.get(position).getMobile());
-                            intent.putExtra("xiangxiads", myContractList.get(position).getAddress());
-                            intent.putExtra("provice", myContractList.get(position).getProvince());
-                            intent.putExtra("city", myContractList.get(position).getCity());
-                            intent.putExtra("area", myContractList.get(position).getArea());
                             setResult(50, intent);
                             AddressManagementActivity.this.finish();
                         }
-
 
                     }
                 });

@@ -46,11 +46,7 @@ public class AboutActivity extends ToolBarActivity implements SharePopUpWindow.O
     LinearLayout llQrcode;
     @BindView(R.id.ll_parent)
     LinearLayout ll_parent;
-
-    private String shareUrl, shareTitle, shareImg;
     private UMImage image;
-    int type = 1;//1:关于同城快跑2：服务协议
-
 
     @Override
     protected int getLayoutId() {
@@ -66,7 +62,6 @@ public class AboutActivity extends ToolBarActivity implements SharePopUpWindow.O
             }
         });
         setToolBarTitle("关于同城快跑");
-
         load();
     }
 
@@ -110,9 +105,6 @@ public class AboutActivity extends ToolBarActivity implements SharePopUpWindow.O
     public void onShareListener(SHARE_MEDIA share_media) {
         //设置分享图片
         image = new UMImage(this, MyShare.getQr_code());//网络图片
-//        web = new UMWeb(shareUrl);
-//        web.setTitle(shareTitle);//标题
-//        web.setThumb(image);  //缩略图
         new ShareAction(AboutActivity.this)
                 .setPlatform(share_media)
                 .withMedia(image)
@@ -144,7 +136,6 @@ public class AboutActivity extends ToolBarActivity implements SharePopUpWindow.O
 
         @Override
         public void onCancel(SHARE_MEDIA platform) {
-//            Toast.makeText(AboutActivity.this, "分享取消", Toast.LENGTH_SHORT).show();
         }
     };
 

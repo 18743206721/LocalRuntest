@@ -9,10 +9,11 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
-import com.lcodecore.tkrefreshlayout.Footer.LoadingView;
 import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout;
+import com.lcodecore.tkrefreshlayout.footer.LoadingView;
 import com.lcodecore.tkrefreshlayout.header.SinaRefreshView;
 import com.lzy.okgo.OkGo;
 import com.lzy.okgo.cache.CacheMode;
@@ -68,7 +69,7 @@ public class LookShopFragment extends BaseFragment implements RefreshUtil.OnRefr
         LookShopFragment fragment = new LookShopFragment();
         Bundle bundle = new Bundle();
         bundle.putInt("type", type);
-        bundle.putString("shopid",shopid);
+        bundle.putString("shopid", shopid);
         fragment.setArguments(bundle);
         return fragment;
     }
@@ -95,28 +96,30 @@ public class LookShopFragment extends BaseFragment implements RefreshUtil.OnRefr
             loadbanner(0);
             loadIndex(0);
             loadjianjie();
-        }else if (type == 2){
+        } else if (type == 2) {
             loadall(1);
-        }else {
+        } else {
             loadnews(1);
         }
         initListener();
     }
 
     private void initAdapter() {
-        adapter = new LookShopAdapter(getActivity(),bannerList,indexlist,allgoodlist,jianjie,type);
-        if (type == 1){
+        adapter = new LookShopAdapter(getActivity(), bannerList, indexlist, allgoodlist, jianjie, type);
+        if (type == 1) {
             LinearLayoutManager mgr = new LinearLayoutManager(getActivity());
             rvLooksp.setLayoutManager(mgr);
             rvLooksp.setAdapter(adapter);
-        }else {
+        } else {
             GridLayoutManager mgr = new GridLayoutManager(getActivity(), 2);
             rvLooksp.setLayoutManager(mgr);
             rvLooksp.setAdapter(adapter);
         }
     }
 
-    /**轮播图*/
+    /**
+     * 轮播图
+     */
     private void loadbanner(final int total) {
         OkGo.<String>post(HttpManager.Shopbanner)
                 .tag(this)
@@ -128,14 +131,14 @@ public class LookShopFragment extends BaseFragment implements RefreshUtil.OnRefr
                     public void onSuccess(Response<String> response) {
                         Gson gson = new Gson();
                         ShopBannerBean shopBannerBean = gson.fromJson(response.body().toString(), ShopBannerBean.class);
-                        if (shopBannerBean.getData()!=null) {
-                            if (total == 0){
+                        if (shopBannerBean.getData() != null) {
+                            if (total == 0) {
                                 bannerList.clear();
                             }
                             bannerList.addAll(shopBannerBean.getData());
                             adapter.setList(bannerList);
-                        }else{
-                            ToastUtils.showToast(getActivity(),shopBannerBean.getMsg());
+                        } else {
+                            ToastUtils.showToast(getActivity(), shopBannerBean.getMsg());
                         }
 
                         if (isRefresh) {
@@ -148,7 +151,9 @@ public class LookShopFragment extends BaseFragment implements RefreshUtil.OnRefr
                 });
     }
 
-    /**推荐新品*/
+    /**
+     * 推荐新品
+     */
     private void loadIndex(final int total) {
         OkGo.<String>post(HttpManager.Shopindex)
                 .tag(this)
@@ -160,7 +165,7 @@ public class LookShopFragment extends BaseFragment implements RefreshUtil.OnRefr
                     public void onSuccess(Response<String> response) {
                         Gson gson = new Gson();
                         ShopIndex index = gson.fromJson(response.body().toString(), ShopIndex.class);
-                        if (index.getData()!=null) {
+                        if (index.getData() != null) {
 
 //                            if (index.getData().size() == 0 && count != 0) {
 //                                Toast.makeText(getActivity(),
@@ -168,13 +173,13 @@ public class LookShopFragment extends BaseFragment implements RefreshUtil.OnRefr
 //                                        Toast.LENGTH_SHORT).show();
 //                            }
 
-                            if (total == 0){
+                            if (total == 0) {
                                 indexlist.clear();
                             }
                             indexlist.addAll(index.getData());
                             adapter.setListIndex(indexlist);
-                        }else{
-                            ToastUtils.showToast(getActivity(),index.getMsg());
+                        } else {
+                            ToastUtils.showToast(getActivity(), index.getMsg());
                         }
                         if (isRefresh) {
                             tw_mylook.finishRefreshing();
@@ -187,7 +192,7 @@ public class LookShopFragment extends BaseFragment implements RefreshUtil.OnRefr
 
     /**
      * 店铺简介
-     * */
+     */
     private void loadjianjie() {
         OkGo.<String>post(HttpManager.Shopjianjie)
                 .tag(this)
@@ -199,10 +204,10 @@ public class LookShopFragment extends BaseFragment implements RefreshUtil.OnRefr
                     public void onSuccess(Response<String> response) {
                         Gson gson = new Gson();
                         ShopJianjieBean jianjieBean = gson.fromJson(response.body().toString(), ShopJianjieBean.class);
-                        if (jianjieBean.getData()!=null) {
+                        if (jianjieBean.getData() != null) {
                             adapter.setjianjie(jianjieBean.getData());
-                        }else{
-                            ToastUtils.showToast(getActivity(),jianjieBean.getMsg());
+                        } else {
+                            ToastUtils.showToast(getActivity(), jianjieBean.getMsg());
                         }
                         if (isRefresh) {
                             tw_mylook.finishRefreshing();
@@ -215,38 +220,42 @@ public class LookShopFragment extends BaseFragment implements RefreshUtil.OnRefr
 
     /**
      * 全部宝贝
-     * */
+     */
     private void loadall(final int page) {
         OkGo.<String>post(HttpManager.Shopgoods)
                 .tag(this)
                 .cacheKey("cachePostKey")
                 .cacheMode(CacheMode.DEFAULT)
                 .params("id", shopid)
-                .params("page",page)
+                .params("page", page)
                 .execute(new DialogCallback<String>(getActivity()) {
                     @Override
                     public void onSuccess(Response<String> response) {
                         Gson gson = new Gson();
                         ShopAllGoodBean allGoodBean = gson.fromJson(response.body().toString(), ShopAllGoodBean.class);
-                        if (allGoodBean.getData()!=null) {
-                            if (page == 1){
-                                allgoodlist .clear();
+                        if (allGoodBean.getData() != null) {
+
+                            if (allGoodBean.getData().size() == 0 && page != 1) {
+                                Toast.makeText(getActivity(),
+                                        "只有这么多了~",
+                                        Toast.LENGTH_SHORT).show();
+                            }
+
+                            if (page == 1) {
+                                allgoodlist.clear();
                             }
                             allgoodlist.addAll(allGoodBean.getData());
 
-                            if (allGoodBean.getData().size() == 0){
-                                ToastUtils.showToast(getActivity(),"暂无更多!");
-                            }else {
-                                adapter.setgoodsList(allgoodlist);
+                            if (isRefresh) {
+                                tw_mylook.finishRefreshing();
+                            } else {
+                                tw_mylook.finishLoadmore();
                             }
 
-                        }else{
-                            ToastUtils.showToast(getActivity(),allGoodBean.getMsg());
-                        }
-                        if (isRefresh) {
-                            tw_mylook.finishRefreshing();
+                            adapter.setgoodsList(allgoodlist);
+
                         } else {
-                            tw_mylook.finishLoadmore();
+                            ToastUtils.showToast(getActivity(), allGoodBean.getMsg());
                         }
 
                     }
@@ -254,39 +263,39 @@ public class LookShopFragment extends BaseFragment implements RefreshUtil.OnRefr
     }
 
     /**
-     *新品
-     * */
+     * 新品
+     */
     private void loadnews(final int page) {
         OkGo.<String>post(HttpManager.shopnews)
                 .tag(this)
                 .cacheKey("cachePostKey")
                 .cacheMode(CacheMode.DEFAULT)
                 .params("id", shopid)
-                .params("page",page)
+                .params("page", page)
                 .execute(new DialogCallback<String>(getActivity()) {
                     @Override
                     public void onSuccess(Response<String> response) {
                         Gson gson = new Gson();
                         ShopAllGoodBean allGoodBean = gson.fromJson(response.body().toString(), ShopAllGoodBean.class);
-                        if (allGoodBean.getData()!=null) {
-                            if (page == 1){
-                                allgoodlist .clear();
+                        if (allGoodBean.getData() != null) {
+                            if (allGoodBean.getData().size() == 0 && page != 1) {
+                                Toast.makeText(getActivity(),
+                                        "只有这么多了~",
+                                        Toast.LENGTH_SHORT).show();
+                            }
+
+                            if (page == 1) {
+                                allgoodlist.clear();
                             }
                             allgoodlist.addAll(allGoodBean.getData());
-
-                            if (allGoodBean.getData().size() == 0){
-                                ToastUtils.showToast(getActivity(),"暂无更多!");
-                            }else {
-                                adapter.setnewsgoodsList(allgoodlist);
+                            if (isRefresh) {
+                                tw_mylook.finishRefreshing();
+                            } else {
+                                tw_mylook.finishLoadmore();
                             }
-
-                        }else{
-                            ToastUtils.showToast(getActivity(),allGoodBean.getMsg());
-                        }
-                        if (isRefresh) {
-                            tw_mylook.finishRefreshing();
+                            adapter.setnewsgoodsList(allgoodlist);
                         } else {
-                            tw_mylook.finishLoadmore();
+                            ToastUtils.showToast(getActivity(), allGoodBean.getMsg());
                         }
 
                     }
@@ -314,7 +323,8 @@ public class LookShopFragment extends BaseFragment implements RefreshUtil.OnRefr
     }
 
     @Override
-    protected void lazyLoad() {}
+    protected void lazyLoad() {
+    }
 
     @Override
     public void onRefresh() {
@@ -322,9 +332,9 @@ public class LookShopFragment extends BaseFragment implements RefreshUtil.OnRefr
         if (type == 1) {
             loadbanner(0);
             loadIndex(0);
-        }else if (type == 2){
-            loadall(page++);
-        }else{
+        } else if (type == 2) {
+            loadall(page);
+        } else {
             loadnews(page++);
         }
     }
@@ -334,15 +344,13 @@ public class LookShopFragment extends BaseFragment implements RefreshUtil.OnRefr
         isRefresh = false;
         if (type == 1) {
             loadbanner(0);
-            total+=count;
+            total += count;
             loadIndex(0);
-        }else if (type == 2){
-            page++;
-            loadall(page);
-        }else {
+        } else if (type == 2) {
+            loadall(page++);
+        } else {
             loadnews(page++);
         }
-
     }
 
 }

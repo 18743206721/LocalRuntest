@@ -222,6 +222,7 @@ public class ModificationActivity extends ToolBarActivity implements CountDownTi
 
     @Override
     public void countDownTimerFinish() {
+        rlGetMesss.setEnabled(true);
         tvRegisGetmss.setEnabled(true);
         tvRegisGetmss.setTextColor(Color.parseColor("#2dbe50"));
         rlGetMesss.setBackgroundResource(R.drawable.btn_register_bg);

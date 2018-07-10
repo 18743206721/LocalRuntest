@@ -41,13 +41,6 @@ public class PinglunAdapter extends RecyclerView.Adapter<CommonViewHolder> {
         RoundRectImageView item_img3 = holder.getItemView().findViewById(R.id.item_img3);
         RoundImageView iv_userimg = holder.getItemView().findViewById(R.id.iv_userimg);
 
-//        TextView line = holder.getItemView().findViewById(R.id.line);
-//        if (position == list.size()) {
-//            line.setVisibility(View.VISIBLE);
-//        } else {
-//            line.setVisibility(View.GONE);
-//        }
-
         holder.setText(R.id.tv_time, AppUtil.times(list.get(position).getAdd_time())); //时间
         holder.setText(R.id.tv_name, list.get(position).getUsername());
         holder.setText(R.id.tv_content, list.get(position).getContent());//内容

@@ -145,6 +145,8 @@
         <activity
             android:name=".main.view.MainActivity"
             android:screenOrientation="portrait">
+            <!--适配刘海屏-->
+            <meta-data android:name="android.notch_support" android:value="true"/>
         </activity>
         <activity
             android:name=".maincode.home.view.activity.LookShopActivity"

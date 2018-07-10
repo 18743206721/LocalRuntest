@@ -10,8 +10,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
-import com.lcodecore.tkrefreshlayout.Footer.LoadingView;
 import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout;
+import com.lcodecore.tkrefreshlayout.footer.LoadingView;
 import com.lcodecore.tkrefreshlayout.header.SinaRefreshView;
 import com.lzy.okgo.OkGo;
 import com.lzy.okgo.cache.CacheMode;
@@ -192,7 +192,6 @@ public class MyAllOrderFragment extends BaseFragment implements RefreshUtil.OnRe
                         Gson gson = new Gson();
                         CommonBean bean = gson.fromJson(response.body().toString(), CommonBean.class);
                         popdelted.dismiss();
-//                            adapter.setList(mDatas);
                         mDatas.remove(currentPositon);
                         adapter.notifyDataSetChanged();
                         ToastUtils.showToast(getActivity(), bean.getMsg());
@@ -222,7 +221,6 @@ public class MyAllOrderFragment extends BaseFragment implements RefreshUtil.OnRe
                         Gson gson = new Gson();
                         CommonBean bean = gson.fromJson(response.body().toString(), CommonBean.class);
                         popcancel.dismiss();
-//                            adapter.setList(mDatas);
                         mDatas.remove(currentPositon);
                         adapter.notifyDataSetChanged();
                         ToastUtils.showToast(getActivity(), bean.getMsg());
@@ -266,23 +264,24 @@ public class MyAllOrderFragment extends BaseFragment implements RefreshUtil.OnRe
                                 mDatas.clear();
                             }
                             mDatas.addAll(bean.getData().getList());
+
+                            if (mDatas.size() == 0) {
+                                myDecoFgApply.setVisibility(View.GONE);
+                                empty.setVisibility(View.VISIBLE);
+                            } else {
+                                empty.setVisibility(View.GONE);
+                                myDecoFgApply.setVisibility(View.VISIBLE);
+                            }
+
+                            if (isRefresh) {
+                                tw_refresh.finishRefreshing();
+                            } else {
+                                tw_refresh.finishLoadmore();
+                            }
+
                             adapter.setList(mDatas);
                         } else {
                             ToastUtils.showToast(getActivity(), bean.getMsg());
-                        }
-
-                        if (mDatas.size() == 0) {
-                            myDecoFgApply.setVisibility(View.GONE);
-                            empty.setVisibility(View.VISIBLE);
-                        } else {
-                            empty.setVisibility(View.GONE);
-                            myDecoFgApply.setVisibility(View.VISIBLE);
-                        }
-
-                        if (isRefresh) {
-                            tw_refresh.finishRefreshing();
-                        } else {
-                            tw_refresh.finishLoadmore();
                         }
 
                     }

@@ -87,10 +87,6 @@ public class RightAdapter extends BaseAdapter {
         return convertView;
     }
 
-    public int indexOf(String s) {
-        return list.size();
-    }
-
     public void setList(List<ClassifBean.DataBean> list) {
         this.list = list;
         notifyDataSetChanged();

@@ -58,7 +58,6 @@ public class MineSettingActivity extends ToolBarActivity {
     private View.OnClickListener yes;
 
     private ArrayList<String> selectedPhotos = new ArrayList<>();
-    private String img = ""; //图片url
     private Intent intent;
 
 
@@ -156,9 +155,6 @@ public class MineSettingActivity extends ToolBarActivity {
         if (resultCode == RESULT_OK && requestCode == PhotoPicker.REQUEST_CODE) {
             if (data != null) {
                 selectedPhotos = data.getStringArrayListExtra(PhotoPicker.KEY_SELECTED_PHOTOS);
-                if (selectedPhotos.size() != 0) {
-                    img = selectedPhotos.get(0);
-                }
                 loadimg();
             }
         } else if (requestCode == 100 && resultCode == 200){ //名字

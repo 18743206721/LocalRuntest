@@ -209,6 +209,7 @@ public class ForgetPwdActivity extends ToolBarActivity implements CountDownTimer
 
     @Override
     public void countDownTimerFinish() {
+        rlGetMesss.setEnabled(true);
         tvForgetGetmss.setEnabled(true);
         tvForgetGetmss.setTextColor(Color.parseColor("#2dbe50"));
         rlGetMesss.setBackgroundResource(R.drawable.btn_register_bg);

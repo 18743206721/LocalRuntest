@@ -35,6 +35,7 @@ public class DaiBanDetailsActivity extends ToolBarActivity {
     @BindView(R.id.tv_lianxi)
     TextView tvLianxi;
     String id;
+    private String phone;
 
     @Override
     protected int getLayoutId() {
@@ -70,13 +71,14 @@ public class DaiBanDetailsActivity extends ToolBarActivity {
                         itemTvAds.setText(taskdetailBean.getData().getDescribe());
                         ImageLoader.getInstance().initGlide(DaiBanDetailsActivity.this).loadImage(
                                 HttpManager.INDEX+taskdetailBean.getData().getCover(), ivDaibande);
+                        phone = taskdetailBean.getData().getPhone();
                     }
                 });
     }
 
     @OnClick(R.id.tv_lianxi)
     public void onViewClicked() {
-        Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + 1008655));
+        Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + phone));
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
     }

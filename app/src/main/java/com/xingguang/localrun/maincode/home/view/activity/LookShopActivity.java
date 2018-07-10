@@ -121,7 +121,7 @@ public class LookShopActivity extends BaseActivity {
                             Gson gson = new Gson();
                             CommonBean bean = gson.fromJson(response.body().toString(), CommonBean.class);
                             toolbarSubimg.setImageResource(R.mipmap.attention_cancel);
-                            ToastUtils.showToast(LookShopActivity.this,bean.getMsg());
+                            ToastUtils.showToast(LookShopActivity.this,"关注成功!");
                         }
                     });
         } else {
@@ -137,7 +137,7 @@ public class LookShopActivity extends BaseActivity {
                             Gson gson = new Gson();
                             CommonBean bean = gson.fromJson(response.body().toString(), CommonBean.class);
                             toolbarSubimg.setImageResource(R.mipmap.attention_bg);
-                            ToastUtils.showToast(LookShopActivity.this,bean.getMsg());
+                            ToastUtils.showToast(LookShopActivity.this,"取消关注!");
                         }
                     });
         }

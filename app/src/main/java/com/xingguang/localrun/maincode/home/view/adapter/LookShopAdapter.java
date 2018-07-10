@@ -79,7 +79,7 @@ public class LookShopAdapter extends RecyclerView.Adapter<CommonViewHolder> {
             banner = holder.getItemView().findViewById(R.id.banner);
             Star iv_tice_star = holder.getItemView().findViewById(R.id.iv_tice_star);
             TextView tv_baifenbi = holder.getItemView().findViewById(R.id.tv_baifenbi);
-            TextView tv_attention = holder.getItemView().findViewById(R.id.tv_attention);
+//            TextView tv_attention = holder.getItemView().findViewById(R.id.tv_attention);
 
             //设置星星的充满度
             if (jianjieBean.getPercent() == 0){
@@ -87,7 +87,8 @@ public class LookShopAdapter extends RecyclerView.Adapter<CommonViewHolder> {
             }else {
                 tv_baifenbi.setText(jianjieBean.getPercent()+"%");
                 tv_baifenbi.setVisibility(View.VISIBLE);
-                iv_tice_star.setMark(Float.parseFloat(  (5/100)*jianjieBean.getPercent()+"f"));
+                iv_tice_star.setMark(Float.parseFloat(
+                        jianjieBean.getPercent()*0.05+"f"));
             }
 
             adapter = new LookShopItemAdapter(mContext, indexlist, type);
@@ -118,21 +119,21 @@ public class LookShopAdapter extends RecyclerView.Adapter<CommonViewHolder> {
             ImageView iv_logo = holder.getItemView().findViewById(R.id.iv_logo);//logo
             ImageLoader.getInstance().initGlide(mContext).loadImage(HttpManager.INDEX+jianjieBean.getLogo(),iv_logo);
 
-            if (jianjieBean.getIs_collected() == 0){ //未关注
-                holder.setText(R.id.tv_attention,"关注");
-            }else{ //已关注
-                holder.setText(R.id.tv_attention,"已关注");
-            }
-
-            tv_attention.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (jianjieBean.getIs_collected() == 0){ //未关注
-                        holder.setText(R.id.tv_attention,"已关注");
-                    }
-
-                }
-            });
+//            if (jianjieBean.getIs_collected() == 0){ //未关注
+//                holder.setText(R.id.tv_attention,"关注");
+//            }else{ //已关注
+//                holder.setText(R.id.tv_attention,"已关注");
+//            }
+//
+//            tv_attention.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    if (jianjieBean.getIs_collected() == 0){ //未关注
+//                        holder.setText(R.id.tv_attention,"已关注");
+//                    }
+//
+//                }
+//            });
 
         } else if (type == 2) {
             if (mOnItemClickListener != null) {

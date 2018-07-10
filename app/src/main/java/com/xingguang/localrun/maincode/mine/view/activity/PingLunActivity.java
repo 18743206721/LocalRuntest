@@ -3,7 +3,6 @@ package com.xingguang.localrun.maincode.mine.view.activity;
 import android.content.Intent;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -81,10 +80,8 @@ public class PingLunActivity extends ToolBarActivity {
         });
         setToolBarTitle("添加评价");
         recid = getIntent().getStringExtra("rec_id");
-
         initAdapter();
         initListener();
-
     }
 
 
@@ -117,7 +114,6 @@ public class PingLunActivity extends ToolBarActivity {
         iv_tice_star.setStarChangeLister(new Startwo.OnStarChangeListener() {
             @Override
             public void onStarChange(Float mark) {
-                Log.e("start", "onStarChange: " + mark);
                 score = mark;
             }
         });
@@ -179,24 +175,14 @@ public class PingLunActivity extends ToolBarActivity {
             for (int i = 0; i < photolist.size(); i++) {
                 files.add(new File(photolist.get(i)));
             }
-
             List<File> bs = new ArrayList<>();
             bs.addAll(files);
-
-
             pinglun(bs);
-
         }
 
     }
 
-    private void pinglun(List<File> files){
-
-        for (int i = 0; i < files.size(); i++) {
-            File file = files.get(i);
-            Log.e("filepinglun", "pinglun: "+file );
-        }
-
+    private void pinglun(List<File> files) {
         OkGo.<String>post(HttpManager.addComment)
                 .tag(this)
                 .cacheKey("cachePostKey")
@@ -205,16 +191,16 @@ public class PingLunActivity extends ToolBarActivity {
                 .params("content", etPinglunContent.getText().toString())
                 .params("score", score)
                 .params("rec_id", recid)
-                .addFileParams("img[]",files)
+                .addFileParams("img[]", files)
                 .execute(new DialogCallback<String>(this) {
                     @Override
                     public void onSuccess(Response<String> response) {
                         Gson gson = new Gson();
                         CommonBean bean = gson.fromJson(response.body().toString(), CommonBean.class);
-                        if (bean.getStatus() == 1){
+                        if (bean.getStatus() == 1) {
                             ToastUtils.showToast(PingLunActivity.this, bean.getMsg());
                             finish();
-                        }else{
+                        } else {
                             ToastUtils.showToast(PingLunActivity.this, bean.getMsg());
                         }
                     }
@@ -230,14 +216,11 @@ public class PingLunActivity extends ToolBarActivity {
                 photos = data.getStringArrayListExtra(PhotoPicker.KEY_SELECTED_PHOTOS);
                 gvImages.setVisibility(View.VISIBLE);
                 rlPhoto.setVisibility(View.GONE);
-
                 for (int i = 0; i < photos.size(); i++) {
                     String imgurl = BitmapUtil.compressImage(photos.get(i));
                     photolist.add(imgurl);
                 }
-
                 adapter.setPhotos(photolist);
-
             } else {
                 gvImages.setVisibility(View.GONE);
                 rlPhoto.setVisibility(View.VISIBLE);

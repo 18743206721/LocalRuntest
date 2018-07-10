@@ -8,13 +8,11 @@
     <!--设置沉浸式状态栏，填充布局-->
     <LinearLayout
         android:fitsSystemWindows="true"
-        android:clipToPadding="true"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/home_bule"
         android:paddingTop="@dimen/padding_top">
     </LinearLayout>
-
     <!--<include layout="@layout/toolbar_layout" />-->
 
     <LinearLayout

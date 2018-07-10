@@ -11,20 +11,16 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.lzy.okgo.OkGo;
-import com.lzy.okgo.cache.CacheMode;
-import com.lzy.okgo.model.Response;
+import com.igexin.sdk.PushManager;
 import com.xingguang.core.base.BaseActivity;
 import com.xingguang.core.utils.AppManager;
-import com.xingguang.core.utils.SharedPreferencesUtils;
 import com.xingguang.core.utils.ToastUtils;
 import com.xingguang.localrun.R;
-import com.xingguang.localrun.http.DialogCallback;
-import com.xingguang.localrun.http.HttpManager;
 import com.xingguang.localrun.maincode.classify.ClassifFragment;
 import com.xingguang.localrun.maincode.home.HomeFragment;
 import com.xingguang.localrun.maincode.mine.MineFragment;
 import com.xingguang.localrun.maincode.shop.ShopFragment;
+import com.xingguang.localrun.push.IntentService;
 import com.xingguang.localrun.utils.AppUtil;
 
 import java.util.concurrent.TimeUnit;
@@ -64,7 +60,6 @@ public class MainActivity extends BaseActivity {
     TextView tabOneTxt;
     @BindView(R.id.tab_two_img)
     ImageView tabTwoImg;
-
     //首页
     private HomeFragment homeFragment;
     //分类
@@ -75,11 +70,8 @@ public class MainActivity extends BaseActivity {
     private MineFragment myFragment;
     // 用来判断 两次返回键退出app
     private boolean isExit = false;
-
     private FragmentManager fm;
-
     public static MainActivity instance;
-    private String type;
     private int typeid;
 
     @Override
@@ -96,6 +88,10 @@ public class MainActivity extends BaseActivity {
         setThemeColor(tabOneImg,R.drawable.home_icon);
         tabOneTxt.setTextColor(getResources().getColor(R.color.text_color_red));
 
+        //推送
+        PushManager.getInstance().initialize(this.getApplicationContext(), com.xingguang.localrun.push.PushService.class);
+        PushManager.getInstance().registerPushIntentService(this.getApplicationContext(), IntentService.class);
+
         typeid = getIntent().getIntExtra("typeid",0);
         if (typeid == 1){
             MainActivity.instance.setBg(1);
@@ -103,45 +99,6 @@ public class MainActivity extends BaseActivity {
         }else if (typeid == 2){
             MainActivity.instance.setBg(4);
             MainActivity.instance.setToInvestmentFragment();
-        }
-
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-//        if (type!=null) {
-//            if (type.equals("2")){
-//                setBg(4);
-//                setToInvestmentFragment();
-//            }
-
-            load();
-    }
-
-    //推送
-    String tuisong;
-    private void load() {
-        if (((String) SharedPreferencesUtils.get(MainActivity.this,
-                SharedPreferencesUtils.CID, "")).equals("")) {
-            tuisong = "";
-        } else {
-            tuisong = (String) SharedPreferencesUtils.get(MainActivity.this,
-                    SharedPreferencesUtils.CID, "");
-
-            OkGo.<String>post(HttpManager.TUISONG)
-                    .tag(this)
-                    .cacheKey("cachePostKey")
-                    .cacheMode(CacheMode.DEFAULT)
-                    .params("ClientID", (String) SharedPreferencesUtils.get(MainActivity.this,
-                            SharedPreferencesUtils.CID, ""))
-                    .execute(new DialogCallback<String>(this) {
-                        @Override
-                        public void onSuccess(Response<String> response) {
-//                            Gson gson = new Gson();
-//                            TuisongBean bean = gson.fromJson(response.body().toString(), TuisongBean.class);
-                        }
-                    });
         }
     }
 

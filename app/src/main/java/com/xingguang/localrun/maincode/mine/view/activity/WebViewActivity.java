@@ -43,7 +43,7 @@ public class WebViewActivity extends ToolBarActivity {
 
         if ("3".equals(type)) { //注册协议
             loadxieyi(3);
-        }else if ("2".equals(type)){ //服务协议
+        } else if ("2".equals(type)) { //服务协议
             loadxieyi(2);
         }
 

@@ -62,7 +62,7 @@ public class LoginActivity extends HttpToolBarActivity {
     private String headerUrl;
     private String name;
     private String sex;
-
+    public static LoginActivity instance;
     @Override
     protected int getLayoutId() {
         return R.layout.activity_login;
@@ -70,7 +70,7 @@ public class LoginActivity extends HttpToolBarActivity {
 
     @Override
     protected void initView() {
-
+        instance = this;
         setToolBarTitle("登录");
         getToolbarBack().setOnClickListener(new View.OnClickListener() {
             @Override
@@ -220,17 +220,18 @@ public class LoginActivity extends HttpToolBarActivity {
                     public void onSuccess(Response<String> response) {
                         Gson gson = new Gson();
                         OtherLogin otherLogin = gson.fromJson(response.body().toString(), OtherLogin.class);
-                            if (!otherLogin.getData().getToken().equals("")){
+
+                            if (!otherLogin.getData().getToken().equals("")) {
                                 LoginActivity.this.finish();
                                 ToastUtils.showToast(LoginActivity.this, "恭喜您,登录成功!");
                                 SharedPreferencesUtils.put(LoginActivity.this, SharedPreferencesUtils.USERID, otherLogin.getData().getToken());
                                 SharedPreferencesUtils.put(LoginActivity.this, SharedPreferencesUtils.USERNAME, otherLogin.getData().getNickname());
                                 SharedPreferencesUtils.put(LoginActivity.this, SharedPreferencesUtils.USERIMAGE, HttpManager.INDEX + otherLogin.getData().getAvatar());
                                 SharedPreferencesUtils.put(LoginActivity.this, SharedPreferencesUtils.PHONE, otherLogin.getData().getMobile());
-                            }else {
+                            } else {
                                 Intent intent = new Intent(LoginActivity.this, OtherLoginActivity.class);
-                                intent.putExtra("type",otherLogin.getData().getThird_type());
-                                intent.putExtra("openid", otherLogin.getData().getUniqid());
+                                intent.putExtra("type", type);
+                                intent.putExtra("openid", openid);
                                 intent.putExtra("user_id", otherLogin.getData().getUser_id());
                                 intent.putExtra("name", name);
                                 intent.putExtra("headerUrl", headerUrl);

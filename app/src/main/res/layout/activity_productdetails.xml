@@ -9,111 +9,126 @@
     android:orientation="vertical"
     tools:context="com.xingguang.localrun.maincode.home.view.activity.ProductdetailsActivity">
 
-    <android.support.design.widget.CoordinatorLayout
-        android:id="@+id/coordinator"
+
+    <com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout
+        android:id="@+id/tw_refresh"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@+id/line_two">
 
-        <android.support.design.widget.AppBarLayout
-            android:id="@+id/mAppbarlayout"
+        <android.support.design.widget.CoordinatorLayout
+            android:id="@+id/coordinator"
             android:layout_width="match_parent"
-            android:layout_height="240dp"
-            android:background="@color/white"
-            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+            android:layout_height="match_parent"
+            android:layout_above="@+id/line_two"
+            android:addStatesFromChildren="true"
+            android:fitsSystemWindows="true">
 
-            <android.support.design.widget.CollapsingToolbarLayout
-                android:id="@+id/mcollasptoobarlayout"
+            <android.support.design.widget.AppBarLayout
+                android:id="@+id/mAppbarlayout"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                app:layout_scrollFlags="scroll|exitUntilCollapsed">
+                android:layout_height="240dp"
+                android:background="@color/white"
+                android:clipChildren="false"
+                android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
-                <RelativeLayout
-                    android:background="@color/white"
-                    android:id="@+id/rl_my_header"
+                <android.support.design.widget.CollapsingToolbarLayout
+                    android:id="@+id/mcollasptoobarlayout"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                    <com.youth.banner.Banner
-                        android:id="@+id/iv_tice_head"
-                        android:layout_width="match_parent"
-                        android:layout_height="240dp"
-                        android:background="@color/white"
-                        android:adjustViewBounds="true"
-                        android:scaleType="fitXY" />
-
-                </RelativeLayout>
-
-                <android.support.v7.widget.Toolbar
-                    android:id="@+id/mtoolbar"
-                    android:layout_width="match_parent"
-                    android:layout_height="40dp"
-                    android:background="#00000000"
-                    app:layout_collapseMode="pin">
+                    android:layout_height="match_parent"
+                    app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
                     <RelativeLayout
+                        android:id="@+id/rl_my_header"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
+                        android:layout_height="match_parent"
+                        android:background="@color/white">
 
-                        <ImageView
-                            android:id="@+id/back"
-                            android:layout_width="20dp"
-                            android:layout_height="20dp"
-                            android:layout_centerVertical="true"
-                            android:src="@mipmap/back_details" />
-
-                        <TextView
-                            android:id="@+id/tv_title"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_centerInParent="true"
-                            android:text="商品详情"
-                            android:textColor="@color/textBlack"
-                            android:textSize="14sp"
-                            android:visibility="gone" />
-
-                        <ImageView
-                            android:id="@+id/iv_fenxiang"
-                            android:layout_width="25dp"
-                            android:layout_height="25dp"
-                            android:layout_alignParentRight="true"
-                            android:layout_centerVertical="true"
-                            android:layout_marginRight="13dp"
-                            android:src="@mipmap/message_details" />
+                        <com.youth.banner.Banner
+                            android:id="@+id/iv_tice_head"
+                            android:layout_width="match_parent"
+                            android:layout_height="240dp"
+                            android:adjustViewBounds="true"
+                            android:background="@color/white"
+                            android:scaleType="fitXY" />
 
                     </RelativeLayout>
 
-                </android.support.v7.widget.Toolbar>
+                    <android.support.v7.widget.Toolbar
+                        android:id="@+id/mtoolbar"
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:background="#00000000"
+                        app:layout_collapseMode="pin">
 
-            </android.support.design.widget.CollapsingToolbarLayout>
-        </android.support.design.widget.AppBarLayout>
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
 
-        <android.support.v4.widget.NestedScrollView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@android:color/white"
-            android:focusable="true"
-            android:focusableInTouchMode="true"
-            android:scrollbars="none"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+                            <ImageView
+                                android:id="@+id/back"
+                                android:layout_width="20dp"
+                                android:layout_height="20dp"
+                                android:layout_centerVertical="true"
+                                android:src="@mipmap/back_details" />
 
-            <LinearLayout
+                            <TextView
+                                android:id="@+id/tv_title"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerInParent="true"
+                                android:text="商品详情"
+                                android:textColor="@color/textBlack"
+                                android:textSize="14sp"
+                                android:visibility="gone" />
+
+                            <ImageView
+                                android:id="@+id/iv_fenxiang"
+                                android:layout_width="25dp"
+                                android:layout_height="25dp"
+                                android:layout_alignParentRight="true"
+                                android:layout_centerVertical="true"
+                                android:layout_marginRight="13dp"
+                                android:src="@mipmap/message_details" />
+
+                        </RelativeLayout>
+
+                    </android.support.v7.widget.Toolbar>
+
+                </android.support.design.widget.CollapsingToolbarLayout>
+            </android.support.design.widget.AppBarLayout>
+
+
+            <android.support.v4.widget.NestedScrollView
+                android:id="@+id/nestscroll"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
+                android:layout_height="wrap_content"
+                android:background="@android:color/white"
+                android:scrollbars="none"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-                <View
+
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="0.5dp"
-                    android:background="@color/fengexian" />
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
 
-                <include layout="@layout/layout_producted" />
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0.5dp"
+                        android:background="@color/fengexian" />
 
-            </LinearLayout>
 
-        </android.support.v4.widget.NestedScrollView>
+                    <include layout="@layout/layout_producted" />
 
-    </android.support.design.widget.CoordinatorLayout>
+                </LinearLayout>
+
+            </android.support.v4.widget.NestedScrollView>
+
+
+        </android.support.design.widget.CoordinatorLayout>
+    </com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout>
+
 
     <TextView
         android:id="@+id/line_two"
