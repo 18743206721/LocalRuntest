@@ -22,6 +22,7 @@ import com.xingguang.localrun.R;
 import com.xingguang.localrun.http.CommonBean;
 import com.xingguang.localrun.http.DialogCallback;
 import com.xingguang.localrun.http.HttpManager;
+import com.xingguang.localrun.maincode.home.model.GoodsDetailsBean;
 import com.xingguang.localrun.maincode.home.view.activity.BuyActivity;
 import com.xingguang.localrun.maincode.home.view.activity.HomeSearchActivity;
 import com.xingguang.localrun.maincode.home.view.activity.ProductdetailsActivity;
@@ -36,8 +37,8 @@ public class NowOrderPopUpWindow extends PopupWindow implements View.OnClickList
     private final String goodsid;//店铺id
     //图片  减号   加号
     private ImageView title_img, subtract_btn, plus_btn;
-    //价钱  库存   数量  确定
-    private TextView money, inventory, num_tv, commit;
+    //价钱  库存   数量  确定 ,“规格”字体，“请选择规格”字体
+    private TextView money, inventory, num_tv, commit, tv_selectedguige,textview1;
     //取消
     private ImageView cancel;
 
@@ -46,13 +47,15 @@ public class NowOrderPopUpWindow extends PopupWindow implements View.OnClickList
     private String original_img; //图片
     int type; //1是立即购买
     String storgeNum = "";//库存
+    GoodsDetailsBean.DataBean dataBean;
 
-    public NowOrderPopUpWindow(Context contexts, View parent, String original_img, String goodsid, String storgeNum, int type) {
+    public NowOrderPopUpWindow(Context contexts, View parent, String original_img, String goodsid, String storgeNum, GoodsDetailsBean.DataBean dataBean, int type) {
         this.context = contexts;
         this.original_img = original_img;
         this.goodsid = goodsid;
         this.storgeNum = storgeNum;
         this.type = type;
+        this.dataBean = dataBean;
 
         View view = View.inflate(context, R.layout.popup_now_buy, null);
 
@@ -65,6 +68,7 @@ public class NowOrderPopUpWindow extends PopupWindow implements View.OnClickList
         plus_btn = (ImageView) view.findViewById(R.id.plus_btn);
         subtract_btn.setOnClickListener(this);
         plus_btn.setOnClickListener(this);
+        tv_selectedguige = view.findViewById(R.id.tv_selectedguige);
 
         //价钱  库存  取消  数量  确定
         money = (TextView) view.findViewById(R.id.money);
@@ -72,6 +76,14 @@ public class NowOrderPopUpWindow extends PopupWindow implements View.OnClickList
         cancel = (ImageView) view.findViewById(R.id.cancel);
         num_tv = (TextView) view.findViewById(R.id.num_tv);
         commit = (TextView) view.findViewById(R.id.commit);
+        textview1 = view.findViewById(R.id.textview1);
+
+
+        ImageLoader.getInstance().initGlide(contexts).loadImage(original_img, title_img);
+        money.setText(dataBean.getShop_price());
+        inventory.setText("库存：" + dataBean.getStore_count());
+        tv_selectedguige.setText("此商品暂无规格");
+        textview1.setVisibility(View.GONE);
 
         changeData();
 
@@ -80,9 +92,6 @@ public class NowOrderPopUpWindow extends PopupWindow implements View.OnClickList
 
         //取消
         cancel.setOnClickListener(this);
-
-        ImageLoader.getInstance().initGlide(contexts).loadImage(original_img, title_img);
-        inventory.setText(storgeNum);
 
         setWidth(LayoutParams.MATCH_PARENT);
         setHeight(LayoutParams.MATCH_PARENT);

@@ -15,8 +15,8 @@ public class PurchaseTagAdapter extends BaseAdapter {
 
     private Context mContext;
     private ArrayList<SpecBean.DataBean> list;
-    private boolean isSelected = false;
 
+    private String keyname;
 
     //设置修改
     public interface UpdateListener {
@@ -25,14 +25,14 @@ public class PurchaseTagAdapter extends BaseAdapter {
 
     UpdateListener updateListener;
 
-
     public void setUpdateClick(UpdateListener updateListener) {
         this.updateListener = updateListener;
     }
 
-    public PurchaseTagAdapter(Context context, ArrayList<SpecBean.DataBean> list) {
+    public PurchaseTagAdapter(Context context, ArrayList<SpecBean.DataBean> list, String keyname) {
         this.mContext = context;
         this.list = list;
+        this.keyname = keyname;
     }
 
     @Override
@@ -64,6 +64,17 @@ public class PurchaseTagAdapter extends BaseAdapter {
         SpecBean.DataBean lists = list.get(position);
         holder.tv_tag.setText(lists.getKey_name());
 
+        if (keyname!=null){
+            if (keyname.equals(list.get(position).getKey_name())){
+                holder.tv_tag.setTextColor(mContext.getResources().getColor(R.color.home_read));
+                holder.tv_tag.setBackgroundResource(R.drawable.checked_bg);
+            }else {
+                holder.tv_tag.setTextColor(mContext.getResources().getColor(R.color.textBlack));
+                holder.tv_tag.setBackgroundResource(R.drawable.normal_bg);
+            }
+        }
+
+
         if ("1".equals(lists.getIsClick())) {
             holder.tv_tag.setTextColor(mContext.getResources().getColor(R.color.home_read));
             holder.tv_tag.setBackgroundResource(R.drawable.checked_bg);
@@ -71,8 +82,8 @@ public class PurchaseTagAdapter extends BaseAdapter {
             holder.tv_tag.setTextColor(mContext.getResources().getColor(R.color.textBlack));
             holder.tv_tag.setBackgroundResource(R.drawable.normal_bg);
         }
-//
-//        if (0 == lists.getStock()) {
+
+//        if ("1" .equals(lists.getStore_count())) {
 //            holder.tv_tag.setEnabled(false);
 //            holder.tv_tag.setTextColor(mContext.getResources().getColor(R.color.textLightGray));
 //            holder.tv_tag.setBackgroundResource(R.drawable.normal_bg);

@@ -54,6 +54,12 @@ public class LookShopAdapter extends RecyclerView.Adapter<CommonViewHolder> {
 
     private OnItemClickListener mOnItemClickListener = null;
 
+    private OnItemmoreClickListener mOnItemmoreClickListener = null;
+
+    public void setmOnItemmoreClickListener(OnItemmoreClickListener mOnItemmoreClickListener) {
+        this.mOnItemmoreClickListener = mOnItemmoreClickListener;
+    }
+
     public void setOnItemClickListener(OnItemClickListener listener) {
         this.mOnItemClickListener = listener;
     }
@@ -79,7 +85,15 @@ public class LookShopAdapter extends RecyclerView.Adapter<CommonViewHolder> {
             banner = holder.getItemView().findViewById(R.id.banner);
             Star iv_tice_star = holder.getItemView().findViewById(R.id.iv_tice_star);
             TextView tv_baifenbi = holder.getItemView().findViewById(R.id.tv_baifenbi);
+            final TextView tv_more = holder.getItemView().findViewById(R.id.tv_more);
 //            TextView tv_attention = holder.getItemView().findViewById(R.id.tv_attention);
+
+            tv_more.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mOnItemmoreClickListener.onItemmoreClick(tv_more, position);
+                }
+            });
 
             //设置星星的充满度
             if (jianjieBean.getPercent() == 0){
@@ -236,5 +250,11 @@ public class LookShopAdapter extends RecyclerView.Adapter<CommonViewHolder> {
     public interface OnItemClickListener {
         void onItemClick(View view, int position);
     }
+
+    //define interface
+    public interface OnItemmoreClickListener {
+        void onItemmoreClick(View view, int position);
+    }
+
 
 }

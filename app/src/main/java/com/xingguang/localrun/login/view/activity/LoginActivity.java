@@ -152,6 +152,12 @@ public class LoginActivity extends HttpToolBarActivity {
                             SharedPreferencesUtils.put(LoginActivity.this, SharedPreferencesUtils.USERNAME, loginBean.getData().getNickname());
                             SharedPreferencesUtils.put(LoginActivity.this, SharedPreferencesUtils.USERIMAGE, HttpManager.INDEX + loginBean.getData().getAvatar());
                             SharedPreferencesUtils.put(LoginActivity.this, SharedPreferencesUtils.PHONE, loginBean.getData().getMobile());
+
+                            //登录返回的收藏，店铺关注足迹
+                            SharedPreferencesUtils.put(LoginActivity.this, SharedPreferencesUtils.COLLEC, loginBean.getData().getGoods_collect());
+                            SharedPreferencesUtils.put(LoginActivity.this, SharedPreferencesUtils.ATTENTION, loginBean.getData().getShop_collect());
+                            SharedPreferencesUtils.put(LoginActivity.this, SharedPreferencesUtils.ZUJI, loginBean.getData().getGoods_visit());
+
                             ToastUtils.showToast(LoginActivity.this, "恭喜您,登录成功!");
                             finish();
                         }else {
@@ -228,6 +234,9 @@ public class LoginActivity extends HttpToolBarActivity {
                                 SharedPreferencesUtils.put(LoginActivity.this, SharedPreferencesUtils.USERNAME, otherLogin.getData().getNickname());
                                 SharedPreferencesUtils.put(LoginActivity.this, SharedPreferencesUtils.USERIMAGE, HttpManager.INDEX + otherLogin.getData().getAvatar());
                                 SharedPreferencesUtils.put(LoginActivity.this, SharedPreferencesUtils.PHONE, otherLogin.getData().getMobile());
+
+
+
                             } else {
                                 Intent intent = new Intent(LoginActivity.this, OtherLoginActivity.class);
                                 intent.putExtra("type", type);

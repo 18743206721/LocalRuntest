@@ -61,11 +61,13 @@
                     android:textColor="@color/textBlack"
                     android:textSize="14sp" />
                 <TextView
+                    android:id="@+id/textview1"
                     android:layout_marginBottom="15dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:visibility="visible"
                     android:layout_marginTop="5dp"
-                    android:text="请选择口味"
+                    android:text="请选择规格"
                     android:textColor="@color/textDarkGray"
                     android:textSize="14sp" />
 
@@ -106,10 +108,11 @@
                 android:orientation="vertical">
 
                 <TextView
+                    android:id="@+id/tv_selectedguige"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="15dp"
-                    android:text="口味"
+                    android:text="规格:"
                     android:textColor="@color/textBlack"
                     android:textSize="14sp" />
 

@@ -172,8 +172,6 @@ public class HomeSearchActivity extends BaseActivity implements RefreshUtil.OnRe
         for (int i = 0, j = historSearch.length; i < j; i++) {
             historList.add(historSearch[i]);
         }
-
-
         listAdapter.setList(historList);
     }
 
@@ -190,28 +188,27 @@ public class HomeSearchActivity extends BaseActivity implements RefreshUtil.OnRe
         tabAll.setOnTabSelectedListener(new XTabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(XTabLayout.Tab tab) {
-                if (etSearch.getText().length() != 0) {
-                    String text = (String) tab.getText();
-                    if (text.equals("商品")) {
-                        type = 1;
-                    } else if (text.equals("店铺")) {
-                        type = 2;
-                    } else {
-                        type = 3;
-                    }
-                    load(type, page, sort);
+                String text = (String) tab.getText();
+                if (text.equals("商品")) {
+                    type = 1;
+                    ll_sea_biaoqian.setVisibility(View.VISIBLE);
+                } else if (text.equals("店铺")) {
+                    type = 2;
+                    ll_sea_biaoqian.setVisibility(View.GONE);
                 } else {
-                    ToastUtils.showToast(HomeSearchActivity.this, "请先输入搜索内容!");
+                    type = 3;
+                    ll_sea_biaoqian.setVisibility(View.GONE);
+                }
+                if (etSearch.getText().length() != 0) {
+                    load(type, page, sort);
                 }
             }
 
             @Override
-            public void onTabUnselected(XTabLayout.Tab tab) {
-            }
+            public void onTabUnselected(XTabLayout.Tab tab) {}
 
             @Override
-            public void onTabReselected(XTabLayout.Tab tab) {
-            }
+            public void onTabReselected(XTabLayout.Tab tab) {}
         });
 
         //设置商品下综合销量价格标签的点击
@@ -262,6 +259,7 @@ public class HomeSearchActivity extends BaseActivity implements RefreshUtil.OnRe
                         Gson gson = new Gson();
                         if (type == 3) {//搜索代办
                             ll_sea_biaoqian.setVisibility(View.GONE);
+
                             Searchthreebean bean = gson.fromJson(response.body().toString(), Searchthreebean.class);
                             if (bean.getData().getData() != null) {
 
@@ -458,14 +456,13 @@ public class HomeSearchActivity extends BaseActivity implements RefreshUtil.OnRe
     @Override
     public void onRefresh() {
         isRefresh = true;
-        load(type, 1, sort);
+        load(type, page, sort);
     }
 
     @Override
     public void onLoad() {
         isRefresh = false;
-        page++;
-        load(type, page, sort);
+        load(type, page++, sort);
     }
 
 
@@ -515,7 +512,7 @@ public class HomeSearchActivity extends BaseActivity implements RefreshUtil.OnRe
                             String original_img = HttpManager.INDEX + dataBean.getOriginal_img();
                             String storgeNum = dataBean.getStore_count();//库存
                             if (list.size() == 0) { //无规格时加入购物车
-                                new NowOrderPopUpWindow(HomeSearchActivity.this, ll_parent, original_img, goodsId, storgeNum, 3);
+                                new NowOrderPopUpWindow(HomeSearchActivity.this, ll_parent, original_img, goodsId, storgeNum, dataBean,3);
                             } else {//有规格时加入购物车
                                 for (int i = 0, j = specBeanList.size(); i < j; i++) {
                                     if (itemid.equals(specBeanList.get(i).getItem_id())) {
@@ -524,10 +521,8 @@ public class HomeSearchActivity extends BaseActivity implements RefreshUtil.OnRe
                                         specBeanList.get(i).setIsClick("0");
                                     }
                                 }
-                                new NowBuyPopUpWindow(HomeSearchActivity.this, ll_parent, specBeanList, original_img, nums, 2);
+                                new NowBuyPopUpWindow(HomeSearchActivity.this, ll_parent, specBeanList, original_img, nums,dataBean, 2);
                             }
-
-
                         }
                     }
                 });

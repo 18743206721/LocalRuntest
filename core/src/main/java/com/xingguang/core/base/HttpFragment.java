@@ -41,4 +41,9 @@ public abstract class HttpFragment extends BaseFragment implements HttpView {
     public void showMsg(String msg) {
         ToastUtils.showToast(getActivity(), msg);
     }
+
+
+
+
+
 }

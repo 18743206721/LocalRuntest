@@ -127,7 +127,6 @@ public class ProductdetailsActivity extends BaseActivity implements SharePopUpWi
     @BindView(R.id.nestscroll)
     NestedScrollView nestedScrollView;
 
-    private boolean isRefresh = false;
     private boolean isshow;
     public static ProductdetailsActivity instance;
     //商品规格列表
@@ -152,6 +151,7 @@ public class ProductdetailsActivity extends BaseActivity implements SharePopUpWi
     GoodsDetailsBean.DataBean dataBean;
     private int page = 1;
     private PinglunAdapter pinglunadapter;
+    private int lookshop = 0;
 
     @Override
     protected int getLayoutId() {
@@ -165,6 +165,7 @@ public class ProductdetailsActivity extends BaseActivity implements SharePopUpWi
         twRefresh.setBottomView(new LoadingView(this));
         twRefresh.setOnRefreshListener(new RefreshUtil(this).refreshListenerAdapter());
         goods_id = getIntent().getStringExtra("goods_id");
+        lookshop = getIntent().getIntExtra("lookshop",0);
         instance = this;
 
         twRefresh.setTargetView(nestedScrollView);
@@ -172,10 +173,16 @@ public class ProductdetailsActivity extends BaseActivity implements SharePopUpWi
         initAdapter();
         loadDetails();
         loadshare();
-        loadGuiGe();
+
         loadpingLun(1);
         initListener();
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        loadGuiGe();
     }
 
     /**
@@ -276,15 +283,6 @@ public class ProductdetailsActivity extends BaseActivity implements SharePopUpWi
     }
 
     private void initListener() {
-//        rvComment.addOnScrollListener(new SwipyAppBarScrollListener(mAppbarlayout, llParent, rvComment));
-
-//        nestedScrollView.getViewTreeObserver().addOnScrollChangedListener(new ViewTreeObserver.OnScrollChangedListener() {
-//            @Override
-//            public void onScrollChanged() {
-//                twRefresh.setEnabled(true);
-//            }
-//        });
-
         mAppbarlayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
             @Override
             public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
@@ -296,10 +294,8 @@ public class ProductdetailsActivity extends BaseActivity implements SharePopUpWi
                     twRefresh.setEnableRefresh(false);
                     twRefresh.setEnableOverScroll(false);
                 }
-
             }
         });
-
 
         //設置appbar的滑動颜色渐变效果
         mAppbarlayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
@@ -327,70 +323,72 @@ public class ProductdetailsActivity extends BaseActivity implements SharePopUpWi
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.ll_shop://店铺
-//                ivTiceHead.stopAutoPlay();
-//                Intent intent = new Intent(ProductdetailsActivity.this,LookShopActivity.class);
-//                intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-//                startActivity(intent);
-
-
                 intent = new Intent();
                 intent.setClass(ProductdetailsActivity.this, LookShopActivity.class);
                 intent.putExtra("shopid", dataBean.getShop_id());
                 startActivity(intent);
                 finish();
-                LookShopActivity.instance.finish();
-
+                if (lookshop == 1) {
+                    LookShopActivity.instance.finish();
+                }
                 break;
             case R.id.collect://收藏
-                collection();
+                if (AppUtil.isExamined(ProductdetailsActivity.this)){
+                    collection();
+                }
                 break;
             case R.id.add_shopcar: //添加购物车
-                if (specBeanList.size() == 0) {
-                    //添加购物车接口，无规格时，不传itemid
-                    new NowOrderPopUpWindow(ProductdetailsActivity.this, llParent, original_img, goods_id, storgeNum, 2);
-                } else { //有规格时
-                    for (int i = 0, j = specBeanList.size(); i < j; i++) {
-                        if (itemid.equals(specBeanList.get(i).getItem_id())) {
-                            specBeanList.get(i).setIsClick("1");
-                        } else {
-                            specBeanList.get(i).setIsClick("0");
+                if (AppUtil.isExamined(ProductdetailsActivity.this)) {
+                    if (specBeanList.size() == 0) {
+                        //添加购物车接口，无规格时，不传itemid
+                        new NowOrderPopUpWindow(ProductdetailsActivity.this, llParent, original_img, goods_id, storgeNum,dataBean, 2);
+                    } else { //有规格时
+                        for (int i = 0, j = specBeanList.size(); i < j; i++) {
+                            if (itemid.equals(specBeanList.get(i).getItem_id())) {
+                                specBeanList.get(i).setIsClick("1");
+                            } else {
+                                specBeanList.get(i).setIsClick("0");
+                            }
                         }
+                        new NowBuyPopUpWindow(ProductdetailsActivity.this, llParent, specBeanList, original_img, nums, dataBean,4);
                     }
-                    new NowBuyPopUpWindow(ProductdetailsActivity.this, llParent, specBeanList, original_img, nums, 4);
                 }
                 break;
             case R.id.ll_profenxinag: //友盟分享
                 new SharePopUpWindow(ProductdetailsActivity.this, llParent, ProductdetailsActivity.this);
                 break;
             case R.id.commit://立即购买
-                if (specBeanList.size() != 0) {  //有规格情况
-                    for (int i = 0, j = specBeanList.size(); i < j; i++) {
-                        if (itemid.equals(specBeanList.get(i).getItem_id())) {
-                            specBeanList.get(i).setIsClick("1");
-                        } else {
-                            specBeanList.get(i).setIsClick("0");
+                if (AppUtil.isExamined(ProductdetailsActivity.this)) {
+                    if (specBeanList.size() != 0) {  //有规格情况
+                        for (int i = 0, j = specBeanList.size(); i < j; i++) {
+                            if (itemid.equals(specBeanList.get(i).getItem_id())) {
+                                specBeanList.get(i).setIsClick("1");
+                            } else {
+                                specBeanList.get(i).setIsClick("0");
+                            }
                         }
+                        new NowBuyPopUpWindow(ProductdetailsActivity.this, llParent, specBeanList, original_img, nums,dataBean, 3);
+                    } else {//无规格情况
+                        //走商品详情接口
+                        new NowOrderPopUpWindow(ProductdetailsActivity.this, llParent, original_img, goods_id, storgeNum,dataBean, 1);
+
                     }
-                    new NowBuyPopUpWindow(ProductdetailsActivity.this, llParent, specBeanList, original_img, nums, 3);
-                } else {//无规格情况
-                    //走商品详情接口
-                    new NowOrderPopUpWindow(ProductdetailsActivity.this, llParent, original_img, goods_id, storgeNum, 1);
-
                 }
-
                 break;
             case R.id.ll_guige://选择规格
-                if (specBeanList.size() != 0) {
-                    for (int i = 0, j = specBeanList.size(); i < j; i++) {
-                        if (itemid.equals(specBeanList.get(i).getItem_id())) {
-                            specBeanList.get(i).setIsClick("1");
-                        } else {
-                            specBeanList.get(i).setIsClick("0");
+                if (AppUtil.isExamined(ProductdetailsActivity.this)) {
+                    if (specBeanList.size() != 0) {
+                        for (int i = 0, j = specBeanList.size(); i < j; i++) {
+                            if (itemid.equals(specBeanList.get(i).getItem_id())) {
+                                specBeanList.get(i).setIsClick("1");
+                            } else {
+                                specBeanList.get(i).setIsClick("0");
+                            }
                         }
+                        new NowBuyPopUpWindow(ProductdetailsActivity.this, llParent, specBeanList, original_img, nums, dataBean,1);
+                    } else {
+                        ToastUtils.showToast(ProductdetailsActivity.this, "此商品暂无规格!");
                     }
-                    new NowBuyPopUpWindow(ProductdetailsActivity.this, llParent, specBeanList, original_img, nums, 1);
-                } else {
-                    ToastUtils.showToast(ProductdetailsActivity.this, "此商品暂无规格!");
                 }
                 break;
             case R.id.back:
@@ -426,7 +424,6 @@ public class ProductdetailsActivity extends BaseActivity implements SharePopUpWi
         }
     }
 
-
     /**
      * 商品规格
      */
@@ -443,6 +440,7 @@ public class ProductdetailsActivity extends BaseActivity implements SharePopUpWi
                         SpecBean bean = gson.fromJson(response.body().toString(), SpecBean.class);
                         if (bean.getData() != null) {
                             if (bean.getData().size() != 0) {
+                                specBeanList.clear();
                                 specBeanList.addAll(bean.getData());
                             }
                         } else {
@@ -472,7 +470,6 @@ public class ProductdetailsActivity extends BaseActivity implements SharePopUpWi
                     nums = Integer.parseInt(msg.obj.toString().split("\\ ")[0]);
                     itemid = msg.obj.toString().split("\\ ")[1];
                     keyname = msg.obj.toString().split("\\ ")[2];
-
 //                    BuyActivity.instance.finish();
                     startActivity(new Intent(ProductdetailsActivity.this, BuyActivity.class));
                     ProductdetailsActivity.instance.finish();
@@ -572,7 +569,6 @@ public class ProductdetailsActivity extends BaseActivity implements SharePopUpWi
         }
     }
 
-
     /**
      * 评论数据接口
      */
@@ -599,12 +595,8 @@ public class ProductdetailsActivity extends BaseActivity implements SharePopUpWi
                             if (page == 1) {
                                 mdatas.clear();
                             }
-
                             mdatas.addAll(bean.getData());
-
                             pinglunadapter.setList(mdatas);
-
-
                             if (mdatas.size() == 0) {
                                 llLiebiao.setVisibility(View.GONE);
                                 llWpl.setVisibility(View.VISIBLE);
@@ -612,13 +604,10 @@ public class ProductdetailsActivity extends BaseActivity implements SharePopUpWi
                                 llLiebiao.setVisibility(View.VISIBLE);
                                 llWpl.setVisibility(View.GONE);
                             }
-
                             twRefresh.finishLoadmore();
-
                         } else {
                             ToastUtils.showToast(ProductdetailsActivity.this, bean.getMsg());
                         }
-
                     }
                 });
     }

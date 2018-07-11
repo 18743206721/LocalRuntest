@@ -11,7 +11,7 @@ public class LoginBean {
     /**
      * status : 1
      * msg : 请求成功
-     * data : {"id":"4","mobile":"13146633658","password":"MDAwMDAwMDAwMH2Kqq1_qoyW","nickname":"张三","avatar":"/Uploads/avatar/user1.jpg","openid":null,"qq":null,"sina":null,"status":"1","last_login_time":"1527575145","last_login_ip":"127.0.0.1","reg_time":"1527571601","token":"MDAwMDAwMDAwMH560GmA0HzesoeCYoabsLG0zrdn"}
+     * data : {"id":"16","mobile":"18743206721","nickname":"阿鲁特","avatar":"/Uploads/avatar/user1.jpg","token":"MDAwMDAwMDAwMH2KummA0KbctHeUYIWrrK60zsWsrol0bw","goods_collect":"0","shop_collect":"1","goods_visit":"11"}
      */
 
     private int status;
@@ -44,34 +44,24 @@ public class LoginBean {
 
     public static class DataBean {
         /**
-         * id : 4
-         * mobile : 13146633658
-         * password : MDAwMDAwMDAwMH2Kqq1_qoyW
-         * nickname : 张三
+         * id : 16
+         * mobile : 18743206721
+         * nickname : 阿鲁特
          * avatar : /Uploads/avatar/user1.jpg
-         * openid : null
-         * qq : null
-         * sina : null
-         * status : 1
-         * last_login_time : 1527575145
-         * last_login_ip : 127.0.0.1
-         * reg_time : 1527571601
-         * token : MDAwMDAwMDAwMH560GmA0HzesoeCYoabsLG0zrdn
+         * token : MDAwMDAwMDAwMH2KummA0KbctHeUYIWrrK60zsWsrol0bw
+         * goods_collect : 0
+         * shop_collect : 1
+         * goods_visit : 11
          */
 
         private String id;
         private String mobile;
-        private String password;
         private String nickname;
         private String avatar;
-        private Object openid;
-        private Object qq;
-        private Object sina;
-        private String status;
-        private String last_login_time;
-        private String last_login_ip;
-        private String reg_time;
         private String token;
+        private String goods_collect;
+        private String shop_collect;
+        private String goods_visit;
 
         public String getId() {
             return id;
@@ -87,14 +77,6 @@ public class LoginBean {
 
         public void setMobile(String mobile) {
             this.mobile = mobile;
-        }
-
-        public String getPassword() {
-            return password;
-        }
-
-        public void setPassword(String password) {
-            this.password = password;
         }
 
         public String getNickname() {
@@ -113,68 +95,36 @@ public class LoginBean {
             this.avatar = avatar;
         }
 
-        public Object getOpenid() {
-            return openid;
-        }
-
-        public void setOpenid(Object openid) {
-            this.openid = openid;
-        }
-
-        public Object getQq() {
-            return qq;
-        }
-
-        public void setQq(Object qq) {
-            this.qq = qq;
-        }
-
-        public Object getSina() {
-            return sina;
-        }
-
-        public void setSina(Object sina) {
-            this.sina = sina;
-        }
-
-        public String getStatus() {
-            return status;
-        }
-
-        public void setStatus(String status) {
-            this.status = status;
-        }
-
-        public String getLast_login_time() {
-            return last_login_time;
-        }
-
-        public void setLast_login_time(String last_login_time) {
-            this.last_login_time = last_login_time;
-        }
-
-        public String getLast_login_ip() {
-            return last_login_ip;
-        }
-
-        public void setLast_login_ip(String last_login_ip) {
-            this.last_login_ip = last_login_ip;
-        }
-
-        public String getReg_time() {
-            return reg_time;
-        }
-
-        public void setReg_time(String reg_time) {
-            this.reg_time = reg_time;
-        }
-
         public String getToken() {
             return token;
         }
 
         public void setToken(String token) {
             this.token = token;
+        }
+
+        public String getGoods_collect() {
+            return goods_collect;
+        }
+
+        public void setGoods_collect(String goods_collect) {
+            this.goods_collect = goods_collect;
+        }
+
+        public String getShop_collect() {
+            return shop_collect;
+        }
+
+        public void setShop_collect(String shop_collect) {
+            this.shop_collect = shop_collect;
+        }
+
+        public String getGoods_visit() {
+            return goods_visit;
+        }
+
+        public void setGoods_visit(String goods_visit) {
+            this.goods_visit = goods_visit;
         }
     }
 }

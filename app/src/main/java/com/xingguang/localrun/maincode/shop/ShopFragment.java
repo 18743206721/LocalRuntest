@@ -27,6 +27,7 @@ import com.xingguang.localrun.http.DialogCallback;
 import com.xingguang.localrun.http.HttpManager;
 import com.xingguang.localrun.maincode.home.model.SpecBean;
 import com.xingguang.localrun.maincode.home.view.activity.BuyActivity;
+import com.xingguang.localrun.maincode.home.view.activity.ProductdetailsActivity;
 import com.xingguang.localrun.maincode.home.view.adapter.PurchaseTagAdapter;
 import com.xingguang.localrun.maincode.shop.model.GoodInfo;
 import com.xingguang.localrun.maincode.shop.view.adapter.ShopCarAdapter;
@@ -121,7 +122,10 @@ public class ShopFragment extends HttpFragment implements ShopCarAdapter.CheckIn
             @Override
             public void OnItemClick(View view, int position) {
                 //跳转到商品详情页面
-                ToastUtils.showToast(getActivity(), "跳转到商品详情" + position);
+                Intent intent = new Intent();
+                intent.setClass(getActivity(), ProductdetailsActivity.class);
+                intent.putExtra("goods_id", shoplist.get(position).getGoods_id());
+                startActivity(intent);
             }
         });
 
@@ -178,6 +182,9 @@ public class ShopFragment extends HttpFragment implements ShopCarAdapter.CheckIn
                             if (bean.getData().size() != 0) { //有规格时
                                 specBeanList.clear();
                                 specBeanList.addAll(bean.getData());
+
+                                keyname = shoplist.get(position).getSpec_key_name();
+
                                 for (int i = 0, j = specBeanList.size(); i < j; i++) {
                                     if (itemid.equals(specBeanList.get(i).getItem_id())) {
                                         specBeanList.get(i).setIsClick("1");
@@ -214,6 +221,8 @@ public class ShopFragment extends HttpFragment implements ShopCarAdapter.CheckIn
         ImageView cancel = (ImageView) view.findViewById(R.id.cancel);
         final TextView num_tv = (TextView) view.findViewById(R.id.num_tv);
         TextView commit = (TextView) view.findViewById(R.id.commit);
+        final TextView tv_selectedguige = view.findViewById(R.id.tv_selectedguige);
+
         //规格
         TagCloudLayout id_flowlayout = (TagCloudLayout) view.findViewById(R.id.id_flowlayout);
 
@@ -228,10 +237,14 @@ public class ShopFragment extends HttpFragment implements ShopCarAdapter.CheckIn
         ImageLoader.getInstance().initGlide(getActivity()).loadImage(original_img, title_img);
         inventory.setText("库存：" + storgeNum);
         num_tv.setText(nums + "");
+        if (specBeanList.size()!=0) {
+            money.setText(specBeanList.get(postion).getPrice());
+        }
+
 
         //规格
         if (type == 1) {
-            final PurchaseTagAdapter mAdapter = new PurchaseTagAdapter(getActivity(), specBeanList);
+            final PurchaseTagAdapter mAdapter = new PurchaseTagAdapter(getActivity(), specBeanList, keyname);
             id_flowlayout.setAdapter(mAdapter);
             mAdapter.setUpdateClick(new PurchaseTagAdapter.UpdateListener() {
                 @Override
@@ -242,11 +255,14 @@ public class ShopFragment extends HttpFragment implements ShopCarAdapter.CheckIn
                     specBeanList.get(position).setIsClick("1");
                     money.setText(specBeanList.get(position).getPrice());
                     storgeNum = specBeanList.get(position).getStore_count();
+                    keyname = specBeanList.get(position).getKey_name();
                     itemid = specBeanList.get(position).getItem_id();
                     inventory.setText("库存：" + specBeanList.get(position).getStore_count());
                     mAdapter.notifyDataSetChanged();
                 }
             });
+        } else {
+            tv_selectedguige.setText("暂无规格");
         }
 
         cancel.setOnClickListener(new View.OnClickListener() {
@@ -320,6 +336,9 @@ public class ShopFragment extends HttpFragment implements ShopCarAdapter.CheckIn
                     }
 
                 } else if (type == 2) { //商品无规格
+
+                    tv_selectedguige.setText("暂无规格");
+
                     OkGo.<String>post(HttpManager.CartupdateCart)
                             .tag(this)
                             .cacheKey("cachePostKey")
@@ -340,6 +359,7 @@ public class ShopFragment extends HttpFragment implements ShopCarAdapter.CheckIn
                                             shoplist.get(i).setGoods_num(nums + "");
                                         }
                                     }
+
                                     shopCarAdapter.setList(shoplist);
                                     //修改购物车规格后，刷新总价格
                                     load(1);
@@ -472,7 +492,7 @@ public class ShopFragment extends HttpFragment implements ShopCarAdapter.CheckIn
                             }
                             shopCarAdapter.setList(jianjieBean.getData().getCartList());
                         } else {
-                            ToastUtils.showToast(getActivity(), jianjieBean.getMsg());
+//                            ToastUtils.showToast(getActivity(), jianjieBean.getMsg());
                         }
                     }
                 });

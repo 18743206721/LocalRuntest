@@ -26,7 +26,7 @@
                 android:id="@+id/tv_my_colcount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="58"
+                android:text="0"
                 android:textColor="@color/textBlack"
                 android:textSize="16sp" />
 
@@ -55,7 +55,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/textBlack"
-                android:text="12"
+                android:text="0"
                 android:textSize="16sp" />
 
             <TextView
@@ -79,7 +79,7 @@
 
             <TextView
                 android:id="@+id/tv_zujicount"
-                android:text="35"
+                android:text="0"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/textBlack"
@@ -268,16 +268,35 @@
             android:layout_width="match_parent"
             android:layout_height="0.5dp"
             android:background="@color/board" />
-        <Button
-            android:id="@+id/btn_shenqing"
-            android:visibility="visible"
-            android:layout_width="match_parent"
-            android:layout_height="45dp"
-            android:background="@null"
-            android:text="申请入驻"
-            android:textColor="@color/textMoney"
-            android:textSize="15sp" />
 
+        <LinearLayout
+            android:layout_marginLeft="13dp"
+            android:layout_marginRight="13dp"
+            android:background="@drawable/btn_graymine_bg"
+            android:layout_marginTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <Button
+                android:id="@+id/btn_shenqing"
+                android:visibility="visible"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:background="@null"
+                android:text="申请入驻"
+                android:textColor="@color/textMoney"
+                android:textSize="15sp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_marginBottom="13dp"
+            android:layout_marginLeft="13dp"
+            android:layout_marginRight="13dp"
+            android:background="@drawable/btn_graymine_bg"
+            android:layout_marginTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
         <Button
             android:id="@+id/bt_back"
             android:visibility="visible"
@@ -288,6 +307,7 @@
             android:textColor="@color/textMoney"
             android:textSize="15sp" />
 
+        </LinearLayout>
     </LinearLayout>
 
 </LinearLayout>

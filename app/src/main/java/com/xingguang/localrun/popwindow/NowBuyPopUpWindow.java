@@ -22,6 +22,7 @@ import com.xingguang.localrun.R;
 import com.xingguang.localrun.http.CommonBean;
 import com.xingguang.localrun.http.DialogCallback;
 import com.xingguang.localrun.http.HttpManager;
+import com.xingguang.localrun.maincode.home.model.GoodsDetailsBean;
 import com.xingguang.localrun.maincode.home.model.SpecBean;
 import com.xingguang.localrun.maincode.home.view.activity.HomeSearchActivity;
 import com.xingguang.localrun.maincode.home.view.activity.ProductdetailsActivity;
@@ -40,7 +41,7 @@ public class NowBuyPopUpWindow extends PopupWindow implements View.OnClickListen
     //图片  减号   加号
     private ImageView title_img, subtract_btn, plus_btn;
     //价钱  库存   数量  确定
-    private TextView money, inventory, num_tv, commit;
+    private TextView money, inventory, num_tv, commit, tv_selectedguige;
     //取消
     private ImageView cancel;
 
@@ -56,21 +57,22 @@ public class NowBuyPopUpWindow extends PopupWindow implements View.OnClickListen
 
 
     private PurchaseTagAdapter mAdapter;
-    private ArrayList<SpecBean.DataBean> lists = new ArrayList<>();
+    private ArrayList<SpecBean.DataBean> lists  = new ArrayList<>();
     private int nums = 1;
     private String original_img; //图片
     private String keyname; //规格名字
     int type; //1是商品详情，2是搜索
     String goodsId = "";//店铺id
+    GoodsDetailsBean.DataBean dataBean;
 
-
-    public NowBuyPopUpWindow(Context contexts, View parent, final ArrayList<SpecBean.DataBean> listss, String original_img, int nums, int type) {
+    public NowBuyPopUpWindow(Context contexts, View parent, final ArrayList<SpecBean.DataBean> listss, String original_img, int nums, GoodsDetailsBean.DataBean dataBean, int type) {
         lists.clear();
         this.context = contexts;
         this.lists = listss;
         this.original_img = original_img;
         this.nums = nums;
         this.type = type;
+        this.dataBean = dataBean;
 
         View view = View.inflate(context, R.layout.popup_now_buy, null);
 
@@ -90,6 +92,8 @@ public class NowBuyPopUpWindow extends PopupWindow implements View.OnClickListen
         cancel = (ImageView) view.findViewById(R.id.cancel);
         num_tv = (TextView) view.findViewById(R.id.num_tv);
         commit = (TextView) view.findViewById(R.id.commit);
+        tv_selectedguige = view.findViewById(R.id.tv_selectedguige);
+
         //规格
         id_flowlayout = (TagCloudLayout) view.findViewById(R.id.id_flowlayout);
 
@@ -102,19 +106,24 @@ public class NowBuyPopUpWindow extends PopupWindow implements View.OnClickListen
         cancel.setOnClickListener(this);
 
         ImageLoader.getInstance().initGlide(contexts).loadImage(original_img, title_img);
+        money.setText(dataBean.getShop_price());
+        inventory.setText("库存：" + dataBean.getStore_count());
 
-
-        for (int i = 0, j = lists.size(); i < j; i++) {
-            if ("1".equals(lists.get(i).getIsClick())) {
-                money.setText(lists.get(i).getPrice());
-                inventory.setText("库存：" + lists.get(i).getStore_count());
-                store_count = lists.get(i).getStore_count();
-                purchasenum = nums + "";
+        if (lists.size() != 0) {
+            for (int i = 0, j = lists.size(); i < j; i++) {
+                if ("1".equals(lists.get(i).getIsClick())) {
+                    money.setText(lists.get(i).getPrice());
+                    inventory.setText("库存：" + lists.get(i).getStore_count());
+                    store_count = lists.get(i).getStore_count();
+                    purchasenum = nums + "";
+                }
             }
         }
 
+
+
         //规格
-        mAdapter = new PurchaseTagAdapter(context, lists);
+        mAdapter = new PurchaseTagAdapter(context, lists, keyname);
         id_flowlayout.setAdapter(mAdapter);
         mAdapter.setUpdateClick(new PurchaseTagAdapter.UpdateListener() {
             @Override

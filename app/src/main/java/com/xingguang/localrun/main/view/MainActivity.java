@@ -88,6 +88,8 @@ public class MainActivity extends BaseActivity {
         setThemeColor(tabOneImg,R.drawable.home_icon);
         tabOneTxt.setTextColor(getResources().getColor(R.color.text_color_red));
 
+//        initState();
+
         //推送
         PushManager.getInstance().initialize(this.getApplicationContext(), com.xingguang.localrun.push.PushService.class);
         PushManager.getInstance().registerPushIntentService(this.getApplicationContext(), IntentService.class);
@@ -101,6 +103,17 @@ public class MainActivity extends BaseActivity {
             MainActivity.instance.setToInvestmentFragment();
         }
     }
+
+    /**
+     * 沉浸式状态栏
+     */
+//    private void initState() {
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) { //透明状态栏
+//            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS); //透明导航栏
+//            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
+//        }
+//    }
+
 
     @OnClick({R.id.tab_one, R.id.tab_two, R.id.tab_three, R.id.tab_four})
     public void onclick(View view) {
@@ -120,8 +133,10 @@ public class MainActivity extends BaseActivity {
                 }
                 break;
             case R.id.tab_four:// 我的
-                setBg(4);
-                setToInvestmentFragment();
+                if (AppUtil.isExamined(MainActivity.this)) {
+                    setBg(4);
+                    setToInvestmentFragment();
+                }
                 break;
             default:
                 break;

@@ -65,12 +65,6 @@ public class AddressManagementActivity extends ToolBarActivity implements Refres
 
     @Override
     protected void initView() {
-        getToolbarBack().setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
         setToolBarTitle("收货地址");
         tw_refresh.setHeaderView(new SinaRefreshView(this));
         tw_refresh.setBottomView(new LoadingView(this));
@@ -126,6 +120,14 @@ public class AddressManagementActivity extends ToolBarActivity implements Refres
                 if (buytype == 1) {
                     SetDefAddress(imageView,myContractList.get(position).getAddress_id(),isdefult, position);
                 }
+            }
+        });
+
+        getToolbarBack().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                finish();
             }
         });
 
@@ -220,7 +222,7 @@ public class AddressManagementActivity extends ToolBarActivity implements Refres
     @Override
     public void onLoad() {
         isRefresh = false;
-        load(myContractList.size());
+        load(total++);
     }
 
 

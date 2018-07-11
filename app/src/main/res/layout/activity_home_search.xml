@@ -162,8 +162,12 @@
             android:background="@color/white"
             app:xTabDisplayNum="3"
             app:xTabIndicatorColor="@color/home_read"
-            app:xTabIndicatorHeight="1dp"
+            app:xTabIndicatorHeight="0dp"
             app:xTabMode="fixed"
+            android:visibility="visible"
+            app:xTabBackgroundColor="#fff"
+            app:xTabSelectedBackgroundColor="#fff"
+            app:xTabIndicatorWidth="0dp"
             app:xTabPaddingEnd="10dp"
             app:xTabPaddingStart="10dp"
 

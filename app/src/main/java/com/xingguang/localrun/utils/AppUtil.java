@@ -906,6 +906,34 @@ public class AppUtil {
         return (String) SharedPreferencesUtils.get(context, SharedPreferencesUtils.PHONE, "");
     }
 
+    /**
+     * 获得用户收藏数
+     *
+     * @param context
+     */
+    public static String getUserCollec(Context context) {
+        return (String) SharedPreferencesUtils.get(context, SharedPreferencesUtils.COLLEC, "");
+    }
+
+    /**
+     * 获得用户关注店铺
+     *
+     * @param context
+     */
+    public static String getUserAttention(Context context) {
+        return (String) SharedPreferencesUtils.get(context, SharedPreferencesUtils.ATTENTION, "");
+    }
+
+    /**
+     * 获得用户足迹
+     *
+     * @param context
+     */
+    public static String getUserZuji(Context context) {
+        return (String) SharedPreferencesUtils.get(context, SharedPreferencesUtils.ZUJI, "");
+    }
+
+
 
 
     /**
@@ -981,7 +1009,7 @@ public class AppUtil {
 	 * @return
              */
     public static String times(String time) {  //yyyy年 ss秒
-        SimpleDateFormat sdr = new SimpleDateFormat("MM月dd日HH时mm分");
+        SimpleDateFormat sdr = new SimpleDateFormat("HH:mm");
         @SuppressWarnings("unused")
         long lcc = Long.valueOf(time);
         int i = Integer.parseInt(time);

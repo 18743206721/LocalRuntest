@@ -175,8 +175,6 @@ public class HttpManager {
     //商品评价
     public static final String Goodscomment = BASE_URL+"Goods/comment";
 
-    public static final String TUISONG = BASE_URL+"/tuisong";
-
     //精选/低价
     public static final String Goodsspecial = BASE_URL+"Goods/special";
 
@@ -189,6 +187,8 @@ public class HttpManager {
     //文章
     public static final String Indexarticle = BASE_URL+"Index/article";
 
+    //收藏，关注，足迹数量
+    public static final String profile = BASE_URL+"User/profile";
 
     //index.php
     public static final String INDEX = "http://140.143.248.102/";

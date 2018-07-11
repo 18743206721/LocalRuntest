@@ -5,6 +5,7 @@ import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout;
@@ -83,8 +84,8 @@ public class ClassifFragment extends HttpFragment implements RefreshUtil.OnRefre
 
     @Override
     public void onHiddenChanged(boolean hidden) {
-        if (!hidden){// 重新显示到最前端中,相当于onresume
-            if (ClassType.getLeixing()!=null) {
+        if (!hidden) {// 重新显示到最前端中,相当于onresume
+            if (ClassType.getLeixing() != null) {
                 if (ClassType.getLeixing().equals("0")) {//精选
                     int buffSize = leftList.size();
                     flagArray = new boolean[buffSize];
@@ -201,16 +202,18 @@ public class ClassifFragment extends HttpFragment implements RefreshUtil.OnRefre
                         ClassifBean bean = gson.fromJson(response.body().toString(), ClassifBean.class);
                         if (bean.getData() != null) {
 
+                            if (bean.getData().size() == 0 && page != 1) {
+                                Toast.makeText(getActivity(),
+                                        "只有这么多了~",
+                                        Toast.LENGTH_SHORT).show();
+                            }
+
                             if (page == 1) {
                                 rightList.clear();
                             }
 
                             rightList.addAll(bean.getData());
-                            if (bean.getData().size() == 0) {
-                                ToastUtils.showToast(getActivity(), "暂无更多!");
-                            } else {
-                                rightListAdapter.setList(bean.getData());
-                            }
+                            rightListAdapter.setList(bean.getData());
 
                             if (rightList.size() == 0) {
                                 rightListView.setVisibility(View.GONE);

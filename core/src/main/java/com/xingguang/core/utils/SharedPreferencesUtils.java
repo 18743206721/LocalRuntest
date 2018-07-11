@@ -47,6 +47,12 @@ public class SharedPreferencesUtils {
 
     public static final String CID = "cid";
 
+    //收藏
+    public static final String COLLEC = "collec";
+    //关注
+    public static final String ATTENTION = "attention";
+    //足迹
+    public static final String ZUJI = "zuji";
 
 
     /**

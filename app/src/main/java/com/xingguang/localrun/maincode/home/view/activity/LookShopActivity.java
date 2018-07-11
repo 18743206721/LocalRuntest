@@ -65,17 +65,10 @@ public class LookShopActivity extends BaseActivity {
         instance = this;
         toolbarSubtitle.setText("商店");
         shopid = getIntent().getStringExtra("shopid");
-//        ToastUtils.showToast(LookShopActivity.this,"shopid"+shopid);
         if (shopid!=null) {
             loadjianjie();
         }
         initViewPage();
-    }
-
-
-    @Override
-    protected void onResume() {
-        super.onResume();
     }
 
     /**
@@ -147,7 +140,7 @@ public class LookShopActivity extends BaseActivity {
     private void initViewPage() {
         mFragments = new ArrayList<>();
         for (int i = 0; i < mTitles.length; i++) {
-            listFragment = LookShopFragment.newInstance(i + 1, shopid);
+            listFragment = new LookShopFragment(i + 1, shopid,mPagerShop);
             mFragments.add(listFragment);
         }
         BaseFragmentAdapter adapter = new BaseFragmentAdapter(getSupportFragmentManager(), mFragments, mTitles);
@@ -163,7 +156,9 @@ public class LookShopActivity extends BaseActivity {
                 finish();
                 break;
             case R.id.toolbar_subimg:
-                loadAttention();
+                if (AppUtil.isExamined(LookShopActivity.this)) {
+                    loadAttention();
+                }
                 break;
         }
     }

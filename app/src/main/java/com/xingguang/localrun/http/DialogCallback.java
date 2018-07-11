@@ -16,11 +16,8 @@
 package com.xingguang.localrun.http;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
-import android.view.Window;
 
 import com.lzy.okgo.request.base.Request;
-import com.xingguang.localrun.R;
 
 /**
  * ================================================
@@ -33,33 +30,56 @@ import com.xingguang.localrun.R;
  */
 public abstract class DialogCallback<T> extends JsonCallBack<T> {
 
-    private ProgressDialog dialog;
+    CustomProgressDialog pd = null;
+    Activity activity;
+    protected int postCount = 0;
+    protected int finishCount = 0;
 
-    private void initDialog(Activity activity) {
-        dialog = new ProgressDialog(activity);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setCanceledOnTouchOutside(false);
-        dialog.setProgressStyle(R.style.CustomProgressDialog);
-        dialog.setMessage("正在加载中...");
-    }
+//    private void initDialog(Activity activity) {
+//        dialog = new ProgressDialog(activity);
+//        View view = LayoutInflater.from(activity).inflate(R.layout.loading_dialog,null);
+//         iva = view.findViewById(R.id.loading);
+//
+//        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+//        dialog.setCanceledOnTouchOutside(false);
+//        dialog.setProgressStyle(R.style.CustomProgressDialog);
+//        dialog.setMessage("正在加载中...");
+//
+//    }
 
     public DialogCallback(Activity activity) {
         super();
-        initDialog(activity);
+//        initDialog(activity);
+        this.activity = activity;
+
     }
 
     @Override
     public void onStart(Request<T, ? extends Request> request) {
-        if (dialog != null && !dialog.isShowing()) {
-            dialog.show();
-        }
+//        if (dialog != null && !dialog.isShowing()) {
+//            dialog.show();
+//            iva.setVisibility(View.VISIBLE);
+//        }
+
+        postCount++;
+        if (pd == null)
+            pd = CustomProgressDialog.createDialog(activity);
+
     }
 
     @Override
     public void onFinish() {
         //网络请求结束后关闭对话框
-        if (dialog != null && dialog.isShowing()) {
-            dialog.dismiss();
+//        if (dialog != null && dialog.isShowing()) {
+//            dialog.dismiss();
+//            iva.setVisibility(View.GONE);
+//        }
+
+        finishCount++;
+        if (finishCount == postCount) {
+            if (pd != null)
+                pd.dismiss();
         }
+
     }
 }

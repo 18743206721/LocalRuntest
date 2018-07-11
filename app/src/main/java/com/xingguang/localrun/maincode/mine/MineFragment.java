@@ -1,18 +1,16 @@
 package com.xingguang.localrun.maincode.mine;
 
 import android.content.Intent;
-import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.widget.Toolbar;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
 import com.lzy.okgo.OkGo;
 import com.lzy.okgo.cache.CacheMode;
 import com.lzy.okgo.model.Response;
@@ -23,7 +21,7 @@ import com.xingguang.localrun.R;
 import com.xingguang.localrun.http.DialogCallback;
 import com.xingguang.localrun.http.HttpManager;
 import com.xingguang.localrun.login.view.activity.LoginActivity;
-import com.xingguang.localrun.maincode.mine.model.MessageEvent;
+import com.xingguang.localrun.maincode.mine.model.ProfileBean;
 import com.xingguang.localrun.maincode.mine.view.activity.AboutActivity;
 import com.xingguang.localrun.maincode.mine.view.activity.AddressManagementActivity;
 import com.xingguang.localrun.maincode.mine.view.activity.FootPrintActivity;
@@ -37,12 +35,7 @@ import com.xingguang.localrun.utils.AppUtil;
 import com.xingguang.localrun.utils.ImageLoader;
 import com.xingguang.localrun.view.RoundImageView;
 
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
-
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 
@@ -94,12 +87,9 @@ public class MineFragment extends BaseFragment {
     AppBarLayout mAppBarLayout;
     @BindView(R.id.my_tv_setting)
     TextView my_tv_setting;
-
     private TextPopUpWindow pop;
     private View.OnClickListener no;
     private View.OnClickListener yes;
-    private Intent intent;
-
     Unbinder unbinder;
 
     @Override
@@ -118,7 +108,7 @@ public class MineFragment extends BaseFragment {
             }
         });
 
-        EventBus.getDefault().register(this);
+//        EventBus.getDefault().register(this);
         initListener();
 
     }
@@ -140,7 +130,7 @@ public class MineFragment extends BaseFragment {
 
     /**
      * 退出登录
-     * */
+     */
     private void loadbacklogin() {
         OkGo.<String>post(HttpManager.logout)
                 .tag(this)
@@ -155,42 +145,60 @@ public class MineFragment extends BaseFragment {
                         ToastUtils.showToast(getActivity(), "已退出登录");
                         myUserName.setText("未登录");
                         ImageLoader.loadCircleImage(getActivity(), R.mipmap.defaultavatar123, myUserImg);
+                        btBack.setVisibility(View.GONE);
                     }
                 });
     }
 
     @Override
-    protected void lazyLoad() {
-        //写网络请求
-
-    }
+    protected void lazyLoad() {}
 
 
     @Override
     public void onResume() {
         super.onResume();
         if (!AppUtil.getUserId(getActivity()).equals("")) {
+            btBack.setVisibility(View.VISIBLE);
             AppUtil.getUserImage(getActivity());
             myUserName.setText(AppUtil.getUserName(getActivity()));
             ImageLoader.loadCircleImage(getActivity(), AppUtil.getUserImage(getActivity()), myUserImg);
+
+            loadcount();
+
         } else {
             myUserName.setText("未登录");
             ImageLoader.loadCircleImage(getActivity(), R.mipmap.defaultavatar123, myUserImg);
+            btBack.setVisibility(View.GONE);
+            tvMyColcount.setText("0");
+            tvMyColshopcount.setText("0");
+            tvZujicount.setText("0");
         }
 
 
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void applyenter(MessageEvent messageEvent) {
-        if (messageEvent.equals("1")){
-            btnShenqing.setVisibility(View.GONE);
-        }
+    private void loadcount() {
+        OkGo.<String>post(HttpManager.profile)
+                .tag(this)
+                .cacheKey("cachePostKey")
+                .cacheMode(CacheMode.DEFAULT)
+                .params("token", AppUtil.getUserId(getActivity()))
+                .execute(new DialogCallback<String>(getActivity()) {
+                    @Override
+                    public void onSuccess(Response<String> response) {
+                        //设置关注数，收藏数，足迹数
+                        Gson gson = new Gson();
+                        ProfileBean bean = gson.fromJson(response.body().toString(), ProfileBean.class);
+                        tvMyColcount.setText(bean.getData().getGoods_collect());
+                        tvMyColshopcount.setText(bean.getData().getShop_collect());
+                        tvZujicount.setText(bean.getData().getGoods_visit());
+                    }
+                });
     }
 
     @OnClick({R.id.rl_my_header, R.id.ll_my_collection, R.id.ll_my_attention, R.id.ll_my_zuji, R.id.ll_my_allorder, R.id.ll_daipay, R.id.ll_mydai_fahuo,
             R.id.ll_complete, R.id.ll_getads, R.id.ll_about,
-            R.id.btn_shenqing, R.id.bt_back,R.id.my_tv_setting})
+            R.id.btn_shenqing, R.id.bt_back, R.id.my_tv_setting})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.rl_my_header://登录头布局
@@ -214,23 +222,33 @@ public class MineFragment extends BaseFragment {
                 }
                 break;
             case R.id.ll_my_allorder://我的全部订单
-                startActivity(new Intent(getActivity(), MyOrderAllActivity.class)
-                        .putExtra("state","0"));
+                if (AppUtil.isExamined(getActivity())) {
+                    startActivity(new Intent(getActivity(), MyOrderAllActivity.class)
+                            .putExtra("state", "0"));
+                }
                 break;
             case R.id.ll_daipay://待支付
-                startActivity(new Intent(getActivity(), MyOrderAllActivity.class)
-                        .putExtra("state","1"));
+                if (AppUtil.isExamined(getActivity())) {
+                    startActivity(new Intent(getActivity(), MyOrderAllActivity.class)
+                            .putExtra("state", "1"));
+                }
                 break;
             case R.id.ll_mydai_fahuo://待付款
-                startActivity(new Intent(getActivity(), MyOrderAllActivity.class)
-                        .putExtra("state","2"));
+                if (AppUtil.isExamined(getActivity())) {
+                    startActivity(new Intent(getActivity(), MyOrderAllActivity.class)
+                            .putExtra("state", "2"));
+                }
                 break;
             case R.id.ll_complete://已完成
-                startActivity(new Intent(getActivity(), MyOrderAllActivity.class)
-                        .putExtra("state","3"));
+                if (AppUtil.isExamined(getActivity())) {
+                    startActivity(new Intent(getActivity(), MyOrderAllActivity.class)
+                            .putExtra("state", "3"));
+                }
                 break;
             case R.id.ll_getads://收货地址
-                startActivity(new Intent(getActivity(), AddressManagementActivity.class));
+                if (AppUtil.isExamined(getActivity())) {
+                    startActivity(new Intent(getActivity(), AddressManagementActivity.class));
+                }
                 break;
             case R.id.ll_about://关于
                 startActivity(new Intent(getActivity(), AboutActivity.class));
@@ -254,20 +272,5 @@ public class MineFragment extends BaseFragment {
     }
 
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        // TODO: inflate a fragment view
-        View rootView = super.onCreateView(inflater, container, savedInstanceState);
-        unbinder = ButterKnife.bind(this, rootView);
-        return rootView;
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        unbinder.unbind();
-        //取消注册事件
-        EventBus.getDefault().unregister(this);
-    }
 
 }

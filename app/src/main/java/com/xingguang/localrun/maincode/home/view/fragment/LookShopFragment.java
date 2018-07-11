@@ -2,7 +2,7 @@ package com.xingguang.localrun.maincode.home.view.fragment;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.os.Bundle;
+import android.support.v4.view.ViewPager;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -64,14 +64,12 @@ public class LookShopFragment extends BaseFragment implements RefreshUtil.OnRefr
     int total = 0;
     int count;
     private int page = 1;//页数
+    ViewPager viewPager;
 
-    public static LookShopFragment newInstance(int type, String shopid) {
-        LookShopFragment fragment = new LookShopFragment();
-        Bundle bundle = new Bundle();
-        bundle.putInt("type", type);
-        bundle.putString("shopid", shopid);
-        fragment.setArguments(bundle);
-        return fragment;
+    public LookShopFragment(int type, String shopid, ViewPager mPagerShop) {
+        this.type = type;
+        this.shopid = shopid;
+        this.viewPager = mPagerShop;
     }
 
     @Override
@@ -84,12 +82,6 @@ public class LookShopFragment extends BaseFragment implements RefreshUtil.OnRefr
         tw_mylook.setHeaderView(new SinaRefreshView(getActivity()));
         tw_mylook.setBottomView(new LoadingView(getActivity()));
         tw_mylook.setOnRefreshListener(new RefreshUtil(this).refreshListenerAdapter());
-
-        Bundle arguments = getArguments();
-        if (arguments != null) {
-            type = arguments.getInt("type");
-            shopid = arguments.getString("shopid");
-        }
 
         initAdapter();
         if (type == 1) {
@@ -166,12 +158,6 @@ public class LookShopFragment extends BaseFragment implements RefreshUtil.OnRefr
                         Gson gson = new Gson();
                         ShopIndex index = gson.fromJson(response.body().toString(), ShopIndex.class);
                         if (index.getData() != null) {
-
-//                            if (index.getData().size() == 0 && count != 0) {
-//                                Toast.makeText(getActivity(),
-//                                        "只有这么多了~",
-//                                        Toast.LENGTH_SHORT).show();
-//                            }
 
                             if (total == 0) {
                                 indexlist.clear();
@@ -303,6 +289,16 @@ public class LookShopFragment extends BaseFragment implements RefreshUtil.OnRefr
     }
 
     private void initListener() {
+        //更多分类
+        adapter.setmOnItemmoreClickListener(new LookShopAdapter.OnItemmoreClickListener() {
+            @Override
+            public void onItemmoreClick(View view, int position) {
+                viewPager.setCurrentItem(1);
+            }
+        });
+
+
+
         adapter.setOnItemClickListener(new LookShopAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
@@ -315,8 +311,8 @@ public class LookShopFragment extends BaseFragment implements RefreshUtil.OnRefr
                 Intent intent = new Intent();
                 intent.setClass(getActivity(), ProductdetailsActivity.class);
                 intent.putExtra("goods_id", allgoodlist.get(position).getGoods_id());
+                intent.putExtra("lookshop", 1);
                 startActivity(intent);
-
             }
         });
 

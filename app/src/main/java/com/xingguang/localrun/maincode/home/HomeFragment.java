@@ -116,11 +116,10 @@ public class HomeFragment extends HttpFragment {
         fm = getFragmentManager();
 
         initAdapter();
-        initListener();
-
         loadHeader();
         initDaiGou(0);
         initDaiBan(0);
+        initListener();
 
     }
 
@@ -220,26 +219,21 @@ public class HomeFragment extends HttpFragment {
             @Override
             public void OnItemClick(View view, int position) {
                 //跳转到店铺页面
-                if (AppUtil.isExamined(getActivity())) {
                     intent = new Intent(getActivity(), LookShopActivity.class);
                     intent.putExtra("shopid", daigoulist.get(position).getShop_id());
                     startActivity(intent);
                     LogUtils.e("homefragment_shopid",daigoulist.get(position).getShop_id());
-                }
             }
         });
 
         daibanadapter.setmOnItemClickListener(new HomeDaiBanAdapter.OnItemClickListener() {
             @Override
             public void OnItemClick(TextView view, int position) {
-                if (AppUtil.isExamined(getActivity())) {
                     Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + daibanlist.get(position).getPhone()));
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(intent);
-                }
             }
         });
-
     }
 
     private void initAdapter() {
@@ -362,16 +356,24 @@ public class HomeFragment extends HttpFragment {
                 startActivity(new Intent(getActivity(), DaiBanMoreActivity.class));
                 break;
             case R.id.iv_img1://优速办1
-                startActivity(new Intent(getActivity(), DaiBanDetailsActivity.class));
+                if (banner2BeanList.size()!=0) {
+                    intentclassif(banner2BeanList.get(0).getData_id(), banner2BeanList.get(0).getData_type());
+                }
                 break;
             case R.id.iv_img2://优速办2
-                startActivity(new Intent(getActivity(), DaiBanDetailsActivity.class));
+                if (banner2BeanList.size()!=0) {
+                    intentclassif(banner2BeanList.get(0).getData_id(), banner2BeanList.get(0).getData_type());
+                }
                 break;
             case R.id.iv_img3://优速办3
-                startActivity(new Intent(getActivity(), DaiBanDetailsActivity.class));
+                if (banner2BeanList.size()!=0) {
+                    intentclassif(banner2BeanList.get(0).getData_id(), banner2BeanList.get(0).getData_type());
+                }
                 break;
             case R.id.iv_img4://优速办4
-                startActivity(new Intent(getActivity(), DaiBanDetailsActivity.class));
+                if (banner2BeanList.size()!=0) {
+                    intentclassif(banner2BeanList.get(0).getData_id(), banner2BeanList.get(0).getData_type());
+                }
                 break;
             case R.id.ll_daigoupage://代购加载更多
                  page++;

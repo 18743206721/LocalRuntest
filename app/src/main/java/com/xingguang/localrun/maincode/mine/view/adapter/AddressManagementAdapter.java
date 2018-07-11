@@ -199,14 +199,6 @@ public class AddressManagementAdapter extends RecyclerView.Adapter<RecyclerView.
         return myContractList.size();
     }
 
-//    @Override
-//    public void onClick(View view) {
-//        if (mOnItemClickLitener != null) {
-//            //注意这里使用getTag方法获取position
-//            mOnItemClickLitener.onItemClick(view, Integer.parseInt(view.getTag().toString()));
-//        }
-//    }
-
     /**
      * HomeList布局
      */

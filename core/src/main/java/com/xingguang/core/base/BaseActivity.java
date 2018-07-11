@@ -63,6 +63,9 @@ public abstract class BaseActivity extends RxAppCompatActivity {
         }
     }
 
+
+
+
     /**
      * this activity layout res
      * 设置layout布局

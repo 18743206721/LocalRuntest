@@ -15,6 +15,7 @@ import com.xingguang.localrun.http.CommonBean;
 import com.xingguang.localrun.http.DialogCallback;
 import com.xingguang.localrun.http.HttpManager;
 import com.xingguang.localrun.maincode.home.view.activity.LookShopActivity;
+import com.xingguang.localrun.maincode.home.view.activity.ProductdetailsActivity;
 import com.xingguang.localrun.maincode.mine.model.MyCollectionBean;
 import com.xingguang.localrun.maincode.mine.view.adapter.MyCollectionAdapter;
 import com.xingguang.localrun.maincode.mine.view.adapter.OnItemClickListener;
@@ -90,7 +91,10 @@ public class MyCollectionActivity extends ToolBarActivity {
         rvCollection.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                ToastUtils.showToast(MyCollectionActivity.this,"点击"+position);
+                Intent intent = new Intent();
+                intent.setClass(MyCollectionActivity.this, ProductdetailsActivity.class);
+                intent.putExtra("goods_id", list.get(position).getGoods_id());
+                startActivity(intent);
             }
 
             @Override

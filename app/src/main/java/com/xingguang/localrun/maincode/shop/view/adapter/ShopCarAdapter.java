@@ -23,7 +23,6 @@ public class ShopCarAdapter extends RecyclerView.Adapter <CommonViewHolder> {
     private boolean isShow = true;//是否显示编辑/完成
 
     private OnItemClickListener mOnItemClickLitener;
-
     //修改
     private OnItemEditListener mOnItemEditLitener;
     private int pos;
