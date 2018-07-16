@@ -147,6 +147,7 @@ public class LookShopActivity extends BaseActivity {
         mPagerShop.setAdapter(adapter);
         xtabShop.setupWithViewPager(mPagerShop);
         mPagerShop.setOffscreenPageLimit(0);
+
     }
 
     @OnClick({R.id.toolbar_back, R.id.toolbar_subimg})
