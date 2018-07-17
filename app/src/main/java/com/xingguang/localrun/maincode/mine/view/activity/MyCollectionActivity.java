@@ -3,6 +3,7 @@ package com.xingguang.localrun.maincode.mine.view.activity;
 import android.content.Intent;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
+import android.widget.ImageView;
 
 import com.google.gson.Gson;
 import com.lzy.okgo.OkGo;
@@ -37,6 +38,9 @@ public class MyCollectionActivity extends ToolBarActivity {
 
     @BindView(R.id.rv_collection)
     DeleteRecyclerView rvCollection;
+    @BindView(R.id.empty)
+    ImageView empty;
+
 
     MyCollectionAdapter coladapter;
     List<MyCollectionBean.DataBean> list = new ArrayList<>();
@@ -81,6 +85,15 @@ public class MyCollectionActivity extends ToolBarActivity {
                         Gson gson = new Gson();
                         MyCollectionBean bean = gson.fromJson(response.body().toString(), MyCollectionBean.class);
                         list.addAll(bean.getData());
+
+                        if (list.size() == 0) {
+                            rvCollection.setVisibility(View.GONE);
+                            empty.setVisibility(View.VISIBLE);
+                        } else {
+                            empty.setVisibility(View.GONE);
+                            rvCollection.setVisibility(View.VISIBLE);
+                        }
+
                         coladapter.setList(list);
                     }
                 });

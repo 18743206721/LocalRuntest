@@ -112,6 +112,7 @@ public class NowBuyPopUpWindow extends PopupWindow implements View.OnClickListen
         if (lists.size() != 0) {
             for (int i = 0, j = lists.size(); i < j; i++) {
                 if ("1".equals(lists.get(i).getIsClick())) {
+                    itemid = lists.get(i).getItem_id();
                     money.setText(lists.get(i).getPrice());
                     inventory.setText("库存：" + lists.get(i).getStore_count());
                     store_count = lists.get(i).getStore_count();

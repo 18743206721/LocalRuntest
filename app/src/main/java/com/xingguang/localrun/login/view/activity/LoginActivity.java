@@ -234,9 +234,6 @@ public class LoginActivity extends HttpToolBarActivity {
                                 SharedPreferencesUtils.put(LoginActivity.this, SharedPreferencesUtils.USERNAME, otherLogin.getData().getNickname());
                                 SharedPreferencesUtils.put(LoginActivity.this, SharedPreferencesUtils.USERIMAGE, HttpManager.INDEX + otherLogin.getData().getAvatar());
                                 SharedPreferencesUtils.put(LoginActivity.this, SharedPreferencesUtils.PHONE, otherLogin.getData().getMobile());
-
-
-
                             } else {
                                 Intent intent = new Intent(LoginActivity.this, OtherLoginActivity.class);
                                 intent.putExtra("type", type);

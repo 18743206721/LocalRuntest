@@ -6,6 +6,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.xingguang.localrun.R;
+import com.xingguang.localrun.http.HttpManager;
 import com.xingguang.localrun.maincode.mine.model.MyCollectionBean;
 import com.xingguang.localrun.utils.ImageLoader;
 import com.xingguang.localrun.view.CommonViewHolder;
@@ -36,7 +37,7 @@ public class MyCollectionAdapter extends RecyclerView.Adapter <CommonViewHolder>
     @Override
     public void onBindViewHolder(final CommonViewHolder holder, final int position) {
         ImageView item_iv_collect_img = holder.getItemView().findViewById(R.id.item_iv_collect_img);
-        ImageLoader.getInstance().initGlide(mContext).loadImage(list.get(position).getOriginal_img(),item_iv_collect_img);
+        ImageLoader.getInstance().initGlide(mContext).loadImage(HttpManager.INDEX+list.get(position).getOriginal_img(),item_iv_collect_img);
         holder.setText(R.id.item_tv_collec_title, list.get(position).getGoods_name());
         holder.setText(R.id.tv_collec_people,list.get(position).getCollect_count()+"人收藏");
         holder.setText(R.id.tv_collec_price,"¥"+list.get(position).getShop_price());

@@ -123,6 +123,7 @@ public class GoodInfo {
              * goods_fee : 12
              * cut_fee : 12
              * total_fee : 12
+             * item_id
              * goods : {"goods_id":"19","cat_id1":"5","cat_id2":"7","shop_id":"1","goods_sn":"No00010000019","goods_name":"可口可乐","store_count":"99","click_count":"3","sale_num":"0","shop_price":"2.50","market_price":"2.50","goods_remark":"可口可乐","goods_content":"&lt;img src=&quot;/Uploads/Editor/2018-05-07/5aefe652e9278.jpg&quot; alt=&quot;&quot; /&gt;&lt;img src=&quot;/Uploads/Editor/2018-05-07/5aefe6530afc8.jpg&quot; alt=&quot;&quot; /&gt;&lt;img src=&quot;/Uploads/Editor/2018-05-07/5aefe65326548.jpg&quot; alt=&quot;&quot; /&gt;","original_img":"/Uploads/Picture/2018-05-07/5aefe0d3543a8.jpg","is_on_sale":"1","on_time":"1525671525","sort":"50","is_recommend":"1","is_new":"0","is_hot":"0","last_update":"1528680556","goods_type":"0","spec_type":"3"}
              */
 
@@ -145,6 +146,15 @@ public class GoodInfo {
             private double total_fee;
             private boolean isChoose;
             private GoodsBean goods;
+            private String item_id;
+
+            public String getItem_id() {
+                return item_id;
+            }
+
+            public void setItem_id(String item_id) {
+                this.item_id = item_id;
+            }
 
             public boolean isChoose() {
                 return isChoose;

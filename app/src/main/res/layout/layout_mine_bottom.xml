@@ -293,7 +293,7 @@
             android:layout_marginBottom="13dp"
             android:layout_marginLeft="13dp"
             android:layout_marginRight="13dp"
-            android:background="@drawable/btn_graymine_bg"
+            android:background="@drawable/btn_redmine_bg"
             android:layout_marginTop="10dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
@@ -304,10 +304,10 @@
             android:layout_height="45dp"
             android:background="@null"
             android:text="退出当前账户"
-            android:textColor="@color/textMoney"
+            android:textColor="@color/white"
             android:textSize="15sp" />
-
         </LinearLayout>
+
     </LinearLayout>
 
 </LinearLayout>

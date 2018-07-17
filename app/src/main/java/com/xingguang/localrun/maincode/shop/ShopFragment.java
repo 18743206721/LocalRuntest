@@ -120,7 +120,7 @@ public class ShopFragment extends HttpFragment implements ShopCarAdapter.CheckIn
     private void initListener() {
         shopCarAdapter.setmOnItemClickListener(new ShopCarAdapter.OnItemClickListener() {
             @Override
-            public void OnItemClick(View view, int position) {
+            public void OnItemClick(ImageView view, int position) {
                 //跳转到商品详情页面
                 Intent intent = new Intent();
                 intent.setClass(getActivity(), ProductdetailsActivity.class);
@@ -135,6 +135,7 @@ public class ShopFragment extends HttpFragment implements ShopCarAdapter.CheckIn
             public void OnItemEdit(TextView edit, TextView tv_shop_guige, int position) {
                 tvGuige = tv_shop_guige;
                 nums = Integer.parseInt(shoplist.get(position).getGoods_num());
+                itemid = shoplist.get(position).getItem_id();
                 loadGoodGuige(position);
             }
         });
@@ -233,17 +234,18 @@ public class ShopFragment extends HttpFragment implements ShopCarAdapter.CheckIn
         popupWindow.update();
 
         original_img = HttpManager.INDEX + shoplist.get(postion).getGoods().getOriginal_img();
-        storgeNum = shoplist.get(postion).getGoods().getStore_count();
         ImageLoader.getInstance().initGlide(getActivity()).loadImage(original_img, title_img);
-        inventory.setText("库存：" + storgeNum);
+
         num_tv.setText(nums + "");
-        if (specBeanList.size()!=0) {
-            money.setText(specBeanList.get(postion).getPrice());
-        }
+
 
 
         //规格
         if (type == 1) {
+
+            money.setText(specBeanList.get(postion).getPrice());
+            inventory.setText("库存：" + specBeanList.get(postion).getStore_count());
+
             final PurchaseTagAdapter mAdapter = new PurchaseTagAdapter(getActivity(), specBeanList, keyname);
             id_flowlayout.setAdapter(mAdapter);
             mAdapter.setUpdateClick(new PurchaseTagAdapter.UpdateListener() {
@@ -263,6 +265,10 @@ public class ShopFragment extends HttpFragment implements ShopCarAdapter.CheckIn
             });
         } else {
             tv_selectedguige.setText("暂无规格");
+
+            money.setText(shoplist.get(postion).getGoods_price());
+            inventory.setText("库存：" + shoplist.get(postion).getGoods().getStore_count());
+
         }
 
         cancel.setOnClickListener(new View.OnClickListener() {

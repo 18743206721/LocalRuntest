@@ -14,6 +14,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -152,6 +153,7 @@ public class ProductdetailsActivity extends BaseActivity implements SharePopUpWi
     private int page = 1;
     private PinglunAdapter pinglunadapter;
     private int lookshop = 0;
+    private WebSettings webSettings;
 
     @Override
     protected int getLayoutId() {
@@ -211,7 +213,47 @@ public class ProductdetailsActivity extends BaseActivity implements SharePopUpWi
                             webView1.setVisibility(View.VISIBLE);
                             String html = dataBean.getGoods_content();
                             String data = html.replace("%@", html);
-                            webView1.loadData(data, "text/html; charset=UTF-8", null);
+
+//                            webView1.loadUrl("javascript:(function(){" +
+//                                    "var objs = document.getElementsByTagName('img'); " +
+//                                    "for(var i=0;i<objs.length;i++)  " +
+//                                    "{"
+//                                    + "var img = objs[i];   " +
+//                                    " img.style.maxWidth = '100%';img.style.height='auto';" +
+//                                    "}" +
+//                                    "})()");
+//
+//                            String CSS_STYPE = "<head><style>img{max-width:340px !important;}</style></head>";
+//                            webView1.loadDataWithBaseURL(null, CSS_STYPE +html, "text/html", "utf-8",null);
+
+
+//                            webView1.loadData(data, "text/html; charset=UTF-8", null);
+
+
+
+                            //设置加载的html里图片居中显示，并适应屏幕尺寸
+                            webView1.getSettings().setJavaScriptEnabled(true);
+                            webSettings = webView1.getSettings();
+                            webSettings.setUseWideViewPort(true);
+                            webSettings.setLoadWithOverviewMode(true);
+                            webSettings.setJavaScriptEnabled(false);
+//                            String baseUrl = "http://m.fanai.com";
+//            contentWeb.loadDataWithBaseURL(baseUrl, html, "text/html", "utf-8", null);
+                            String css = "<style type=\"text/css\"> img {" +
+                                    "width:100%;" +
+                                    "height:auto;" +
+                                    "}" +
+                                    "body {" +
+                                    "margin-right:15px;" +
+                                    "margin-left:15px;" +
+                                    "margin-top:15px;" +
+                                    "font-size:45px;" +
+                                    "}" +
+                                    "</style>";
+                            html = "<html><header>" + css + "</header><body>" + html + "</body></html>";
+                            webView1.loadDataWithBaseURL( null, html, "text/html", "utf-8", null);
+
+
                             original_img = HttpManager.INDEX + dataBean.getOriginal_img();
                             tvProName.setText(dataBean.getGoods_name());//商品名称
                             tvProPrice.setText("¥" + dataBean.getShop_price());//优惠价

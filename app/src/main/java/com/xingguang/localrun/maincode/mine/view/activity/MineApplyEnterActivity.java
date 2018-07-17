@@ -149,7 +149,9 @@ public class MineApplyEnterActivity extends ToolBarActivity {
                         .start(this, PhotoPicker.REQUEST_CODE);
                 break;
             case R.id.tv_apply: //申请入驻
-                load();
+                if (validate()) {
+                    load();
+                }
                 break;
         }
     }
@@ -198,6 +200,36 @@ public class MineApplyEnterActivity extends ToolBarActivity {
                     }
                 });
     }
+
+
+    public Boolean validate() {
+        if (applyName.getText().length() == 0) {
+            ToastUtils.showToast(this, "请填写姓名");
+            return false;
+        } else if (applyPhone.getText().length() == 0) {
+            ToastUtils.showToast(this, "请填写手机号");
+            return false;
+        } else if (applyPhone.getText().length() != 11) {
+            ToastUtils.showToast(this, "请填写11位手机号");
+            return false;
+        } else if (applyCompany.getText().length() == 0) {
+            ToastUtils.showToast(this, "请填写公司名称");
+            return false;
+        } else if (applyJieshao.getText().length() == 0) {
+            ToastUtils.showToast(this, "请填写公司介绍");
+            return false;
+        } else if (adapter.getSelectList().size() == 0) {
+            ToastUtils.showToast(this, "请选择入驻类目");
+            return false;
+        } else if ("".equals(img)) {
+            ToastUtils.showToast(this, "请上传公司资质");
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+
 
 
 }

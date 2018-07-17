@@ -2,7 +2,9 @@ package com.xingguang.localrun.maincode.home.view.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import com.xingguang.localrun.R;
 import com.xingguang.localrun.http.HttpManager;
@@ -40,20 +42,27 @@ public class PinglunAdapter extends RecyclerView.Adapter<CommonViewHolder> {
         RoundRectImageView item_img2 = holder.getItemView().findViewById(R.id.item_img2);
         RoundRectImageView item_img3 = holder.getItemView().findViewById(R.id.item_img3);
         RoundImageView iv_userimg = holder.getItemView().findViewById(R.id.iv_userimg);
+        LinearLayout ll_img = holder.getItemView().findViewById(R.id.ll_img);
 
         holder.setText(R.id.tv_time, AppUtil.times(list.get(position).getAdd_time())); //时间
         holder.setText(R.id.tv_name, list.get(position).getUsername());
         holder.setText(R.id.tv_content, list.get(position).getContent());//内容
-        for (int i = 0; i < list.get(position).getImg().size(); i++) {
-            if (i == 0) {
-                ImageLoader.loadRoundImage(mContext, HttpManager.INDEX+list.get(position).getImg().get(0), item_img1, 5);
-            } else if (i == 1) {
-                ImageLoader.loadRoundImage(mContext, HttpManager.INDEX+list.get(position).getImg().get(1), item_img2, 5);
-            } else if (i == 2) {
-                ImageLoader.loadRoundImage(mContext, HttpManager.INDEX+list.get(position).getImg().get(2), item_img3, 5);
-            }
-        }
         ImageLoader.loadCircleImage(mContext,HttpManager.INDEX+ list.get(position).getAvatar(),iv_userimg);
+
+        if (list.get(position).getImg().size() != 0) {
+            ll_img.setVisibility(View.VISIBLE);
+            for (int i = 0; i < list.get(position).getImg().size(); i++) {
+                if (i == 0) {
+                    ImageLoader.loadRoundImage(mContext, HttpManager.INDEX + list.get(position).getImg().get(0), item_img1, 5);
+                } else if (i == 1) {
+                    ImageLoader.loadRoundImage(mContext, HttpManager.INDEX + list.get(position).getImg().get(1), item_img2, 5);
+                } else if (i == 2) {
+                    ImageLoader.loadRoundImage(mContext, HttpManager.INDEX + list.get(position).getImg().get(2), item_img3, 5);
+                }
+            }
+        }else{
+            ll_img.setVisibility(View.GONE);
+        }
 
 
     }

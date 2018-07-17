@@ -70,7 +70,7 @@ public class ShopCarAdapter extends RecyclerView.Adapter <CommonViewHolder> {
         final TextView tv_shop_deleted = holder.getItemView().findViewById(R.id.tv_shop_deleted);
         final CheckBox check_box = holder.getItemView().findViewById(R.id.check_box);
         final TextView tv_shop_guige = holder.getItemView().findViewById(R.id.tv_shop_guige);
-        ImageView iv_adapter_list_pic = holder.getItemView().findViewById(R.id.iv_adapter_list_pic);
+        final ImageView iv_adapter_list_pic = holder.getItemView().findViewById(R.id.iv_adapter_list_pic);
         final GoodInfo.DataBean.CartListBean shoppingCartBean = list.get(position);
 
         boolean choosed = shoppingCartBean.isChoose();
@@ -82,10 +82,10 @@ public class ShopCarAdapter extends RecyclerView.Adapter <CommonViewHolder> {
 
         //如果设置了回调，则设置点击事件
         if (mOnItemClickLitener != null) {
-            holder.getItemView().setOnClickListener(new View.OnClickListener() {
+            iv_adapter_list_pic.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    mOnItemClickLitener.OnItemClick(holder.getItemView(), position);
+                    mOnItemClickLitener.OnItemClick(iv_adapter_list_pic, position);
                 }
             });
         }
@@ -174,7 +174,7 @@ public class ShopCarAdapter extends RecyclerView.Adapter <CommonViewHolder> {
     }
 
     public interface OnItemClickListener {
-        void OnItemClick(View view, int position);
+        void OnItemClick(ImageView view, int position);
     }
 
     public interface OnItemEditListener {

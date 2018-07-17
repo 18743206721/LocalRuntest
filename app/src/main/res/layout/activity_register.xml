@@ -165,6 +165,7 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
+
                 <com.xingguang.localrun.view.ClearEditText
                     android:id="@+id/register_mss"
                     android:layout_width="match_parent"
