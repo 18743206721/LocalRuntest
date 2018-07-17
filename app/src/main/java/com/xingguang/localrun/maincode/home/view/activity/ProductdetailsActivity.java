@@ -222,7 +222,7 @@ public class ProductdetailsActivity extends BaseActivity implements SharePopUpWi
 //                                    " img.style.maxWidth = '100%';img.style.height='auto';" +
 //                                    "}" +
 //                                    "})()");
-//
+
 //                            String CSS_STYPE = "<head><style>img{max-width:340px !important;}</style></head>";
 //                            webView1.loadDataWithBaseURL(null, CSS_STYPE +html, "text/html", "utf-8",null);
 

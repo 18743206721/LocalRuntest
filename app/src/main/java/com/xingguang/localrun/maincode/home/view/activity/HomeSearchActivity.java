@@ -244,6 +244,7 @@ public class HomeSearchActivity extends BaseActivity implements RefreshUtil.OnRe
         if (search.length() == 0) {
             search = "";
         }
+
         OkGo.<String>post(HttpManager.search)
                 .tag(this)
                 .cacheKey("cachePostKey")

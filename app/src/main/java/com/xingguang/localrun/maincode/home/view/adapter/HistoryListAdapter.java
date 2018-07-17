@@ -71,4 +71,6 @@ public class HistoryListAdapter extends BaseAdapter {
         TextView tv_tag;
     }
 
+
+
 }

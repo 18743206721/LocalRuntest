@@ -136,7 +136,6 @@ public class LookShopActivity extends BaseActivity {
         }
     }
 
-
     private void initViewPage() {
         mFragments = new ArrayList<>();
         for (int i = 0; i < mTitles.length; i++) {
