@@ -37,7 +37,6 @@ import com.xingguang.localrun.view.RoundImageView;
 
 import butterknife.BindView;
 import butterknife.OnClick;
-import butterknife.Unbinder;
 
 public class MineFragment extends BaseFragment {
 
@@ -90,7 +89,6 @@ public class MineFragment extends BaseFragment {
     private TextPopUpWindow pop;
     private View.OnClickListener no;
     private View.OnClickListener yes;
-    Unbinder unbinder;
 
     @Override
     protected int getLayoutId() {
@@ -189,9 +187,12 @@ public class MineFragment extends BaseFragment {
                         //设置关注数，收藏数，足迹数
                         Gson gson = new Gson();
                         ProfileBean bean = gson.fromJson(response.body().toString(), ProfileBean.class);
-                        tvMyColcount.setText(bean.getData().getGoods_collect());
-                        tvMyColshopcount.setText(bean.getData().getShop_collect());
-                        tvZujicount.setText(bean.getData().getGoods_visit());
+                        if (bean.getData()!=null){
+                            tvMyColcount.setText(bean.getData().getGoods_collect());
+                            tvMyColshopcount.setText(bean.getData().getShop_collect());
+                            tvZujicount.setText(bean.getData().getGoods_visit());
+                        }
+
                     }
                 });
     }

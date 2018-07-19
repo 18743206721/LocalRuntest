@@ -20,6 +20,7 @@ import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
@@ -66,8 +67,8 @@ public class AppUtil {
 
     public static AppUtil instance;
 
-    public static AppUtil getInstance(){
-        if (null == instance){
+    public static AppUtil getInstance() {
+        if (null == instance) {
             instance = new AppUtil();
         }
         return instance;
@@ -154,8 +155,7 @@ public class AppUtil {
      * 不带参数的跳转
      *
      * @param fromContext
-     * @param cls  泛型
-     *
+     * @param cls         泛型
      */
     public void intent(Context fromContext, Class<?> cls) {
         Intent intent = new Intent(fromContext, cls);
@@ -749,8 +749,9 @@ public class AppUtil {
     /**
      * 提供（相对）精确的除法运算。当发生除不尽的情况时，由scale参数指
      * 定精度，以后的数字四舍五入。
-     * @param v1 被除数
-     * @param v2 除数
+     *
+     * @param v1    被除数
+     * @param v2    除数
      * @param scale 表示表示需要精确到小数点以后几位。
      * @return 两个参数的商
      */
@@ -765,7 +766,7 @@ public class AppUtil {
     }
 
 
-    public static boolean compareDate(String DATE1, String DATE2)  {
+    public static boolean compareDate(String DATE1, String DATE2) {
 
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 
@@ -787,8 +788,8 @@ public class AppUtil {
     }
 
     //获取颜色
-    public static int getColor(Context context,int colorId){
-        return ContextCompat.getColor(context,colorId);
+    public static int getColor(Context context, int colorId) {
+        return ContextCompat.getColor(context, colorId);
     }
 
 
@@ -818,15 +819,16 @@ public class AppUtil {
 
     /**
      * 给图标着色
-     *
-     * */
+     */
     public static Drawable tintDrawable(Drawable drawable, int colors) {
         final Drawable wrappedDrawable = DrawableCompat.wrap(drawable).mutate();
         DrawableCompat.setTint(wrappedDrawable, colors);
         return wrappedDrawable;
     }
 
-    /** 根据百分比改变颜色透明度 */
+    /**
+     * 根据百分比改变颜色透明度
+     */
     public static int changeAlpha(int color, float fraction) {
         int red = Color.red(color);
         int green = Color.green(color);
@@ -837,7 +839,7 @@ public class AppUtil {
 
     /**
      * 设置系统状态栏，沉浸式效果
-     * */
+     */
     public static void translucentStatusBar(Activity activity) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {//5.0及以上
             View decorView = activity.getWindow().getDecorView();
@@ -853,7 +855,7 @@ public class AppUtil {
 
     /**
      * 解析实体类数据
-     * */
+     */
     public static ArrayList<JsonBean> parseData(String jsonData) { //gson解析
         ArrayList<JsonBean> detail = new ArrayList<>();
         try {
@@ -934,8 +936,6 @@ public class AppUtil {
     }
 
 
-
-
     /**
      * 是否登录
      *
@@ -986,7 +986,7 @@ public class AppUtil {
     }
 
 
-    public static void setThemeColor(Context mContext,ImageView mImage, int icon) {
+    public static void setThemeColor(Context mContext, ImageView mImage, int icon) {
         //利用ContextCompat工具类获取drawable图片资源
         Drawable drawable = ContextCompat.getDrawable(mContext, icon);
         //简单的使用tint改变drawable颜色
@@ -1006,8 +1006,8 @@ public class AppUtil {
     /* 调用此方法输入所要转换的时间戳输入例如（1402733340）输出（"2014年06月14日16时09分00秒"）
      *
      * @param time
-	 * @return
-             */
+     * @return
+     */
     public static String times(String time) {  //yyyy年 ss秒
         SimpleDateFormat sdr = new SimpleDateFormat("HH:mm");
         @SuppressWarnings("unused")
@@ -1017,6 +1017,50 @@ public class AppUtil {
         return times;
     }
 
+    /**
+     * 版本号比较
+     *
+     * @param version1
+     * @param version2
+     * @return
+     */
+
+    public static int compareVersion(String version1, String version2) {
+        if (version1.equals(version2)) {
+            return 0;
+        }
+        String[] version1Array = version1.split("\\.");
+        String[] version2Array = version2.split("\\.");
+        Log.d("HomePageActivity", "version1Array==" + version1Array.length);
+        Log.d("HomePageActivity", "version2Array==" + version2Array.length);
+        int index = 0;
+        // 获取最小长度值
+        int minLen = Math.min(version1Array.length, version2Array.length);
+        int diff = 0;
+// 循环判断每位的大小
+
+        Log.d("HomePageActivity", "verTag2=2222=" + version1Array[index]);
+        while (index < minLen && (diff = Integer.parseInt(version1Array[index]) - Integer.parseInt(version2Array[index])) == 0) {
+            index++;
+        }
+        if (diff == 0) {
+// 如果位数不一致，比较多余位数
+
+            for (int i = index; i < version1Array.length; i++) {
+                if (Integer.parseInt(version1Array[i]) > 0) {
+                    return 1;
+                }
+            }
+            for (int i = index; i < version2Array.length; i++) {
+                if (Integer.parseInt(version2Array[i]) > 0) {
+                    return -1;
+                }
+            }
+            return 0;
+        } else {
+            return diff > 0 ? 1 : -1;
+        }
 
 
+    }
 }

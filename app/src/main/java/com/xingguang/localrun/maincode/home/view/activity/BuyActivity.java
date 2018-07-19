@@ -68,7 +68,7 @@ public class BuyActivity extends ToolBarActivity {
     BuyCartAdapter adapter;
     List<CartBean.DataBean.CartlistBean> mDatas = new ArrayList<>();
     public static BuyActivity instance;
-    private String adsId; //支付时用到的地址id
+    private String adsId = ""; //支付时用到的地址id
     private double allprice; //总金额
 
 
@@ -131,6 +131,7 @@ public class BuyActivity extends ToolBarActivity {
                     public void onSuccess(Response<String> response) {
                         Gson gson = new Gson();
                         CartBean bean = gson.fromJson(response.body().toString(), CartBean.class);
+
                         if (bean.getData()!=null){
                             mDatas.clear();
                             mDatas.addAll(bean.getData().getCartlist());

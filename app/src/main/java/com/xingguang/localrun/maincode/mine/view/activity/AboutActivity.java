@@ -25,6 +25,7 @@ import com.xingguang.localrun.http.HttpManager;
 import com.xingguang.localrun.http.MyShare;
 import com.xingguang.localrun.maincode.mine.model.AboutBean;
 import com.xingguang.localrun.popwindow.SharePopUpWindow;
+import com.xingguang.localrun.utils.ImageLoader;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -63,6 +64,9 @@ public class AboutActivity extends ToolBarActivity implements SharePopUpWindow.O
         });
         setToolBarTitle("关于同城快跑");
         load();
+        if (!MyShare.getQr_code().equals("")) {
+            ImageLoader.getInstance().initGlide(AboutActivity.this).loadImage(MyShare.getQr_code(), ivQRcode);
+        }
     }
 
 
@@ -104,7 +108,10 @@ public class AboutActivity extends ToolBarActivity implements SharePopUpWindow.O
     @Override
     public void onShareListener(SHARE_MEDIA share_media) {
         //设置分享图片
-        image = new UMImage(this, MyShare.getQr_code());//网络图片
+        image = new UMImage(this,
+                MyShare.getQr_code()
+//                R.mipmap.empty_cart
+        );//网络图片
         new ShareAction(AboutActivity.this)
                 .setPlatform(share_media)
                 .withMedia(image)

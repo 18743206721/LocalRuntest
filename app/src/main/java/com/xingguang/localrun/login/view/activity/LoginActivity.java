@@ -1,11 +1,15 @@
 package com.xingguang.localrun.login.view.activity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.graphics.Paint;
 import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.lzy.okgo.OkGo;
@@ -27,6 +31,7 @@ import com.xingguang.localrun.login.model.OtherLogin;
 import com.xingguang.localrun.utils.AppUtil;
 import com.xingguang.localrun.view.ClearEditText;
 
+import java.util.List;
 import java.util.Map;
 
 import butterknife.BindView;
@@ -107,12 +112,21 @@ public class LoginActivity extends HttpToolBarActivity {
                 startActivity(new Intent(LoginActivity.this, ForgetPwdActivity.class));
                 break;
             case R.id.qq_btn://QQ
-                if (AppUtil.isFastDoubleClick(1000)) {
-                    return;
+                if (isQQClientAvailable(LoginActivity.this)){
+
+                    if (AppUtil.isFastDoubleClick(1000)) {
+                        return;
+                    }
+                    resetLoginButton(true);
+                    type = "qq";
+                    mShareAPI.getPlatformInfo(this, SHARE_MEDIA.QQ, umAuthListener);
+
+                }else {
+
+                    Toast.makeText(this, "您还没有安装QQ官方应用，请先安装QQ客户端",Toast.LENGTH_SHORT).show();
+
                 }
-                resetLoginButton(true);
-                type = "qq";
-                mShareAPI.getPlatformInfo(this, SHARE_MEDIA.QQ, umAuthListener);
+
                 break;
             case R.id.wecha_btn://weixin
                 if (AppUtil.isFastDoubleClick(1000)) {
@@ -192,6 +206,7 @@ public class LoginActivity extends HttpToolBarActivity {
             resetLoginButton(false);
             //第三方登陆 获取相关个人信息
             loadOtherLogin(openid, name, headerUrl,type);
+
         }
 
         @Override
@@ -290,6 +305,24 @@ public class LoginActivity extends HttpToolBarActivity {
         } else {
             return true;
         }
+    }
+
+    /**
+     * 判断 用户是否安装QQ客户端
+     */
+    public static boolean isQQClientAvailable(Context context) {
+        final PackageManager packageManager = context.getPackageManager();
+        List<PackageInfo> pinfo = packageManager.getInstalledPackages(0);
+        if (pinfo != null) {
+            for (int i = 0; i < pinfo.size(); i++) {
+                String pn = pinfo.get(i).packageName;
+//                LogUtils.e("pn = "+pn);
+                if (pn.equalsIgnoreCase("com.tencent.qqlite") || pn.equalsIgnoreCase("com.tencent.mobileqq")) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
 

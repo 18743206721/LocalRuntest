@@ -29,6 +29,7 @@ import com.lzy.okgo.OkGo;
 import com.lzy.okgo.cache.CacheMode;
 import com.lzy.okgo.model.Response;
 import com.umeng.socialize.ShareAction;
+import com.umeng.socialize.UMShareAPI;
 import com.umeng.socialize.UMShareListener;
 import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.umeng.socialize.media.UMImage;
@@ -283,15 +284,25 @@ public class ProductdetailsActivity extends BaseActivity implements SharePopUpWi
 
     @Override
     public void onShareListener(SHARE_MEDIA share_media) {
-        image = new UMImage(this, R.mipmap.icon_logo);//网络图片
-        web = new UMWeb(shareUrl);
-        web.setTitle(shareTitle);//标题
-        web.setThumb(image);  //缩略图
+
+        //设置分享图片
+        image = new UMImage(this,
+                MyShare.getQr_code());//网络图片
         new ShareAction(ProductdetailsActivity.this)
                 .setPlatform(share_media)
-                .withMedia(web)
+                .withMedia(image)
                 .setCallback(umShareListener)
                 .share();
+
+//        image = new UMImage(this, R.mipmap.icon_logo);//网络图片
+//        web = new UMWeb(shareUrl);
+//        web.setTitle(shareTitle);//标题
+//        web.setThumb(image);  //缩略图
+//        new ShareAction(ProductdetailsActivity.this)
+//                .setPlatform(share_media)
+//                .withMedia(web)
+//                .setCallback(umShareListener)
+//                .share();
     }
 
     private UMShareListener umShareListener = new UMShareListener() {
@@ -492,6 +503,11 @@ public class ProductdetailsActivity extends BaseActivity implements SharePopUpWi
                 });
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        UMShareAPI.get(this).onActivityResult(requestCode, resultCode, data);
+    }
 
     private String keyname = "";//规格名称
 

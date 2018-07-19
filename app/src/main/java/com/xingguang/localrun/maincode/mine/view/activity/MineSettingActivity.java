@@ -1,6 +1,12 @@
 package com.xingguang.localrun.maincode.mine.view.activity;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
+import android.os.Bundle;
+import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -23,6 +29,9 @@ import com.xingguang.localrun.utils.ImageLoader;
 import com.xingguang.localrun.view.RoundImageView;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.ArrayList;
 
 import butterknife.BindView;
@@ -101,7 +110,7 @@ public class MineSettingActivity extends ToolBarActivity {
 
     /**
      * 退出登录
-     * */
+     */
     private void loadbacklogin() {
         OkGo.<String>post(HttpManager.logout)
                 .tag(this)
@@ -154,40 +163,136 @@ public class MineSettingActivity extends ToolBarActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK && requestCode == PhotoPicker.REQUEST_CODE) {
             if (data != null) {
-                selectedPhotos = data.getStringArrayListExtra(PhotoPicker.KEY_SELECTED_PHOTOS);
-                loadimg();
+                imgjiancai(data);
             }
-        } else if (requestCode == 100 && resultCode == 200){ //名字
+        } else if (requestCode == 100 && resultCode == 200) { //名字
             tvSetname.setText(data.getStringExtra("content"));
-        } else if (requestCode == 101 && resultCode  == 201){
+        } else if (requestCode == 101 && resultCode == 201) {
             tvSetphone.setText(data.getStringExtra("content"));
+        } else if (requestCode == 102){
+            //裁剪后
+            if (data!=null) {
+                Bundle bundle = data.getExtras();
+                Bitmap face = bundle.getParcelable("data");
+                Log.e("caijianhou", "onActivityResult: " + face);
+
+                imgSetUser.setImageBitmap(face);
+                try {
+                    loadimg(saveBitmap(face),face);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+//                Bitmap headShot = BitmapFactory.decodeStream(getContentResolver().openInputStream(cropImageUri));
+            }
         }
 
     }
 
     /**
+     * 图片剪裁
+     */
+    private void imgjiancai(Intent data) {
+        selectedPhotos = data.getStringArrayListExtra(PhotoPicker.KEY_SELECTED_PHOTOS);
+
+
+        Bitmap image = BitmapFactory.decodeFile(selectedPhotos.get(0));
+        File faceFile;
+        try {
+            faceFile = saveBitmap(image);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return;
+        }
+        Uri fileUri = Uri.fromFile(faceFile);
+        routeToCrop(fileUri); //跳转到图片裁剪
+
+
+
+    }
+
+
+    private void routeToCrop(Uri uri) {
+        Intent intent = new Intent("com.android.camera.action.CROP");
+        intent.setDataAndType(uri, "image/*");
+        intent.putExtra("crop", true);
+        intent.putExtra("aspectX", 1);
+        intent.putExtra("aspectY", 1);
+        intent.putExtra("outputX", 150);
+        intent.putExtra("outputY", 150);
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
+        intent.putExtra("return-data", true);
+        startActivityForResult(intent, 102);
+    }
+
+
+    private File saveBitmap(Bitmap bitmap) throws IOException {
+        File file = new File(getExternalCacheDir(), "face-cache");
+        if (!file.exists()) file.createNewFile();
+        try (OutputStream out = new FileOutputStream(file)) {
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
+        }
+        return file;
+    }
+
+
+//    private void routeToGallery() {
+//        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+//        intent.addCategory(Intent.CATEGORY_OPENABLE);
+//        intent.setType("image/*");
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+//            startActivityForResult(intent, GALLERY_REQUSET_CODE_KITKAT);
+//        } else {
+//            startActivityForResult(intent, GALLERY_REQUSET_CODE);
+//        }
+//    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    /**
      * 上传图片到服务器
-     * */
-    private void loadimg() {
+     * @param file
+     * @param face
+     */
+    private void loadimg(File file, final Bitmap face) {
         OkGo.<String>post(HttpManager.update_avatar)
                 .tag(this)
                 .cacheKey("cachePostKey")
                 .cacheMode(CacheMode.DEFAULT)
                 .params("token", AppUtil.getUserId(this))
-                .params("avatar",new File(selectedPhotos.get(0)))
+                .params("avatar",
+//                        new File(selectedPhotos.get(0))
+                        file
+                )
                 .execute(new DialogCallback<String>(this) {
                     @Override
                     public void onSuccess(Response<String> response) {
                         Gson gson = new Gson();
                         CommonBean commonBean = gson.fromJson(response.body().toString(), CommonBean.class);
-                        SharedPreferencesUtils.put(MineSettingActivity.this, SharedPreferencesUtils.USERIMAGE, selectedPhotos.get(0));
-                        ImageLoader.loadCircleImage(MineSettingActivity.this, selectedPhotos.get(0), imgSetUser);
+                        SharedPreferencesUtils.put(MineSettingActivity.this, SharedPreferencesUtils.USERIMAGE,
+//                                selectedPhotos.get(0)
+                                HttpManager.INDEX+commonBean.getData()
+                        );
+                        imgSetUser.setImageBitmap(face);
+//                        ImageLoader.loadCircleImage(MineSettingActivity.this, selectedPhotos.get(0), imgSetUser);
                         ToastUtils.showToast(MineSettingActivity.this, commonBean.getMsg());
                     }
                 });
 
     }
-
 
 
 }

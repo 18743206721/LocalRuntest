@@ -12,6 +12,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 import com.lzy.okgo.OkGo;
 import com.lzy.okgo.cache.CacheMode;
 import com.lzy.okgo.model.Response;
@@ -180,35 +181,38 @@ public class HomeFragment extends HttpFragment {
                 .execute(new DialogCallback<String>(getActivity()) {
                     @Override
                     public void onSuccess(Response<String> response) {
-                        Gson gson = new Gson();
-                        HIndexBean hIndexBean = gson.fromJson(response.body().toString(), HIndexBean.class);
-//                        Type type = new TypeToken<List<HIndexBean.Banner1Bean>>(){}.getType();
-//                        List<HIndexBean.Banner1Bean> banner1BeanList = gson.fromJson(.toString(),type);
-                        banner2BeanList.addAll(hIndexBean.getData().getBanner2());
-                        for (int i = 0; i < hIndexBean.getData().getBanner1().size(); i++) {
-                            networkImages.add(HttpManager.INDEX + hIndexBean.getData().getBanner1().get(i).getImage());
-                        }
-                        initpage();
-
-                        bannerList.addAll(hIndexBean.getData().getBanner1());
-
-                        for (int i = 0; i < banner2BeanList.size(); i++) {
-                            if (i == 0){
-                                ImageLoader.getInstance().initGlide(getActivity()).loadImage(HttpManager.INDEX+banner2BeanList.get(0).getImage(),iv_img1);
-                            }else if(i == 1){
-                                ImageLoader.getInstance().initGlide(getActivity()).loadImage(HttpManager.INDEX+banner2BeanList.get(1).getImage(),iv_img2);
-                            }else if (i == 2){
-                                ImageLoader.getInstance().initGlide(getActivity()).loadImage(HttpManager.INDEX+banner2BeanList.get(2).getImage(),iv_img3);
-                            }else {
-                                ImageLoader.getInstance().initGlide(getActivity()).loadImage(HttpManager.INDEX+banner2BeanList.get(3).getImage(),iv_img4);
+                        try {
+                            Gson gson = new Gson();
+                            HIndexBean hIndexBean = gson.fromJson(response.body().toString(), HIndexBean.class);
+                            banner2BeanList.addAll(hIndexBean.getData().getBanner2());
+                            for (int i = 0; i < hIndexBean.getData().getBanner1().size(); i++) {
+                                networkImages.add(HttpManager.INDEX + hIndexBean.getData().getBanner1().get(i).getImage());
                             }
+                            initpage();
+
+                            bannerList.addAll(hIndexBean.getData().getBanner1());
+
+                            for (int i = 0; i < banner2BeanList.size(); i++) {
+                                if (i == 0){
+                                    ImageLoader.getInstance().initGlide(getActivity()).loadImage(HttpManager.INDEX+banner2BeanList.get(0).getImage(),iv_img1);
+                                }else if(i == 1){
+                                    ImageLoader.getInstance().initGlide(getActivity()).loadImage(HttpManager.INDEX+banner2BeanList.get(1).getImage(),iv_img2);
+                                }else if (i == 2){
+                                    ImageLoader.getInstance().initGlide(getActivity()).loadImage(HttpManager.INDEX+banner2BeanList.get(2).getImage(),iv_img3);
+                                }else {
+                                    ImageLoader.getInstance().initGlide(getActivity()).loadImage(HttpManager.INDEX+banner2BeanList.get(3).getImage(),iv_img4);
+                                }
+                            }
+
+                            //获取分享里的头像和标题，下载地址；
+                            MyShare.setTitle(hIndexBean.getData().getAndroid().getTitle());
+                            MyShare.setLogo(HttpManager.INDEX+hIndexBean.getData().getAndroid().getLogo());
+                            MyShare.setDownload(hIndexBean.getData().getAndroid().getDownload());
+                            MyShare.setQr_code(hIndexBean.getData().getAndroid().getQr_code());//设置二维码图片
+                        }catch (JsonSyntaxException e){
+                            ToastUtils.showToast(getActivity(),"网络异常!");
                         }
 
-                        //获取分享里的头像和标题，下载地址；
-                        MyShare.setTitle(hIndexBean.getData().getAndroid().getTitle());
-                        MyShare.setLogo(HttpManager.INDEX+hIndexBean.getData().getAndroid().getLogo());
-                        MyShare.setDownload(hIndexBean.getData().getAndroid().getDownload());
-                        MyShare.setQr_code(hIndexBean.getData().getAndroid().getQr_code());//设置二维码图片
                     }
                 });
     }

@@ -193,5 +193,7 @@ public class HttpManager {
     //index.php
     public static final String INDEX = "http://140.143.248.102/";
 
+    public static final String UPdata = BASE_URL+"Index/version";
+
 
 }

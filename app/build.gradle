@@ -12,9 +12,9 @@ android {
         multiDexEnabled true
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         manifestPlaceholders = [
-                GETUI_APP_ID    : "gZpysabAjSAOmnb4mu2ub3",
-                GETUI_APP_KEY   : "0lm2BwlixVAWiSOizOHGr7",
-                GETUI_APP_SECRET: "L9CS4HrQx1AHDh68y0VWO4"
+                GETUI_APP_ID    : "sYtNgihpSw5jeiWsqMyBU",
+                GETUI_APP_KEY   : "DL9xfJurDaAdluAycDadV",
+                GETUI_APP_SECRET: "mjod2EPrsb90s1kcCFTaV6"
         ]
 
         ndk {
