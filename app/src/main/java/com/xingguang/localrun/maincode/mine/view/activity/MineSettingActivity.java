@@ -106,6 +106,7 @@ public class MineSettingActivity extends ToolBarActivity {
                 loadbacklogin();
             }
         };
+
     }
 
     /**
@@ -233,33 +234,6 @@ public class MineSettingActivity extends ToolBarActivity {
         }
         return file;
     }
-
-
-//    private void routeToGallery() {
-//        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-//        intent.addCategory(Intent.CATEGORY_OPENABLE);
-//        intent.setType("image/*");
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-//            startActivityForResult(intent, GALLERY_REQUSET_CODE_KITKAT);
-//        } else {
-//            startActivityForResult(intent, GALLERY_REQUSET_CODE);
-//        }
-//    }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
     /**

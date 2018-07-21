@@ -303,7 +303,6 @@
                 android:textColor="#fff"
                 android:textSize="16sp" />
 
-
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>
 
