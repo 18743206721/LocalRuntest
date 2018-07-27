@@ -34,6 +34,7 @@ import com.xingguang.localrun.maincode.home.view.activity.DaiBanDetailsActivity;
 import com.xingguang.localrun.maincode.home.view.activity.DaiBanMoreActivity;
 import com.xingguang.localrun.maincode.home.view.activity.HomeSearchActivity;
 import com.xingguang.localrun.maincode.home.view.activity.LookShopActivity;
+import com.xingguang.localrun.maincode.home.view.activity.ProductdetailsActivity;
 import com.xingguang.localrun.maincode.home.view.adapter.HomeDaiBanAdapter;
 import com.xingguang.localrun.maincode.home.view.adapter.HomeDaiGouAdapter;
 import com.xingguang.localrun.utils.AppUtil;
@@ -222,11 +223,23 @@ public class HomeFragment extends HttpFragment {
         daigouadapter.setmOnItemClickListener(new HomeDaiGouAdapter.OnItemClickListener() {
             @Override
             public void OnItemClick(View view, int position) {
+                //跳转到详情
+                Intent intent = new Intent();
+                intent.setClass(getActivity(), ProductdetailsActivity.class);
+                intent.putExtra("goods_id", daigoulist.get(position).getGoods_id());
+                intent.putExtra("lookshop", 1);
+                startActivity(intent);
+            }
+        });
+
+        daigouadapter.setmOnItemLookshopListener(new HomeDaiGouAdapter.OnItemLookshopListener() {
+            @Override
+            public void OnItemLookshop(TextView view, int position) {
                 //跳转到店铺页面
-                    intent = new Intent(getActivity(), LookShopActivity.class);
-                    intent.putExtra("shopid", daigoulist.get(position).getShop_id());
-                    startActivity(intent);
-                    LogUtils.e("homefragment_shopid",daigoulist.get(position).getShop_id());
+                intent = new Intent(getActivity(), LookShopActivity.class);
+                intent.putExtra("shopid", daigoulist.get(position).getShop_id());
+                startActivity(intent);
+                LogUtils.e("homefragment_shopid",daigoulist.get(position).getShop_id());
             }
         });
 

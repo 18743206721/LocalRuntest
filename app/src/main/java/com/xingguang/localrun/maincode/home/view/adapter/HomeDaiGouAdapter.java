@@ -20,11 +20,11 @@ public class HomeDaiGouAdapter extends RecyclerView.Adapter <CommonViewHolder> {
 
     private OnItemClickListener mOnItemClickLitener;
 
-//    private OnItemLookshopListener mOnItemLookshopLitener;
-//
-//    public void setmOnItemLookshopListener(OnItemLookshopListener mOnItemLookshopListener) {
-//        this.mOnItemLookshopLitener = mOnItemLookshopListener;
-//    }
+    private OnItemLookshopListener mOnItemLookshopLitener;
+
+    public void setmOnItemLookshopListener(OnItemLookshopListener mOnItemLookshopListener) {
+        this.mOnItemLookshopLitener = mOnItemLookshopListener;
+    }
 
 
     public void setmOnItemClickListener(OnItemClickListener mOnItemClickListener) {
@@ -62,12 +62,12 @@ public class HomeDaiGouAdapter extends RecyclerView.Adapter <CommonViewHolder> {
         holder.setUrlImage(R.id.item_ivds_bg, HttpManager.INDEX+list.get(position).getOriginal_img());
         holder.setText(R.id.tvpm_money,"¥"+list.get(position).getShop_price());
 
-//        item_tv_look.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                mOnItemLookshopLitener.OnItemLookshop(item_tv_look, position);
-//            }
-//        });
+        item_tv_look.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mOnItemLookshopLitener.OnItemLookshop(item_tv_look, position);
+            }
+        });
 
 
     }
@@ -86,9 +86,9 @@ public class HomeDaiGouAdapter extends RecyclerView.Adapter <CommonViewHolder> {
         void OnItemClick(View view, int position);
     }
 
-//    public interface OnItemLookshopListener {
-//        void OnItemLookshop(View view, int position);
-//    }
+    public interface OnItemLookshopListener {
+        void OnItemLookshop(TextView view, int position);
+    }
 
 
 }

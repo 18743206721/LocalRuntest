@@ -403,7 +403,7 @@
                     android:paddingBottom="10dp"
                     android:paddingLeft="15dp"
                     android:paddingTop="10dp"
-                    android:text="代购"
+                    android:text="代购 / Service"
                     android:textColor="@color/white"
                     android:textSize="18sp" />
 
@@ -495,7 +495,7 @@
                     android:paddingBottom="10dp"
                     android:paddingLeft="15dp"
                     android:paddingTop="10dp"
-                    android:text="代办"
+                    android:text="代办 / Hand"
                     android:textColor="@color/white"
                     android:textSize="18sp" />
 

@@ -15,9 +15,9 @@ import com.xingguang.core.base.BaseActivity;
 import com.xingguang.core.utils.ToastUtils;
 import com.xingguang.localrun.R;
 import com.xingguang.localrun.base.BaseFragmentAdapter;
-import com.xingguang.localrun.http.CommonBean;
 import com.xingguang.localrun.http.DialogCallback;
 import com.xingguang.localrun.http.HttpManager;
+import com.xingguang.localrun.maincode.home.model.GuanZhuBean;
 import com.xingguang.localrun.maincode.home.model.ShopJianjieBean;
 import com.xingguang.localrun.maincode.home.view.fragment.LookShopFragment;
 import com.xingguang.localrun.utils.AppUtil;
@@ -54,6 +54,7 @@ public class LookShopActivity extends BaseActivity {
     //是否关注
     private boolean isshow = false;
     private String shopid;
+    private String collectid = "";//取消关注
 
     @Override
     protected int getLayoutId() {
@@ -65,7 +66,7 @@ public class LookShopActivity extends BaseActivity {
         instance = this;
         toolbarSubtitle.setText("商店");
         shopid = getIntent().getStringExtra("shopid");
-        if (shopid!=null) {
+        if (shopid != null) {
             loadjianjie();
         }
         initViewPage();
@@ -73,19 +74,20 @@ public class LookShopActivity extends BaseActivity {
 
     /**
      * 店铺简介
-     * */
+     */
     private void loadjianjie() {
         OkGo.<String>post(HttpManager.Shopjianjie)
                 .tag(this)
                 .cacheKey("cachePostKey")
                 .cacheMode(CacheMode.DEFAULT)
+                .params("token",AppUtil.getUserId(LookShopActivity.this))
                 .params("id", shopid)
                 .execute(new DialogCallback<String>(this) {
                     @Override
                     public void onSuccess(Response<String> response) {
                         Gson gson = new Gson();
                         ShopJianjieBean jianjieBean = gson.fromJson(response.body().toString(), ShopJianjieBean.class);
-                        if (jianjieBean.getData()!=null) {
+                        if (jianjieBean.getData() != null) {
                             if (jianjieBean.getData().getIs_collected() == 0) { //未关注
                                 toolbarSubimg.setImageResource(R.mipmap.attention_bg);
                             } else { //已关注
@@ -112,9 +114,10 @@ public class LookShopActivity extends BaseActivity {
                         @Override
                         public void onSuccess(Response<String> response) {
                             Gson gson = new Gson();
-                            CommonBean bean = gson.fromJson(response.body().toString(), CommonBean.class);
+                            GuanZhuBean bean = gson.fromJson(response.body().toString(), GuanZhuBean.class);
+                            collectid = bean.getData().getCollect_id();
                             toolbarSubimg.setImageResource(R.mipmap.attention_cancel);
-                            ToastUtils.showToast(LookShopActivity.this,"关注成功!");
+                            ToastUtils.showToast(LookShopActivity.this, "关注成功!");
                         }
                     });
         } else {
@@ -123,14 +126,15 @@ public class LookShopActivity extends BaseActivity {
                     .cacheKey("cachePostKey")
                     .cacheMode(CacheMode.DEFAULT)
                     .params("token", AppUtil.getUserId(this))
-                    .params("collect_id", shopid)
+                    .params("collect_id", collectid)
                     .execute(new DialogCallback<String>(this) {
                         @Override
                         public void onSuccess(Response<String> response) {
                             Gson gson = new Gson();
-                            CommonBean bean = gson.fromJson(response.body().toString(), CommonBean.class);
+                            GuanZhuBean bean = gson.fromJson(response.body().toString(), GuanZhuBean.class);
+                            collectid = bean.getData().getCollect_id();
                             toolbarSubimg.setImageResource(R.mipmap.attention_bg);
-                            ToastUtils.showToast(LookShopActivity.this,"取消关注!");
+                            ToastUtils.showToast(LookShopActivity.this, bean.getMsg());
                         }
                     });
         }
@@ -139,7 +143,7 @@ public class LookShopActivity extends BaseActivity {
     private void initViewPage() {
         mFragments = new ArrayList<>();
         for (int i = 0; i < mTitles.length; i++) {
-            listFragment = new LookShopFragment(i + 1, shopid,mPagerShop);
+            listFragment = new LookShopFragment(i + 1, shopid, mPagerShop);
             mFragments.add(listFragment);
         }
         BaseFragmentAdapter adapter = new BaseFragmentAdapter(getSupportFragmentManager(), mFragments, mTitles);

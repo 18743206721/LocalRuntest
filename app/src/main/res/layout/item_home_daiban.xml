@@ -51,7 +51,7 @@
         android:layout_margin="@dimen/dp10"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="新竹 新星宇和懿10号楼1106室新星宇和懿10号楼11懿10号楼1106室"
+        android:text=""
         android:textColor="@color/textBlack"
         android:textSize="14sp" />
 
