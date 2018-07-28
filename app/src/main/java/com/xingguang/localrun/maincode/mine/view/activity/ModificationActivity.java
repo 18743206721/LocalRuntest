@@ -22,6 +22,7 @@ import com.xingguang.localrun.base.ToolBarActivity;
 import com.xingguang.localrun.http.CommonBean;
 import com.xingguang.localrun.http.DialogCallback;
 import com.xingguang.localrun.http.HttpManager;
+import com.xingguang.localrun.login.view.activity.LoginActivity;
 import com.xingguang.localrun.utils.AppUtil;
 import com.xingguang.localrun.utils.CountDownTimerUtil;
 import com.xingguang.localrun.view.ClearEditText;
@@ -156,15 +157,20 @@ public class ModificationActivity extends ToolBarActivity implements CountDownTi
                     public void onSuccess(Response<String> response) {
                         Gson gson = new Gson();
                         CommonBean commonBean = gson.fromJson(response.body().toString(), CommonBean.class);
-                        mIntent = new Intent();
-                        Bundle b = new Bundle();
-                        b.putSerializable("content", etModifBianliang.getText().toString());
-                        mIntent.putExtras(b);
+//                        mIntent = new Intent();
+//                        Bundle b = new Bundle();
+//                        b.putSerializable("content", etModifBianliang.getText().toString());
+//                        mIntent.putExtras(b);
                         // 设置结果，并进行传送
-                        SharedPreferencesUtils.put(ModificationActivity.this, SharedPreferencesUtils.PHONE, etModifBianliang.getText().toString());
-                        setResult(201, mIntent);
+//                        SharedPreferencesUtils.remove(ModificationActivity.this,SharedPreferencesUtils.PHONE);
+//                        SharedPreferencesUtils.put(ModificationActivity.this, SharedPreferencesUtils.PHONE, etModifBianliang.getText().toString());
+//                        setResult(201, mIntent);
+                        SharedPreferencesUtils.clear(ModificationActivity.this);
                         ToastUtils.showToast(ModificationActivity.this, commonBean.getMsg());
                         finish();
+                        MineSettingActivity.instance.finish();
+                        startActivity(new Intent(ModificationActivity.this, LoginActivity.class));
+
 
                     }
                 });

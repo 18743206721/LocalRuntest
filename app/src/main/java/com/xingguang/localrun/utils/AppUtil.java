@@ -1023,6 +1023,7 @@ public class AppUtil {
      * @param version1
      * @param version2
      * @return
+     * 0代表相等，1代表version1大于version2，-1代表version1小于version2
      */
 
     public static int compareVersion(String version1, String version2) {

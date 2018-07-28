@@ -69,6 +69,7 @@ public class MineSettingActivity extends ToolBarActivity {
     private ArrayList<String> selectedPhotos = new ArrayList<>();
     private Intent intent;
 
+    public static MineSettingActivity instance;
 
     @Override
     protected int getLayoutId() {
@@ -77,6 +78,7 @@ public class MineSettingActivity extends ToolBarActivity {
 
     @Override
     protected void initView() {
+        instance = this;
         getToolbarTitle().setText("设置");
         getToolbarBack().setOnClickListener(new View.OnClickListener() {
             @Override

@@ -153,7 +153,6 @@ public class ClassifFragment extends HttpFragment implements RefreshUtil.OnRefre
 
         });
 
-
         rightListView.setOnScrollListener(new AbsListView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(AbsListView view, int scrollState) {

@@ -14,6 +14,7 @@ import com.xingguang.localrun.R;
 import com.xingguang.localrun.http.HttpManager;
 import com.xingguang.localrun.maincode.classify.model.ClassifBean;
 import com.xingguang.localrun.maincode.home.view.activity.LookShopActivity;
+import com.xingguang.localrun.maincode.home.view.activity.ProductdetailsActivity;
 import com.xingguang.localrun.utils.ImageLoader;
 import com.xingguang.localrun.view.RoundRectImageView;
 
@@ -62,6 +63,8 @@ public class RightAdapter extends BaseAdapter {
             holder.imageItem = convertView.findViewById(R.id.imageItem);
             holder.iv1 = convertView.findViewById(R.id.iv1);
             holder.iv2 = convertView.findViewById(R.id.iv2);
+            holder.tvprice1 = convertView.findViewById(R.id.tv_price);
+            holder.tvprice2 = convertView.findViewById(R.id.tv_price2);
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
@@ -76,11 +79,36 @@ public class RightAdapter extends BaseAdapter {
         ImageLoader.getInstance().initGlide(mContext).loadImage(
                 HttpManager.INDEX + list.get(position).getGoods().get(1).getOriginal_img(), holder.iv2);
 
+        holder.tvprice1.setText("¥"+list.get(position).getGoods().get(0).getShop_price());
+        holder.tvprice2.setText("¥"+list.get(position).getGoods().get(1).getShop_price());
+
         holder.item_tv_inshop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 mContext.startActivity(new Intent(mContext, LookShopActivity.class)
                 .putExtra("shopid",list.get(position).getId()));
+            }
+        });
+
+        holder.iv1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //跳转到商品详情页面
+                Intent intent = new Intent();
+                intent.setClass(mContext, ProductdetailsActivity.class);
+                intent.putExtra("goods_id", list.get(position).getGoods().get(0).getGoods_id());
+                mContext.startActivity(intent);
+            }
+        });
+
+        holder.iv2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //跳转到商品详情页面
+                Intent intent = new Intent();
+                intent.setClass(mContext, ProductdetailsActivity.class);
+                intent.putExtra("goods_id", list.get(position).getGoods().get(1).getGoods_id());
+                mContext.startActivity(intent);
             }
         });
 
@@ -94,7 +122,7 @@ public class RightAdapter extends BaseAdapter {
 
     class ViewHolder {
         TextView textItem;
-        TextView item_tv_inshop;
+        TextView item_tv_inshop,tvprice1,tvprice2;
         RoundRectImageView imageItem;
         ImageView iv1, iv2;
 

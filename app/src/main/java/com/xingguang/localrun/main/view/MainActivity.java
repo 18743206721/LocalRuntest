@@ -15,7 +15,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
 import android.support.annotation.NonNull;
-import android.support.v4.BuildConfig;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -150,7 +149,6 @@ public class MainActivity extends BaseActivity {
      * 直接检测是否有新的版本，然后进行更新
      */
     private void checkAppVersion() {
-
         if (Build.VERSION.SDK_INT >= 21) {
             if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
                 //申请WRITE_EXTERNAL_STORAGE权限
@@ -171,7 +169,6 @@ public class MainActivity extends BaseActivity {
                 .tag(this)
                 .cacheKey("cachePostKey")
                 .cacheMode(CacheMode.DEFAULT)
-//                .params("VersionName", AppUtil.getVersionName(MainActivity.this))
                 .execute(new DialogCallback<String>(this) {
                     @Override
                     public void onSuccess(Response<String> response) {
@@ -182,7 +179,8 @@ public class MainActivity extends BaseActivity {
                                 if (bean.getData().getVersion_num()!=null) {
                                     packageInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
 
-                                    if (AppUtil.compareVersion(AppUtil.getVersionName(MainActivity.this), bean.getData().getVersion_num()) == -1) {
+                                    if (AppUtil.compareVersion(AppUtil.getVersionName(MainActivity.this),
+                                            bean.getData().getVersion_num()) == -1) {
                                         showDialog(bean);
                                     }
                                 }
@@ -330,15 +328,13 @@ public class MainActivity extends BaseActivity {
         Intent intent = new Intent(Intent.ACTION_VIEW);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             if (file != null) {
-                intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                Uri contentUri = FileProvider.getUriForFile(this, BuildConfig.APPLICATION_ID + ".fileProvider", file);
-                intent.setDataAndType(contentUri, "applicationnd.android.package-archive");
+                Uri contentUri = FileProvider.getUriForFile(this, this.getPackageName() + ".provider", file);
+                intent.setDataAndType(contentUri, "application/vnd.android.package-archive");
+                intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                 this.startActivity(intent);
             }
         } else {
-
             Uri downloadFileUri;
-//            File file = this.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS + "/update.apk");
             if (file != null) {
                 String path = file.getAbsolutePath();
                 downloadFileUri = Uri.parse("file://" + path);
@@ -346,9 +342,6 @@ public class MainActivity extends BaseActivity {
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 this.startActivity(intent);
             }
-
-//            intent.setDataAndType(Uri.fromFile(file), "applicationnd.android.package-archive");
-//            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         }
 
     }
