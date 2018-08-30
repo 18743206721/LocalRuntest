@@ -297,8 +297,6 @@ public class LookShopFragment extends BaseFragment implements RefreshUtil.OnRefr
             }
         });
 
-
-
         adapter.setOnItemClickListener(new LookShopAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {

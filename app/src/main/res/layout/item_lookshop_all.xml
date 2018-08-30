@@ -202,7 +202,7 @@
                 android:id="@+id/item_iv_zizhi"
                 android:scaleType="fitXY"
                 android:adjustViewBounds="true"
-                android:background="@color/home_bule"
+                android:background="@color/board"
                 android:layout_width="180dp"
                 android:layout_height="210dp" />
 

@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
@@ -95,8 +96,8 @@ public class HomeFragment extends HttpFragment {
     private List<String> networkImages = new ArrayList<>();
     private Intent intent;
     private FragmentManager fm;
-    private int page = 0; //代购分页
-    private int count = 0; //代办分页
+    private int page = 1; //代购分页
+    private int count = 1; //代办分页
 
     //轮播图
     private List<HIndexBean.DataBean.Banner1Bean> bannerList = new ArrayList<>();
@@ -119,16 +120,16 @@ public class HomeFragment extends HttpFragment {
 
         initAdapter();
         loadHeader();
-        initDaiGou(0);
-        initDaiBan(0);
+        initDaiGou(1);
+        initDaiBan(1);
         initListener();
 
     }
 
     /**
      * 代办接口
-     * */
-    private void initDaiBan(int count) {
+     */
+    private void initDaiBan(final int count) {
         OkGo.<String>post(HttpManager.tjtask)
                 .tag(this)
                 .cacheKey("cachePostKey")
@@ -139,20 +140,28 @@ public class HomeFragment extends HttpFragment {
                     public void onSuccess(Response<String> response) {
                         Gson gson = new Gson();
                         TjtaskBean tjtaskBean = gson.fromJson(response.body().toString(), TjtaskBean.class);
-                        daibanlist.addAll(tjtaskBean.getData());
-                        if (tjtaskBean.getData().size() == 0){
-                            ToastUtils.showToast(getActivity(),"暂无更多数据!");
-                        }else {
-                            daibanadapter.setList(daibanlist);
+
+                        if (tjtaskBean.getData().size() == 0 && count != 1) {
+                            Toast.makeText(getActivity(),
+                                    "只有这么多了~",
+                                    Toast.LENGTH_SHORT).show();
                         }
+
+                        if (count == 1) {
+                            daibanlist.clear();
+                        }
+
+                        daibanlist.addAll(tjtaskBean.getData());
+                        daibanadapter.setList(daibanlist);
+
                     }
                 });
     }
 
     /**
      * 代购接口
-     * */
-    private void initDaiGou(int page) {
+     */
+    private void initDaiGou(final int page) {
         OkGo.<String>post(HttpManager.tjgoods)
                 .tag(this)
                 .cacheKey("cachePostKey")
@@ -163,12 +172,22 @@ public class HomeFragment extends HttpFragment {
                     public void onSuccess(Response<String> response) {
                         Gson gson = new Gson();
                         TjgoodsBean tjgoodsBean = gson.fromJson(response.body().toString(), TjgoodsBean.class);
-                        daigoulist.addAll(tjgoodsBean.getData());
-                        if (tjgoodsBean.getData().size() == 0){
-                            ToastUtils.showToast(getActivity(),"暂无更多商铺!");
-                        }else {
-                            daigouadapter.setList(daigoulist);
+
+
+                        if (tjgoodsBean.getData().size() == 0 && page != 1) {
+                            Toast.makeText(getActivity(),
+                                    "只有这么多了~",
+                                    Toast.LENGTH_SHORT).show();
                         }
+
+                        if (page == 1) {
+                            daigoulist.clear();
+                        }
+
+                        daigoulist.addAll(tjgoodsBean.getData());
+
+                        daigouadapter.setList(daigoulist);
+
                     }
                 });
     }
@@ -194,24 +213,24 @@ public class HomeFragment extends HttpFragment {
                             bannerList.addAll(hIndexBean.getData().getBanner1());
 
                             for (int i = 0; i < banner2BeanList.size(); i++) {
-                                if (i == 0){
-                                    ImageLoader.getInstance().initGlide(getActivity()).loadImage(HttpManager.INDEX+banner2BeanList.get(0).getImage(),iv_img1);
-                                }else if(i == 1){
-                                    ImageLoader.getInstance().initGlide(getActivity()).loadImage(HttpManager.INDEX+banner2BeanList.get(1).getImage(),iv_img2);
-                                }else if (i == 2){
-                                    ImageLoader.getInstance().initGlide(getActivity()).loadImage(HttpManager.INDEX+banner2BeanList.get(2).getImage(),iv_img3);
-                                }else {
-                                    ImageLoader.getInstance().initGlide(getActivity()).loadImage(HttpManager.INDEX+banner2BeanList.get(3).getImage(),iv_img4);
+                                if (i == 0) {
+                                    ImageLoader.getInstance().initGlide(getActivity()).loadImage(HttpManager.INDEX + banner2BeanList.get(0).getImage(), iv_img1);
+                                } else if (i == 1) {
+                                    ImageLoader.getInstance().initGlide(getActivity()).loadImage(HttpManager.INDEX + banner2BeanList.get(1).getImage(), iv_img2);
+                                } else if (i == 2) {
+                                    ImageLoader.getInstance().initGlide(getActivity()).loadImage(HttpManager.INDEX + banner2BeanList.get(2).getImage(), iv_img3);
+                                } else {
+                                    ImageLoader.getInstance().initGlide(getActivity()).loadImage(HttpManager.INDEX + banner2BeanList.get(3).getImage(), iv_img4);
                                 }
                             }
 
                             //获取分享里的头像和标题，下载地址；
                             MyShare.setTitle(hIndexBean.getData().getAndroid().getTitle());
-                            MyShare.setLogo(HttpManager.INDEX+hIndexBean.getData().getAndroid().getLogo());
+                            MyShare.setLogo(HttpManager.INDEX + hIndexBean.getData().getAndroid().getLogo());
                             MyShare.setDownload(hIndexBean.getData().getAndroid().getDownload());
                             MyShare.setQr_code(hIndexBean.getData().getAndroid().getQr_code());//设置二维码图片
-                        }catch (JsonSyntaxException e){
-                            ToastUtils.showToast(getActivity(),"网络异常!");
+                        } catch (JsonSyntaxException e) {
+                            ToastUtils.showToast(getActivity(), "网络异常!");
                         }
 
                     }
@@ -239,28 +258,28 @@ public class HomeFragment extends HttpFragment {
                 intent = new Intent(getActivity(), LookShopActivity.class);
                 intent.putExtra("shopid", daigoulist.get(position).getShop_id());
                 startActivity(intent);
-                LogUtils.e("homefragment_shopid",daigoulist.get(position).getShop_id());
+                LogUtils.e("homefragment_shopid", daigoulist.get(position).getShop_id());
             }
         });
 
         daibanadapter.setmOnItemClickListener(new HomeDaiBanAdapter.OnItemClickListener() {
             @Override
             public void OnItemClick(TextView view, int position) {
-                    Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + daibanlist.get(position).getPhone()));
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    startActivity(intent);
+                Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + daibanlist.get(position).getPhone()));
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
             }
         });
     }
 
     private void initAdapter() {
-        daigouadapter = new HomeDaiGouAdapter(getActivity(),daigoulist);
+        daigouadapter = new HomeDaiGouAdapter(getActivity(), daigoulist);
         GridLayoutManager mgr = new GridLayoutManager(getActivity(), 2);
         mainHomeLv.setLayoutManager(mgr);
         mainHomeLv.setAdapter(daigouadapter);
         mainHomeLv.setNestedScrollingEnabled(false);
 
-        daibanadapter = new HomeDaiBanAdapter(getActivity(),daibanlist);
+        daibanadapter = new HomeDaiBanAdapter(getActivity(), daibanlist);
         LinearLayoutManager lmg = new LinearLayoutManager(getActivity());
         mainHomelvDaiban.setLayoutManager(lmg);
         mainHomelvDaiban.setAdapter(daibanadapter);
@@ -282,8 +301,8 @@ public class HomeFragment extends HttpFragment {
             @Override
             public void OnBannerClick(int position) {
                 for (int i = 0; i < bannerList.size(); i++) {
-                    if (position == i){
-                        intentclassif(bannerList.get(i).getData_id(),bannerList.get(i).getData_type());
+                    if (position == i) {
+                        intentclassif(bannerList.get(i).getData_id(), bannerList.get(i).getData_type());
                     }
                 }
             }
@@ -293,11 +312,11 @@ public class HomeFragment extends HttpFragment {
 
 
     private void intentclassif(String data_id, String data_type) {
-        if (!data_id.equals("0")){
-            if (data_type.equals("1")){ //代办详情
-                startActivity(new Intent(getActivity(),DaiBanDetailsActivity.class)
-                .putExtra("danbanid",data_id));
-            }else if (data_type.equals("2")){ //店铺详情
+        if (!data_id.equals("0")) {
+            if (data_type.equals("1")) { //代办详情
+                startActivity(new Intent(getActivity(), DaiBanDetailsActivity.class)
+                        .putExtra("danbanid", data_id));
+            } else if (data_type.equals("2")) { //店铺详情
                 intent = new Intent(getActivity(), LookShopActivity.class);
                 intent.putExtra("shopid", data_id);
                 startActivity(intent);
@@ -328,7 +347,7 @@ public class HomeFragment extends HttpFragment {
     @OnClick({R.id.ll_main_fenlei, R.id.ll_main_selecte, R.id.ll_home_dijia, R.id.ll_home_food,
             R.id.ll_outfit, R.id.ll_supermarket, R.id.ll_home_fruit, R.id.ll_home_hardware,
             R.id.ll_sousuo_serch, R.id.ll_daigou_more, R.id.ll_daiban_more,
-            R.id.iv_img1, R.id.iv_img2, R.id.iv_img3, R.id.iv_img4,R.id.ll_daigoupage,R.id.ll_daibanpage})
+            R.id.iv_img1, R.id.iv_img2, R.id.iv_img3, R.id.iv_img4, R.id.ll_daigoupage, R.id.ll_daibanpage})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.ll_sousuo_serch://搜索
@@ -351,19 +370,19 @@ public class HomeFragment extends HttpFragment {
                 MainActivity.instance.setToProjectFragment();
                 break;
             case R.id.ll_home_food://美食
-                startfenlei("美食");
+                startfenlei("美食", 1);
                 break;
             case R.id.ll_outfit://美装
-                startfenlei("美装");
+                startfenlei("美装", 2);
                 break;
             case R.id.ll_supermarket://超市
-                startfenlei("超市");
+                startfenlei("超市", 3);
                 break;
             case R.id.ll_home_fruit://果蔬
-                startfenlei("果蔬");
+                startfenlei("果蔬", 4);
                 break;
             case R.id.ll_home_hardware://五金
-                startfenlei("五金");
+                startfenlei("五金", 5);
                 break;
             case R.id.ll_daigou_more: //代购更多跳转分类
                 MainActivity.instance.setBg(2);
@@ -373,39 +392,39 @@ public class HomeFragment extends HttpFragment {
                 startActivity(new Intent(getActivity(), DaiBanMoreActivity.class));
                 break;
             case R.id.iv_img1://优速办1
-                if (banner2BeanList.size()!=0) {
+                if (banner2BeanList.size() != 0) {
                     intentclassif(banner2BeanList.get(0).getData_id(), banner2BeanList.get(0).getData_type());
                 }
                 break;
             case R.id.iv_img2://优速办2
-                if (banner2BeanList.size()!=0) {
+                if (banner2BeanList.size() != 0) {
                     intentclassif(banner2BeanList.get(0).getData_id(), banner2BeanList.get(0).getData_type());
                 }
                 break;
             case R.id.iv_img3://优速办3
-                if (banner2BeanList.size()!=0) {
+                if (banner2BeanList.size() != 0) {
                     intentclassif(banner2BeanList.get(0).getData_id(), banner2BeanList.get(0).getData_type());
                 }
                 break;
             case R.id.iv_img4://优速办4
-                if (banner2BeanList.size()!=0) {
+                if (banner2BeanList.size() != 0) {
                     intentclassif(banner2BeanList.get(0).getData_id(), banner2BeanList.get(0).getData_type());
                 }
                 break;
             case R.id.ll_daigoupage://代购加载更多
-                 page++;
-                 initDaiGou(page);
+                initDaiGou(page++);
                 break;
             case R.id.ll_daibanpage://代办加载更多
-                count++;
-                initDaiBan(count);
+                initDaiBan(count++);
                 break;
         }
     }
 
-    private void startfenlei(String text) {
+    private void startfenlei(String text, int id) {
         startActivity(new Intent(getActivity(), ClassifShopActivity.class)
-                .putExtra("name", text));
+                .putExtra("name", text)
+                .putExtra("id", id)
+        );
     }
 
 

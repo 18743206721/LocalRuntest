@@ -196,8 +196,6 @@ public class MineSettingActivity extends ToolBarActivity {
      */
     private void imgjiancai(Intent data) {
         selectedPhotos = data.getStringArrayListExtra(PhotoPicker.KEY_SELECTED_PHOTOS);
-
-
         Bitmap image = BitmapFactory.decodeFile(selectedPhotos.get(0));
         File faceFile;
         try {

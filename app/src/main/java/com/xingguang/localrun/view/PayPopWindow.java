@@ -24,7 +24,6 @@ import com.lzy.okgo.model.Response;
 import com.tencent.mm.opensdk.modelpay.PayReq;
 import com.tencent.mm.opensdk.openapi.IWXAPI;
 import com.tencent.mm.opensdk.openapi.WXAPIFactory;
-import com.xingguang.core.utils.ToastUtils;
 import com.xingguang.localrun.R;
 import com.xingguang.localrun.http.DialogCallback;
 import com.xingguang.localrun.http.HttpManager;
@@ -212,10 +211,10 @@ public class PayPopWindow extends PopupWindow implements View.OnClickListener {
         // 将该app注册到微信
         mWxApi.registerApp(HttpManager.WX_APP_ID);
         // 判断是否安装客户端
-        if (!mWxApi.isWXAppInstalled() && !mWxApi.isWXAppSupportAPI()) {
-            ToastUtils.showToast(context, "请您先安装微信客户端！");
-            return;
-        } else {
+//        if (!mWxApi.isWXAppInstalled() && !mWxApi.isWXAppSupportAPI()) {
+//            ToastUtils.showToast(context, "请您先安装微信客户端！");
+//            return;
+//        } else {
 
             OkGo.<String>post(HttpManager.topay)
                     .tag(this)
@@ -245,9 +244,7 @@ public class PayPopWindow extends PopupWindow implements View.OnClickListener {
 
                         }
                     });
-
-
-        }
+//        }
 
     }
 
@@ -327,10 +324,6 @@ public class PayPopWindow extends PopupWindow implements View.OnClickListener {
         // 将该app注册到微信
         mWxApi.registerApp(HttpManager.WX_APP_ID);
         // 判断是否安装客户端
-        if (!mWxApi.isWXAppInstalled() && !mWxApi.isWXAppSupportAPI()) {
-            ToastUtils.showToast(context, "请您先安装微信客户端！");
-            return;
-        } else {
 
             OkGo.<String>post(HttpManager.cart4)
                     .tag(this)
@@ -362,10 +355,6 @@ public class PayPopWindow extends PopupWindow implements View.OnClickListener {
 
                         }
                     });
-
-
-        }
-
     }
 
     /**

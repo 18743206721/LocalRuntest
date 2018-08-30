@@ -328,11 +328,11 @@ public class ProductdetailsActivity extends BaseActivity implements SharePopUpWi
     };
 
     private void initAdapter() {
-        pinglunadapter = new PinglunAdapter(ProductdetailsActivity.this, mdatas);
-        LinearLayoutManager manager = new LinearLayoutManager(ProductdetailsActivity.this);
-        rvComment.setLayoutManager(manager);
-        rvComment.setAdapter(pinglunadapter);
-        rvComment.setNestedScrollingEnabled(false);
+            pinglunadapter = new PinglunAdapter(ProductdetailsActivity.this, mdatas);
+            LinearLayoutManager manager = new LinearLayoutManager(ProductdetailsActivity.this);
+            rvComment.setLayoutManager(manager);
+            rvComment.setAdapter(pinglunadapter);
+            rvComment.setNestedScrollingEnabled(false);
     }
 
     private void initListener() {

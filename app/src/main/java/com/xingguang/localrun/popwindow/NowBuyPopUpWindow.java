@@ -53,11 +53,11 @@ public class NowBuyPopUpWindow extends PopupWindow implements View.OnClickListen
     private Context context;
     //规格id
     String itemid = "";
-    String store_count = "";//库存
+    String store_count = "0";//库存
 
 
     private PurchaseTagAdapter mAdapter;
-    private ArrayList<SpecBean.DataBean> lists  = new ArrayList<>();
+    private ArrayList<SpecBean.DataBean> lists = new ArrayList<>();
     private int nums = 1;
     private String original_img; //图片
     private String keyname; //规格名字
@@ -120,7 +120,6 @@ public class NowBuyPopUpWindow extends PopupWindow implements View.OnClickListen
                 }
             }
         }
-
 
 
         //规格
@@ -220,11 +219,29 @@ public class NowBuyPopUpWindow extends PopupWindow implements View.OnClickListen
                             if ("1".equals(lists.get(i).getIsClick())) {
                                 keyname = lists.get(i).getKey_name();
                                 itemid = lists.get(i).getItem_id();
+                                goodsId = lists.get(i).getGoods_id();
                             }
                         }
                         msg2.obj = nums + " " + itemid + " " + keyname + " ";
                         ProductdetailsActivity.instance.handler.sendMessage(msg2);
-                        dismiss();
+
+                        OkGo.<String>post(HttpManager.addCart)
+                                .tag(this)
+                                .cacheKey("cachePostKey")
+                                .cacheMode(CacheMode.DEFAULT)
+                                .params("token", AppUtil.getUserId(context))
+                                .params("goods_id", goodsId)
+                                .params("goods_num", nums)
+                                .params("item_id", itemid)
+                                .execute(new DialogCallback<String>(ProductdetailsActivity.instance) {
+                                    @Override
+                                    public void onSuccess(Response<String> response) {
+                                        Gson gson = new Gson();
+                                        CommonBean bean = gson.fromJson(response.body().toString(), CommonBean.class);
+                                        dismiss();
+                                        ToastUtils.showToast(context, bean.getMsg());
+                                    }
+                                });
                     }
                 } else if (type == 4) { //添加购物车有规格时
                     final ProductdetailsActivity activity = (ProductdetailsActivity) context;

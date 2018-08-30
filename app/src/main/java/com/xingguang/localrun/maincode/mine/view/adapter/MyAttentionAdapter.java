@@ -25,6 +25,7 @@ public class MyAttentionAdapter extends RecyclerView.Adapter <CommonViewHolder>{
     private Context mContext;
     private List<MineAttentionBean.DataBean> list;
     private OnItemCancelClickLitener mOnItemCancelClickLitener;
+    private OnItemClickLitener mOnItemClickLitener;
 
     public void setList(List<MineAttentionBean.DataBean> list) {
         this.list = list;
@@ -40,6 +41,16 @@ public class MyAttentionAdapter extends RecyclerView.Adapter <CommonViewHolder>{
         this.mOnItemCancelClickLitener = mOnItemCancelClickLitener;
     }
 
+    //itemclick
+    public interface OnItemClickLitener {
+        void onItemClick(View view, int position);
+    }
+
+    public void setOnItemClickLitener(OnItemClickLitener mOnItemClickLitener) {
+        this.mOnItemClickLitener = mOnItemClickLitener;
+    }
+
+
     public MyAttentionAdapter(Context mContext, List<MineAttentionBean.DataBean> list) {
         this.mContext = mContext;
         this.list = list;
@@ -54,7 +65,7 @@ public class MyAttentionAdapter extends RecyclerView.Adapter <CommonViewHolder>{
     }
 
     @Override
-    public void onBindViewHolder(CommonViewHolder holder, final int position) {
+    public void onBindViewHolder(final CommonViewHolder holder, final int position) {
         View viewtop = holder.getItemView().findViewById(R.id.view_top);
         if (position == 0){
             viewtop.setVisibility(View.VISIBLE);
@@ -72,6 +83,16 @@ public class MyAttentionAdapter extends RecyclerView.Adapter <CommonViewHolder>{
                 }
             });
         }
+
+        if (mOnItemClickLitener != null) {
+            holder.getItemView().setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mOnItemClickLitener.onItemClick(holder.getItemView(),position);
+                }
+            });
+        }
+
         ImageLoader.loadRoundImage(mContext, HttpManager.INDEX+list.get(position).getLogo(),item_iv_attention,5); //图片
         holder.setText(R.id.item_tv_attenname,list.get(position).getShop_name()); //店名
 

@@ -1,12 +1,15 @@
 package com.xingguang.localrun.maincode.mine.view.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.xingguang.localrun.R;
 import com.xingguang.localrun.http.HttpManager;
+import com.xingguang.localrun.maincode.home.view.activity.ProductdetailsActivity;
 import com.xingguang.localrun.maincode.mine.model.ZujiBean;
 import com.xingguang.localrun.utils.ImageLoader;
 import com.xingguang.localrun.view.CommonViewHolder;
@@ -36,11 +39,22 @@ public class MyItemFootAdapter extends RecyclerView.Adapter<CommonViewHolder> {
     }
 
     @Override
-    public void onBindViewHolder(CommonViewHolder holder, int position) {
+    public void onBindViewHolder(CommonViewHolder holder, final int position) {
         ImageView item_iv_backimg = holder.getItemView().findViewById(R.id.item_iv_backimg);
         ImageLoader.getInstance().initGlide(mContext).loadImage(
                 HttpManager.INDEX + list.get(position).getOriginal_img(), item_iv_backimg);
         holder.setText(R.id.tv_shop_price, "¥" + list.get(position).getShop_price());
+
+        holder.getItemView().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setClass(mContext, ProductdetailsActivity.class);
+                intent.putExtra("goods_id",list.get(position).getGoods_id());
+                mContext.startActivity(intent);
+            }
+        });
+
     }
 
     @Override

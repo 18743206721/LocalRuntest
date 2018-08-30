@@ -27,6 +27,7 @@ public class ClassifShopActivity extends ToolBarActivity {
     List<Fragment> mFragments;
     String[] mTitles = new String[]{"综和","销量","热度"};
     LookClassifShopFragment listFragment;
+    private int id = 0;//传过来的固定id
 
     @Override
     protected int getLayoutId() {
@@ -35,7 +36,7 @@ public class ClassifShopActivity extends ToolBarActivity {
 
     @Override
     protected void initView() {
-
+        id = getIntent().getIntExtra("id",0);
         getToolbarTitle().setText(getIntent().getStringExtra("name"));
         getToolbarBack().setOnClickListener(new View.OnClickListener() {
             @Override
@@ -50,7 +51,7 @@ public class ClassifShopActivity extends ToolBarActivity {
     private void initViewPage() {
         mFragments = new ArrayList<>();
         for (int i = 0; i < mTitles.length; i++) {
-            listFragment = LookClassifShopFragment.newInstance(i+1);
+            listFragment = LookClassifShopFragment.newInstance(i+1,id);
             mFragments.add(listFragment);
         }
         BaseFragmentAdapter adapter = new BaseFragmentAdapter(getSupportFragmentManager(), mFragments, mTitles);

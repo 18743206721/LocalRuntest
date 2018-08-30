@@ -118,6 +118,7 @@ public class BuyActivity extends ToolBarActivity {
         recyc.setFocusable(false);
 
         load();
+
     }
 
     private void load() {
@@ -146,6 +147,10 @@ public class BuyActivity extends ToolBarActivity {
                             phone.setText(bean.getData().getAddress().getMobile());
                             address.setText(bean.getData().getAddress().getAddress2());
 
+
+
+                        }else {
+                            ToastUtils.showToast(BuyActivity.this,bean.getMsg());
                         }
 
                     }

@@ -55,10 +55,10 @@ public class ShopDianAdapter extends RecyclerView.Adapter<CommonViewHolder> {
 
         //如果设置了回调，则设置点击事件
         if (mOnItemClickLitener != null) {
-            item_tv.setOnClickListener(new View.OnClickListener() {
+            holder.getItemView().setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    mOnItemClickLitener.OnItemClick(item_tv, position);
+                    mOnItemClickLitener.OnItemClick(holder.getItemView(), position);
                 }
             });
         }
@@ -94,7 +94,7 @@ public class ShopDianAdapter extends RecyclerView.Adapter<CommonViewHolder> {
     }
 
     public interface OnItemClickListener {
-        void OnItemClick(TextView view, int position);
+        void OnItemClick(View view, int position);
     }
 
 

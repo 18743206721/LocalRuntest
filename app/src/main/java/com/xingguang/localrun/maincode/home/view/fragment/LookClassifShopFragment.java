@@ -8,7 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout;
@@ -54,12 +54,14 @@ public class LookClassifShopFragment extends BaseFragment implements RefreshUtil
     ShopDianAdapter adapter;
     private List<ClassifBean.DataBean> looklist = new ArrayList<>();
     int page = 1;
+    private int id = 0; //分类id
 
 
-    public static LookClassifShopFragment newInstance(int type) {
+    public static LookClassifShopFragment newInstance(int type, int id) {
         LookClassifShopFragment fragment = new LookClassifShopFragment();
         Bundle bundle = new Bundle();
         bundle.putInt("type", type);
+        bundle.putInt("id",id);
         fragment.setArguments(bundle);
         return fragment;
     }
@@ -77,15 +79,15 @@ public class LookClassifShopFragment extends BaseFragment implements RefreshUtil
         Bundle arguments = getArguments();
         if (arguments != null) {
             type = arguments.getInt("type");
+            id = arguments.getInt("id");
         }
-
         initAdapter();
         initListener();
     }
 
     @Override
     protected void lazyLoad() {
-        load(page);
+        load(1);
     }
 
     private void initAdapter() {
@@ -98,7 +100,7 @@ public class LookClassifShopFragment extends BaseFragment implements RefreshUtil
     private void initListener() {
         adapter.setmOnItemClickListener(new ShopDianAdapter.OnItemClickListener() {
             @Override
-            public void OnItemClick(TextView view, int position) {
+            public void OnItemClick(View view, int position) {
                 Intent intent = new Intent(getActivity(), LookShopActivity.class);
                 intent.putExtra("shopid",looklist.get(position).getId());
                 startActivity(intent);
@@ -111,7 +113,7 @@ public class LookClassifShopFragment extends BaseFragment implements RefreshUtil
                 .tag(this)
                 .cacheKey("cachePostKey")
                 .cacheMode(CacheMode.DEFAULT)
-                .params("id","2")
+                .params("id",id)
                 .params("sort",type)
                 .params("page",page)
                 .execute(new DialogCallback<String>(getActivity()) {
@@ -120,17 +122,17 @@ public class LookClassifShopFragment extends BaseFragment implements RefreshUtil
                         Gson gson = new Gson();
                         ClassifBean bean  = gson.fromJson(response.body().toString(), ClassifBean.class);
                         if (bean.getData()!=null) {
+                            if (bean.getData().size() == 0 && page != 1) {
+                                Toast.makeText(getActivity(),
+                                        "只有这么多了~",
+                                        Toast.LENGTH_SHORT).show();
+                            }
 
                             if (page == 1 ){
                                 looklist.clear();
                             }
 
                             looklist.addAll(bean.getData());
-                            if (bean.getData().size() == 0){
-                                ToastUtils.showToast(getActivity(),"暂无更多!");
-                            }else {
-                                adapter.setList(bean.getData());
-                            }
 
                             if (looklist.size() == 0) {
                                 myDecoFgApply.setVisibility(View.GONE);
@@ -146,6 +148,8 @@ public class LookClassifShopFragment extends BaseFragment implements RefreshUtil
                                 tw_mylook.finishLoadmore();
                             }
 
+                            adapter.setList(looklist);
+
                         }else{
                             ToastUtils.showToast(getActivity(),bean.getMsg());
                         }
@@ -157,14 +161,13 @@ public class LookClassifShopFragment extends BaseFragment implements RefreshUtil
     @Override
     public void onRefresh() {
         isRefresh = true;
-        load(1);
+        load(page);
     }
 
     @Override
     public void onLoad() {
         isRefresh = false;
-        page++;
-        load(page);
+        load(page++);
     }
 
 

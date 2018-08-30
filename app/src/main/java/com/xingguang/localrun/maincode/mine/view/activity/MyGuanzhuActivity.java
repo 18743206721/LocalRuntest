@@ -1,5 +1,6 @@
 package com.xingguang.localrun.maincode.mine.view.activity;
 
+import android.content.Intent;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -20,13 +21,16 @@ import com.xingguang.localrun.base.ToolBarActivity;
 import com.xingguang.localrun.http.CommonBean;
 import com.xingguang.localrun.http.DialogCallback;
 import com.xingguang.localrun.http.HttpManager;
+import com.xingguang.localrun.maincode.home.view.activity.LookShopActivity;
 import com.xingguang.localrun.maincode.mine.model.MineAttentionBean;
 import com.xingguang.localrun.maincode.mine.view.adapter.MyAttentionAdapter;
 import com.xingguang.localrun.popwindow.TextPopUpWindow;
 import com.xingguang.localrun.refresh.RefreshUtil;
 import com.xingguang.localrun.utils.AppUtil;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import butterknife.BindView;
 
 
@@ -106,6 +110,17 @@ public class MyGuanzhuActivity extends ToolBarActivity implements RefreshUtil.On
             }
         };
 
+
+        attenAdapter.setOnItemClickLitener(new MyAttentionAdapter.OnItemClickLitener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                Intent intent = new Intent(MyGuanzhuActivity.this, LookShopActivity.class);
+                intent.putExtra("shopid", mDatas.get(position).getShop_id());
+                startActivity(intent);
+            }
+        });
+
+
     }
 
     /**
@@ -126,7 +141,7 @@ public class MyGuanzhuActivity extends ToolBarActivity implements RefreshUtil.On
                         popde.dismiss();
                         mDatas.remove(currentPositon);
                         attenAdapter.notifyDataSetChanged();
-                        ToastUtils.showToast(MyGuanzhuActivity.this,commonBean.getMsg());
+                        ToastUtils.showToast(MyGuanzhuActivity.this, commonBean.getMsg());
                     }
                 });
     }

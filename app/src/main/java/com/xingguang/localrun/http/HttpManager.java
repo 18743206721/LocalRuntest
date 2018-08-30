@@ -133,7 +133,7 @@ public class HttpManager {
     //加入购物车
     public static final String addCart = BASE_URL+"Cart/addCart";
 
-    //分类右侧列表
+    //根据分类ID获取店铺列表
     public static final String classifshop = BASE_URL+"Goods/shop";
 
     //搜索

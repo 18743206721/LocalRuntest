@@ -114,6 +114,7 @@ public class FootPrintActivity extends ToolBarActivity implements RefreshUtil.On
                 loadcancel(currentPositon);
             }
         };
+
     }
 
     /**

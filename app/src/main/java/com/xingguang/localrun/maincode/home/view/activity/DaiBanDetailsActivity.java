@@ -10,6 +10,7 @@ import com.google.gson.Gson;
 import com.lzy.okgo.OkGo;
 import com.lzy.okgo.cache.CacheMode;
 import com.lzy.okgo.model.Response;
+import com.xingguang.core.utils.ToastUtils;
 import com.xingguang.localrun.R;
 import com.xingguang.localrun.base.ToolBarActivity;
 import com.xingguang.localrun.http.DialogCallback;
@@ -68,10 +69,16 @@ public class DaiBanDetailsActivity extends ToolBarActivity {
                     public void onSuccess(Response<String> response) {
                         Gson gson = new Gson();
                         TaskdetailBean taskdetailBean = gson.fromJson(response.body().toString(), TaskdetailBean.class);
-                        itemTvAds.setText(taskdetailBean.getData().getDescribe());
-                        ImageLoader.getInstance().initGlide(DaiBanDetailsActivity.this).loadImage(
-                                HttpManager.INDEX+taskdetailBean.getData().getCover(), ivDaibande);
-                        phone = taskdetailBean.getData().getPhone();
+
+                        if (taskdetailBean.getStatus() == 1){
+                            itemTvAds.setText(taskdetailBean.getData().getDescribe()+"");
+                            ImageLoader.getInstance().initGlide(DaiBanDetailsActivity.this).loadImage(
+                                    HttpManager.INDEX+taskdetailBean.getData().getCover(), ivDaibande);
+                            phone = taskdetailBean.getData().getPhone();
+                        }else {
+                            ToastUtils.showToast(DaiBanDetailsActivity.this,taskdetailBean.getMsg());
+                        }
+
                     }
                 });
     }

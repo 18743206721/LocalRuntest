@@ -96,13 +96,13 @@ public class LookShopAdapter extends RecyclerView.Adapter<CommonViewHolder> {
             });
 
             //设置星星的充满度
-            if (jianjieBean.getPercent() == 0){
+            if (jianjieBean.getPercent() == 0) {
                 tv_baifenbi.setVisibility(View.GONE);
-            }else {
-                tv_baifenbi.setText(jianjieBean.getPercent()+"%");
+            } else {
+                tv_baifenbi.setText(jianjieBean.getPercent() + "%");
                 tv_baifenbi.setVisibility(View.VISIBLE);
                 iv_tice_star.setMark(Float.parseFloat(
-                        jianjieBean.getPercent()*0.05+"f"));
+                        jianjieBean.getPercent() * 0.05 + "f"));
             }
 
             adapter = new LookShopItemAdapter(mContext, indexlist, type);
@@ -126,12 +126,12 @@ public class LookShopAdapter extends RecyclerView.Adapter<CommonViewHolder> {
             });
 
             //简介
-            holder.setText(R.id.tv_name,jianjieBean.getShop_name());//店铺名字
-            holder.setText(R.id.item_tv_time,jianjieBean.getJoin_time());//时间
+            holder.setText(R.id.tv_name, jianjieBean.getShop_name());//店铺名字
+            holder.setText(R.id.item_tv_time, jianjieBean.getJoin_time());//时间
             ImageView item_iv_zizhi = holder.getItemView().findViewById(R.id.item_iv_zizhi);//资质
-            ImageLoader.getInstance().initGlide(mContext).loadImage(HttpManager.INDEX+jianjieBean.getLicence(),item_iv_zizhi);
+            ImageLoader.getInstance().initGlide(mContext).loadImage(HttpManager.INDEX + jianjieBean.getLicence(), item_iv_zizhi);
             ImageView iv_logo = holder.getItemView().findViewById(R.id.iv_logo);//logo
-            ImageLoader.getInstance().initGlide(mContext).loadImage(HttpManager.INDEX+jianjieBean.getLogo(),iv_logo);
+            ImageLoader.getInstance().initGlide(mContext).loadImage(HttpManager.INDEX + jianjieBean.getLogo(), iv_logo);
 
 //            if (jianjieBean.getIs_collected() == 0){ //未关注
 //                holder.setText(R.id.tv_attention,"关注");
@@ -159,13 +159,12 @@ public class LookShopAdapter extends RecyclerView.Adapter<CommonViewHolder> {
                     }
                 });
             }
-            for (int i = 0; i < goodsList.size(); i++) {
-                ShopAllGoodBean.DataBean bean = goodsList.get(i);
-                ImageView item_iv_backimg = holder.getItemView().findViewById(R.id.item_iv_backimg);
-                ImageLoader.getInstance().initGlide(mContext).loadImage(HttpManager.INDEX +
-                        bean.getOriginal_img(), item_iv_backimg);
-                holder.setText(R.id.tv_shop_price, "¥" + bean.getShop_price());
-            }
+
+            ShopAllGoodBean.DataBean bean = goodsList.get(position);
+            ImageView item_iv_backimg = holder.getItemView().findViewById(R.id.item_iv_backimg);
+            ImageLoader.getInstance().initGlide(mContext).loadImage(HttpManager.INDEX +
+                    bean.getOriginal_img(), item_iv_backimg);
+            holder.setText(R.id.tv_shop_price, "¥" + bean.getShop_price());
 
         } else {
 
@@ -179,13 +178,11 @@ public class LookShopAdapter extends RecyclerView.Adapter<CommonViewHolder> {
                 });
             }
 
-            for (int i = 0; i < goodsList.size(); i++) {
-                ShopAllGoodBean.DataBean bean = goodsList.get(i);
-                ImageView item_iv_backimg = holder.getItemView().findViewById(R.id.item_iv_backimg);
-                ImageLoader.getInstance().initGlide(mContext).loadImage(HttpManager.INDEX +
-                        bean.getOriginal_img(), item_iv_backimg);
-                holder.setText(R.id.tv_shop_price, "¥" + bean.getShop_price());
-            }
+            ShopAllGoodBean.DataBean bean = goodsList.get(position);
+            ImageView item_iv_backimg = holder.getItemView().findViewById(R.id.item_iv_backimg);
+            ImageLoader.getInstance().initGlide(mContext).loadImage(HttpManager.INDEX +
+                    bean.getOriginal_img(), item_iv_backimg);
+            holder.setText(R.id.tv_shop_price, "¥" + bean.getShop_price());
 
 
         }
@@ -213,9 +210,9 @@ public class LookShopAdapter extends RecyclerView.Adapter<CommonViewHolder> {
     public int getItemCount() {
         if (type == 1) {
             return 1;
-        }else if (type == 2){
+        } else if (type == 2) {
             return goodsList.size();
-        }else{
+        } else {
             return goodsList.size();
         }
     }

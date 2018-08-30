@@ -155,7 +155,8 @@ public class AddressManagementActivity extends ToolBarActivity implements Refres
                         ToastUtils.showToast(AddressManagementActivity.this,madbean.getMsg());
 
                         if (buytype == 1) {//支付时，选择地址页面，从支付页面跳过来，buytype == 1；
-                            Intent intent = new Intent(AddressManagementActivity.this, BuyActivity.class);
+                            Intent intent = new Intent(AddressManagementActivity.this,
+                                    BuyActivity.class);
                             setResult(50, intent);
                             AddressManagementActivity.this.finish();
                         }
