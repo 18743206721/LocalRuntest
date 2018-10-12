@@ -512,7 +512,6 @@ public class ProductdetailsActivity extends BaseActivity implements SharePopUpWi
     private String keyname = "";//规格名称
 
     public Handler handler = new Handler() {
-
         @Override
         public void handleMessage(Message msg) {
             // TODO Auto-generated method stub

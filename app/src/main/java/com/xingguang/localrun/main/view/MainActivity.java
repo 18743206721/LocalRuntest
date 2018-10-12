@@ -125,8 +125,6 @@ public class MainActivity extends BaseActivity {
         setThemeColor(tabOneImg,R.drawable.home_icon);
         tabOneTxt.setTextColor(getResources().getColor(R.color.text_color_red));
 
-//        initState();
-
         //推送
         PushManager.getInstance().initialize(this.getApplicationContext(), com.xingguang.localrun.push.PushService.class);
         PushManager.getInstance().registerPushIntentService(this.getApplicationContext(), IntentService.class);
